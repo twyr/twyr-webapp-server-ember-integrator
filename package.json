@@ -67,7 +67,7 @@
 		"ember-resize": "0.0.17",
 		"ember-resolver": "^4.0.0",
 		"ember-source": "^3.1.2",
-		"ember-toastr": "^1.7.1",
+		"ember-toastr": "^1.7.2",
 		"ember-truth-helpers": "^2.0.0",
 		"eslint-plugin-ember": "^5.2.0",
 		"eslint-plugin-jsdoc": "^3.7.0",
