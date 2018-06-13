@@ -72,7 +72,7 @@
 		"eslint-plugin-ember": "^5.2.0",
 		"eslint-plugin-jsdoc": "^3.7.1",
 		"golden-layout": "*",
-		"handsontable": "^3.0.0",
+		"handsontable": "^4.0.0",
 		"jquery": "*",
 		"js-cookie": "*",
 		"jstree": "*",
