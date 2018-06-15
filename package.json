@@ -1,8 +1,8 @@
 {
-	"name": "twyr-webapp-server",
-	"version": "0.0.0",
+	"name": "twyr-webapp-server-ember-integrator",
+	"version": "3.0.1",
 	"private": true,
-	"description": "Small description for twyr-webapp-server goes here",
+	"description": "Empty ember.js app to pull in dependencies for the twyr-webapp-server",
 	"license": "MIT",
 	"author": "",
 	"directories": {
