@@ -68,7 +68,7 @@
 		"ember-promise-helpers": "*",
 		"ember-resize": "*",
 		"ember-resolver": "*",
-		"ember-source": "^3.2.1",
+		"ember-source": "^3.2.2",
 		"ember-toastr": "*",
 		"ember-truth-helpers": "*",
 		"eslint-plugin-ember": "*",
