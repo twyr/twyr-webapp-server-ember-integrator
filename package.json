@@ -25,7 +25,7 @@
 		"ember-ajax": "*",
 		"ember-assign-helper": "*",
 		"ember-awesome-macros": "^1.0.1",
-		"ember-bootstrap": "*",
+		"ember-bootstrap": "^2.0.0",
 		"ember-cli": "*",
 		"ember-cli-app-version": "*",
 		"ember-cli-babel": "*",
