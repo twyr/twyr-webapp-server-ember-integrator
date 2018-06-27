@@ -6,7 +6,14 @@ const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function(defaults) {
     let app = new EmberApp(defaults, {
-        'ace': {
+		'autoRun': false,
+		'storeConfigInMeta': false,
+
+		'fingerprint': {
+			'customHash': null
+		},
+
+		'ace': {
             'exts': ['emmet', 'language_tools', 'searchbox', 'spellcheck', 'split', 'statusbar'],
             'modes': ['css', 'handlebars', 'html', 'javascript', 'json'],
             'themes': ['eclipse'],
