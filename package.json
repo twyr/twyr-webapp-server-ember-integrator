@@ -60,7 +60,7 @@
 		"ember-paper": "^1.0.0-beta.7",
 		"ember-paper-dual-slider": "*",
 		"ember-paper-expansion-panel": "*",
-		"ember-paper-link": "0.0.4",
+		"ember-paper-link": "0.0.5",
 		"ember-paper-password2": "^2.0.2",
 		"ember-paper-stepper": "0.0.7",
 		"ember-paper-swiper": "*",
