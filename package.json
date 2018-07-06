@@ -64,7 +64,7 @@
 		"ember-paper-password2": "^2.0.2",
 		"ember-paper-stepper": "0.0.7",
 		"ember-paper-swiper": "*",
-		"ember-popper": "*",
+		"ember-popper": "^0.9.1",
 		"ember-promise-helpers": "*",
 		"ember-resize": "*",
 		"ember-resolver": "*",
