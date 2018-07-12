@@ -74,7 +74,7 @@
 		"eslint-plugin-ember": "*",
 		"eslint-plugin-jsdoc": "*",
 		"golden-layout": "*",
-		"handsontable": "^4.0.0",
+		"handsontable": "^5.0.0",
 		"jquery": "*",
 		"js-cookie": "*",
 		"jstree": "*",
