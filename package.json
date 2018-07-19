@@ -32,7 +32,7 @@
 		"ember-changeset-validations": "^1.2.11",
 		"ember-cli": "^3.3.0",
 		"ember-cli-app-version": "*",
-		"ember-cli-babel": "^6.15.0",
+		"ember-cli-babel": "^6.16.0",
 		"ember-cli-dependency-checker": "^3.0.0",
 		"ember-cli-eslint": "*",
 		"ember-cli-htmlbars": "*",
