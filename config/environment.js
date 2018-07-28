@@ -1,11 +1,11 @@
 'use strict';
 
 module.exports = function(environment) {
-  let ENV = {
-    'modulePrefix': 'twyr-webapp-server',
-    environment,
-    'rootURL': '/',
-    'locationType': 'auto',
+	let ENV = {
+		'modulePrefix': 'twyr-webapp-server',
+		environment,
+		'rootURL': '/',
+		'locationType': 'auto',
 
 		'pageTitle': {
 			'replace': false,
@@ -18,16 +18,16 @@ module.exports = function(environment) {
 			'enableIsDirty': true
 		},
 
-    'googleFonts': [
-      'Noto+Sans:400,400i,700,700i',
-      'Noto+Serif:400,400i,700,700i&subset=devanagari'
-    ],
+		'googleFonts': [
+			'Noto+Sans:400,400i,700,700i',
+			'Noto+Serif:400,400i,700,700i&subset=devanagari'
+		],
 
-    // Set or update content security policies
-    'contentSecurityPolicy': {
-      'font-src': "'self' fonts.gstatic.com",
-      'style-src': "'self' fonts.googleapis.com"
-    },
+		// Set or update content security policies
+		'contentSecurityPolicy': {
+			'font-src': "'self' fonts.gstatic.com",
+			'style-src': "'self' fonts.googleapis.com"
+		},
 
 		'moment': {
 			'allowEmpty': true,
@@ -44,31 +44,26 @@ module.exports = function(environment) {
 			'injectionFactories': ['component']
 		},
 
-		'tinyMCE': {
-			'version': 4,
-			'load': true
-    },
+		'ember-paper': {
+			'insertFontLinks': false
+		},
 
-    'ember-paper': {
-      'insertFontLinks': false
-    },
+		'EmberENV': {
+			'FEATURES': {
+				// Here you can enable experimental features on an ember canary build
+				// e.g. 'with-controller': true
+			},
+			'EXTEND_PROTOTYPES': {
+				// Prevent Ember Data from overriding Date.parse.
+				'Date': true
+			}
+		},
 
-    'EmberENV': {
-      'FEATURES': {
-        // Here you can enable experimental features on an ember canary build
-        // e.g. 'with-controller': true
-      },
-      'EXTEND_PROTOTYPES': {
-        // Prevent Ember Data from overriding Date.parse.
-        'Date': true
-      }
-    },
-
-    'APP': {
-      // Here you can pass flags/options to your application instance
-      // when it is created
-    }
-  };
+		'APP': {
+			// Here you can pass flags/options to your application instance
+			// when it is created
+		}
+	};
 
 	if(environment === 'development') {
 		ENV.APP.LOG_RESOLVER = true;
@@ -102,5 +97,5 @@ module.exports = function(environment) {
 		ENV.APP.LOG_VIEW_LOOKUPS = false;
 	}
 
-  return ENV;
+	return ENV;
 };

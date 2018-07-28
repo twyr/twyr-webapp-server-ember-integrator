@@ -13,15 +13,6 @@ module.exports = function(defaults) {
       'customHash': null
     },
 
-    // 'inlineContent': {
-    //   'head' : {
-    //     'content': `
-    // <link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,400i,700,700i|Noto+Serif:400,400i,700,700i&amp;subset=devanagari" rel="stylesheet">
-    // <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    // `
-    //   }
-    // },
-
     'ember-bootstrap': {
       'bootstrapVersion': 4,
       'importBootstrapFont': false,
@@ -29,7 +20,7 @@ module.exports = function(defaults) {
     },
 
     'ember-power-select': {
-      'theme': 'bootstrap'
+      'theme': 'material'
     }
   });
 
@@ -48,6 +39,7 @@ module.exports = function(defaults) {
   app.import('bower_components/jstree/dist/themes/default/style.css');
   app.import('vendor/golden-layout/css/goldenlayout.css');
   app.import('vendor/golden-layout/css/goldenlayout-light-theme.css');
+  app.import('vendor/mdb-free/css/mdb.css');
 
   app.import('bower_components/jstree/dist/jstree.js');
   app.import('vendor/golden-layout/js/goldenlayout.js');

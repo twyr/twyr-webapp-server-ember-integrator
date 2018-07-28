@@ -17,7 +17,10 @@ $theme-colors: (
 );
 
 @import "ember-bootstrap/bootstrap";
-@import "ember-power-select/themes/bootstrap";
+
+/* Ember Power Select */
+$ember-power-select-material-active-color: rgb(25, 118, 210);
+@import "ember-power-select/themes/material";
 @import "ember-power-select";
 
 /* Ember Paper */
