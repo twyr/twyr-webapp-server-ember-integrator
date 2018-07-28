@@ -47,7 +47,7 @@
     "ember-cli-shims": "^1.2.0",
     "ember-cli-sri": "^2.1.0",
     "ember-cli-string-helpers": "^1.9.0",
-    "ember-cli-summernote": "^1.5.0",
+    "ember-summernote-lite": "*",
     "ember-cli-uglify": "^2.0.0",
     "ember-cli-update": "^0.22.0",
     "ember-cli-uuid": "^0.6.0",
