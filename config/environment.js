@@ -48,6 +48,12 @@ module.exports = function(environment) {
 			'insertFontLinks': false
 		},
 
+		'ember-cli-summernote': {
+			"importBootstrapCSS": false,
+			"importBootstrapJS": false,
+			"lang": "en-US" // "ru-RU" //"lang": "en-US"
+		},
+
 		'EmberENV': {
 			'FEATURES': {
 				// Here you can enable experimental features on an ember canary build
