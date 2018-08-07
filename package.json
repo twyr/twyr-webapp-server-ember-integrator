@@ -58,7 +58,7 @@
     "ember-data-change-tracker": "^0.7.6",
     "ember-export-application-global": "^2.0.0",
     "ember-gridstack": "^1.2.0",
-    "ember-lifeline": "^3.0.6",
+    "ember-lifeline": "^3.0.7",
     "ember-load-initializers": "^1.1.0",
     "ember-math-helpers": "^2.6.0",
     "ember-maybe-import-regenerator": "^0.1.6",
