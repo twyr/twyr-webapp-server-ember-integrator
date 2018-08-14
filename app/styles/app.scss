@@ -1,9 +1,9 @@
 /* Ember Bootstrap */
 $font-family: "Noto Sans", sans-serif;
 $font-family-sans-serif: "Noto Sans", sans-serif;
-$font-family-serif:      "Noto Serif", serif;
-$font-family-monospace:  monospace;
-$font-family-base:       $font-family-sans-serif;
+$font-family-serif: "Noto Serif", serif;
+$font-family-monospace: monospace;
+$font-family-base: $font-family-sans-serif;
 
 $theme-colors: (
   "primary": #1976d2,
@@ -17,6 +17,12 @@ $theme-colors: (
 );
 
 @import "ember-bootstrap/bootstrap";
+
+/* Material Design Icons Font */
+@import "ember-mdi";
+
+/* Material Design for Bootstrap 4 */
+@import "scss/mdb";
 
 /* Ember Power Select */
 $ember-power-select-material-active-color: rgb(25, 118, 210);
