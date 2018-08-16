@@ -8,7 +8,7 @@ module.exports = function(defaults) {
 		'name': 'twyr-webapp-server',
 
 		'storeConfigInMeta': false,
-		'autoRun': true,
+		'autoRun': false,
 
 		'fingerprint': {
 			'customHash': null,
