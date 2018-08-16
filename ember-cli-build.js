@@ -11,9 +11,9 @@ module.exports = function(defaults) {
 		'autoRun': true,
 
 		'fingerprint': {
+			'customHash': null,
 			'extensions': broccoliAssetRevDefaults.extensions.concat(['svg']),
-			'prepend': '/ember-mdi/',
-			'customHash': null
+			'prepend': '/ember-mdi/'
 		},
 
 		'ember-bootstrap': {

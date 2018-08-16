@@ -45,7 +45,7 @@ module.exports = function(environment) {
 		},
 
 		'ember-paper': {
-			'insertFontLinks': false
+			'insertFontLinks': true
 		},
 
 		'EmberENV': {
