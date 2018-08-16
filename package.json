@@ -19,7 +19,7 @@
   "devDependencies": {
     "@fortawesome/ember-fontawesome": "^0.1.3",
     "@fortawesome/free-solid-svg-icons": "*",
-    "@mdi/svg": "^2.4.85",
+    "@mdi/svg": "^2.6.95",
     "bootstrap": "^4.1.3",
     "broccoli-asset-rev": "^3.0.0",
     "ember-addons-inspector": "^1.1.0",
