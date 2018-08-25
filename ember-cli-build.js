@@ -24,12 +24,6 @@ module.exports = function(defaults) {
 
 		'ember-power-select': {
 			'theme': 'material'
-		},
-
-		'fontawesome': {
-			'icons': {
-				'free-solid-svg-icons': 'all'
-			}
 		}
 	});
 

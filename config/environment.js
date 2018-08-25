@@ -48,6 +48,12 @@ module.exports = function(environment) {
 			'insertFontLinks': true
 		},
 
+		'fontawesome': {
+			'icons': {
+				'free-solid-svg-icons': 'all'
+			}
+		},
+
 		'EmberENV': {
 			'FEATURES': {
 				// Here you can enable experimental features on an ember canary build
