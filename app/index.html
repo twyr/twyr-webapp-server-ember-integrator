@@ -1,26 +1,81 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Twyr Webapp Server Base Ember App</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head profile="http://www.w3.org/2005/10/profile">
+	<!-- Meta Stuff for the Browser to render correctly -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
+	<!-- Other Meta Stuff for seo/kicks -->
+	<meta name="description" content="">
+
+	<!-- Title: Will change based on the actual slogan or whatever -->
+	<title><%- title %></title>
+
+	<!-- Mandatory favicon.ico link -->
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+	<!-- External fonts -->
 	{{content-for "head"}}
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css" media="all">
 
-    <link integrity="" rel="stylesheet" href="{{rootURL}}assets/vendor.css">
-    <link integrity="" rel="stylesheet" href="{{rootURL}}assets/twyr-webapp-server.css">
+	<!-- Application styles -->
+	<link integrity="" rel="stylesheet" href="{{rootURL}}assets/vendor.css">
+	<link integrity="" rel="stylesheet" href="{{rootURL}}assets/twyr-webapp-server.css">
 
-    {{content-for "head-footer"}}
-  </head>
-  <body>
-    {{content-for "body"}}
+	{{content-for "head-footer"}}
 
-    <script src="{{rootURL}}assets/vendor.js"></script>
-    <script src="{{rootURL}}assets/twyr-webapp-server.js"></script>
+	<!-- Miscellaneous client-side data -->
+	<script type="application/javascript">
+		window.developmentMode = <%= developmentMode %>;
+	</script>
+</head>
+<body class="white-skin grey">
+	{{content-for "body"}}
 
-    {{content-for "body-footer"}}
-  </body>
+	<!-- Ember stuff - imported js files -->
+	<script src="{{rootURL}}assets/vendor.js"></script>
+	<script src="{{rootURL}}assets/twyr-webapp-server.js"></script>
+
+	<script type="application/javascript">
+	$.ajaxSetup({
+		'cache': <%= !developmentMode %>,
+		'xhrFields': {
+			'withCredentials': true
+		}
+	});
+	</script>
+
+	<!-- Primus - realtime websocket connection stuff -->
+	<script type="application/javascript" src="/websockets/primus.js"></script>
+
+	<!-- Ember template compiler - for dynamic compilation of templates, whenever we require it... -->
+	<script type="application/javascript" src="/ember-template-compiler.js"></script>
+
+	<!-- The Index Template -->
+	<script type="text/x-handlebars" data-template-name="index">
+		<!-- Configurable Page Title -->
+		{{head-layout}}
+		{{page-title "<%- title %>"}}
+
+		<!-- Main Area -->
+		{{liquid-outlet class="flex"}}
+	</script>
+
+	<!-- The mandatory empty div elements for wormhole, paper, etc. -->
+	{{content-for "body-footer"}}
+
+	<!-- Finally, start the App -->
+	<script type="application/javascript">
+		require('twyr-webapp-server/app')['default'].create({
+			"LOG_RESOLVER": <%= developmentMode %>,
+			"LOG_ACTIVE_GENERATION": <%= developmentMode %>,
+			"LOG_TRANSITIONS": <%= developmentMode %>,
+			"LOG_TRANSITIONS_INTERNAL": <%= developmentMode %>,
+			"LOG_VIEW_LOOKUPS": <%= developmentMode %>,
+			"name": "twyr-webapp-server",
+			"version": "3.0.1"
+		});
+	</script>
+</body>
 </html>
