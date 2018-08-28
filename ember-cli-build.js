@@ -8,12 +8,11 @@ module.exports = function(defaults) {
 		'name': 'twyr-webapp-server',
 
 		'storeConfigInMeta': false,
-		'autoRun': false,
+		'autoRun': true,
 
 		'fingerprint': {
 			'customHash': null,
-			'extensions': broccoliAssetRevDefaults.extensions.concat(['svg']),
-			'prepend': '/ember-mdi/'
+			'extensions': broccoliAssetRevDefaults.extensions.concat(['svg'])
 		},
 
 		'ember-bootstrap': {

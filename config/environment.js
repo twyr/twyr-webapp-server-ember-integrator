@@ -1,11 +1,11 @@
 'use strict';
 
-module.exports = function(environment) {
+module.exports = function (environment) {
 	let ENV = {
 		'modulePrefix': 'twyr-webapp-server',
 		environment,
-		'rootURL': '/',
-		'locationType': 'auto',
+		'rootURL': process.env.CORBER ? '' : '/',
+		'locationType': process.env.CORBER ? 'hash' : 'auto',
 
 		'pageTitle': {
 			'replace': false,
@@ -45,7 +45,7 @@ module.exports = function(environment) {
 		},
 
 		'ember-paper': {
-			'insertFontLinks': true
+			'insertFontLinks': false
 		},
 
 		'fontawesome': {
@@ -59,6 +59,7 @@ module.exports = function(environment) {
 				// Here you can enable experimental features on an ember canary build
 				// e.g. 'with-controller': true
 			},
+
 			'EXTEND_PROTOTYPES': {
 				// Prevent Ember Data from overriding Date.parse.
 				'Date': true
@@ -71,7 +72,7 @@ module.exports = function(environment) {
 		}
 	};
 
-	if(environment === 'development') {
+	if (environment === 'development') {
 		ENV.APP.LOG_RESOLVER = true;
 		ENV.APP.LOG_ACTIVE_GENERATION = true;
 		ENV.APP.LOG_TRANSITIONS = true;
@@ -79,23 +80,19 @@ module.exports = function(environment) {
 		ENV.APP.LOG_VIEW_LOOKUPS = true;
 	}
 
-	if(environment === 'test') {
+	if (environment === 'test') {
 		// Testem prefers this...
 		ENV.locationType = 'none';
 
 		// keep test console output quieter
-		ENV.APP.LOG_RESOLVER = true;
-		ENV.APP.LOG_ACTIVE_GENERATION = true;
-		ENV.APP.LOG_TRANSITIONS = true;
-		ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
-		ENV.APP.LOG_VIEW_LOOKUPS = true;
+		ENV.APP.LOG_ACTIVE_GENERATION = false;
+		ENV.APP.LOG_VIEW_LOOKUPS = false;
 
 		ENV.APP.rootElement = '#ember-testing';
 		ENV.APP.autoboot = false;
 	}
 
-	if(environment === 'production') {
-		// here you can enable a production-specific feature
+	if (environment === 'production') {
 		ENV.APP.LOG_RESOLVER = false;
 		ENV.APP.LOG_ACTIVE_GENERATION = false;
 		ENV.APP.LOG_TRANSITIONS = false;
@@ -105,3 +102,4 @@ module.exports = function(environment) {
 
 	return ENV;
 };
+
