@@ -1,5 +1,25 @@
+<!-- Customizable Header -->
+<header>
+	{{#bs-navbar position="fixed-top" type="dark" backgroundColor="primary" collapsed=false fluid=true as |navbar|}}
+		<div class="navbar-header">
+			{{#link-to "index" class="navbar-brand"}}Twy&apos;r{{/link-to}}
+		</div>
+		{{#navbar.content}}
+			{{#navbar.nav class="ml-auto nav-flex-icons" as |nav|}}
+				{{#nav.item}}{{fa-icon "sign-out-alt" class="white-text"}}{{/nav.item}}
+			{{/navbar.nav}}
+		{{/navbar.content}}
+	{{/bs-navbar}}
+</header>
+
 <!-- Main Area -->
 <main class="flex p-4">
-	<h3>Twy&apos;r Web Application Server - Index HBS</h3>
 	{{liquid-outlet class="flex"}}
 </main>
+
+<!-- Customizable Footer -->
+<footer class="page-footer text-center font-small mt-4 wow fadeIn" style="animation-name:fadeIn; background-color:#1C2331;">
+	<div class="footer-copyright px-1 py-3 text-right">
+		Copyright&copy; 2018 {{#link-to "index"}}Twy&apos;r{{/link-to}}. All rights reserved.
+	</div>
+</footer>

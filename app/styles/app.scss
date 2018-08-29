@@ -1,28 +1,54 @@
-/* Ember Bootstrap */
-$font-family: "Noto Sans", sans-serif;
-$font-family-sans-serif: "Noto Sans", sans-serif;
-$font-family-serif: "Noto Serif", serif;
-$font-family-monospace: monospace;
-$font-family-base: $font-family-sans-serif;
+/* Bootstrap color overrides */
+$font-family:				"Noto Sans", sans-serif;
+$font-family-sans-serif:	"Noto Sans", sans-serif;
+$font-family-serif:			"Noto Serif", serif;
+$font-family-monospace:		monospace;
+$font-family-base:			$font-family-sans-serif;
+
+$primary:					#1976d2;
+$secondary:					#ff9800;
+$success:					#81c784;
+$info:						#80d8ff;
+$warning:					#ffd740;
+$danger:					#e65100;
+$light:						#f8f9fa;
+$dark:						#212529;
 
 $theme-colors: (
-  "primary": #1976d2,
-  "secondary": #ff9800,
-  "success": #81c784,
-  "info": #80d8ff,
-  "warning": #ffd740,
-  "danger": #e65100,
-  "light": #f8f9fa,
-  "dark": #212529
+  "primary": $primary,
+  "secondary": $secondary,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "danger": $danger,
+  "light": $light,
+  "dark": $dark
 );
 
-@import "ember-bootstrap/bootstrap";
+/* MDB color overrides */
+$primary-color:				$primary;
 
-/* Material Design Icons Font */
-@import "ember-mdi";
+$secondary-color:			$secondary;
+$secondary-color-dark:		#ff8800;
+
+$default-color:				$light;
+$default-color-dark:		$dark;
+
+$info-color:				$info;
+$info-color-dark:			$primary;
+
+$success-color:				$success;
+$warning-color:				$warning;
+$danger-color:				$danger;
+
+/* Bootstrap 4 */
+@import "ember-bootstrap/bootstrap";
 
 /* Material Design for Bootstrap 4 */
 @import "scss/mdb";
+
+/* Material Design Icons Font */
+@import "ember-mdi";
 
 /* Ember Power Select */
 $ember-power-select-material-active-color: rgb(25, 118, 210);
