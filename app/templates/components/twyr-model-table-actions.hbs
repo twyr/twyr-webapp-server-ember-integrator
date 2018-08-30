@@ -1,0 +1,79 @@
+<div class="w-100 text-right">
+{{#if (or record.isLoading record.isReloading record.isSaving)}}
+	{{#paper-button class="m-0" warn=true iconButton=true onClick=null}}
+		{{paper-icon "rotate-left" reverseSpin=true}}
+	{{/paper-button}}
+{{else}}
+	{{#if (and (or callbacks.viewAction callbacks.viewTask) (not record.isNew))}}
+		{{#paper-button iconButton=true onClick=(action "controller-action" "view" record)}}
+			{{paper-icon "remove-red-eye"}}
+		{{/paper-button}}
+	{{/if}}
+
+	{{#if inlineEditEnabled}}
+		{{#unless isEditRow}}
+			{{#paper-button accent=true iconButton=true onClick=(action "controller-action" "edit" record)}}
+				{{paper-icon "edit"}}
+			{{/paper-button}}
+		{{/unless}}
+
+		{{#if (or record.isNew record.hasDirtyAttributes record.isDirty record.content.isDirty)}}
+			{{#if (or callbacks.saveAction callbacks.saveTask)}}
+				{{#paper-button primary=true iconButton=true onClick=(action "controller-action" "save" record)}}
+					{{paper-icon "save"}}
+				{{/paper-button}}
+			{{/if}}
+		{{/if}}
+
+		{{#if isEditRow}}
+			{{#paper-button warn=true iconButton=true onClick=(action "controller-action" "cancel" record)}}
+				{{paper-icon "close"}}
+			{{/paper-button}}
+		{{/if}}
+
+		{{#if (and (or callbacks.deleteAction callbacks.deleteTask) (not record.isNew))}}
+			{{#paper-button warn=true iconButton=true onClick=(action "controller-action" "delete" record)}}
+				{{paper-icon "delete"}}
+			{{/paper-button}}
+		{{/if}}
+	{{else}}
+		{{#if (not (not expandedRowComponent))}}
+			{{#if isExpanded}}
+				{{#paper-button class=themeInstance.collapseRow accent=true iconButton=true onClick=(action "collapseRow" index record)}}
+					{{fa-icon "angle-double-up" size="lg"}}
+				{{/paper-button}}
+			{{else}}
+				{{#paper-button class=themeInstance.expandRow accent=true iconButton=true onClick=(action "expandRow" index record)}}
+					{{fa-icon "angle-double-down" size="lg"}}
+				{{/paper-button}}
+			{{/if}}
+		{{else}}
+			{{#if (and (or callbacks.editAction callbacks.editTask) (not (get record (or callbacks.editCheckField "isEditing"))))}}
+				{{#paper-button accent=true iconButton=true onClick=(action "controller-action" "edit" record)}}
+					{{paper-icon "open-in-new"}}
+				{{/paper-button}}
+			{{/if}}
+		{{/if}}
+
+		{{#if (or record.isNew record.hasDirtyAttributes record.isDirty record.content.isDirty)}}
+			{{#if (or callbacks.saveAction callbacks.saveTask)}}
+				{{#paper-button primary=true iconButton=true onClick=(action "controller-action" "save" record)}}
+					{{paper-icon "save"}}
+				{{/paper-button}}
+			{{/if}}
+			{{#if (or callbacks.cancelAction callbacks.cancelTask)}}
+				{{#paper-button warn=true iconButton=true onClick=(action "controller-action" "cancel" record)}}
+					{{paper-icon "close"}}
+				{{/paper-button}}
+			{{/if}}
+		{{/if}}
+
+		{{#if (and (or callbacks.deleteAction callbacks.deleteTask) (not record.isNew))}}
+			{{#paper-button warn=true iconButton=true onClick=(action "controller-action" "delete" record)}}
+				{{paper-icon "delete"}}
+			{{/paper-button}}
+		{{/if}}
+	{{/if}}
+{{/if}}
+</div>
+{{yield}}

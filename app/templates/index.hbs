@@ -1,12 +1,14 @@
 <!-- Customizable Header -->
 <header>
-	{{#bs-navbar position="fixed-top" type="dark" backgroundColor="primary" collapsed=false fluid=true as |navbar|}}
+	{{#bs-navbar class="p-0 px-2 py-1" position="sticky-top" type="light" backgroundColor="twyr" collapsed=false fluid=true as |navbar|}}
 		<div class="navbar-header">
-			{{#link-to "index" class="navbar-brand"}}Twy&apos;r{{/link-to}}
+			{{#link-to "index" class="navbar-brand"}}
+				<span class="h3 orange-text" style="font-family:Keania One;">Twy&apos;r</span>
+			{{/link-to}}
 		</div>
 		{{#navbar.content}}
-			{{#navbar.nav class="ml-auto nav-flex-icons" as |nav|}}
-				{{#nav.item}}{{fa-icon "sign-out-alt" class="white-text"}}{{/nav.item}}
+			{{#navbar.nav class="ml-auto orange-text nav-flex-icons" as |nav|}}
+				{{#nav.item}}{{fa-icon "sign-out-alt" class="h4 mb-0"}}{{/nav.item}}
 			{{/navbar.nav}}
 		{{/navbar.content}}
 	{{/bs-navbar}}
@@ -18,8 +20,46 @@
 </main>
 
 <!-- Customizable Footer -->
-<footer class="page-footer text-center font-small mt-4 wow fadeIn" style="animation-name:fadeIn; background-color:#1C2331;">
+<footer class="page-footer mt-4" style="animation-name:fadeIn; background-color:#1C2331;">
 	<div class="footer-copyright px-1 py-3 text-right">
 		Copyright&copy; 2018 {{#link-to "index"}}Twy&apos;r{{/link-to}}. All rights reserved.
 	</div>
 </footer>
+
+<!-- Modal -->
+{{#liquid-if showDialog}}
+{{#paper-dialog class=modalData.dialogClass onClose=(action "controller-action" "closeDialog" false) parent=modalData.parentElement origin=modalData.dialogOrigin clickOutsideToClose=false escapeToClose=false}}
+	{{#paper-toolbar class="stylish-color white-text"}}
+		{{#paper-toolbar-tools}}
+		<h2>{{modalData.title}}</h2>
+		{{/paper-toolbar-tools}}
+	{{/paper-toolbar}}
+
+	{{#if modalData.componentName}}
+		{{#paper-dialog-content class="flex m-0 p-0"}}
+			{{component modalData.componentName state=modalData.componentState controller-action="controller-action"}}
+		{{/paper-dialog-content}}
+	{{else}}
+		{{#paper-dialog-content}}
+			{{{modalData.content}}}
+		{{/paper-dialog-content}}
+	{{/if}}
+
+	{{#if (or modalData.confirmButton modalData.cancelButton)}}
+		{{paper-divider}}
+		{{#paper-dialog-actions class="layout-row layout-align-end-center"}}
+			{{#if modalData.cancelButton}}
+				{{#paper-button primary=(not (not modalData.cancelButton.primary)) accent=(not (not modalData.cancelButton.accent)) warn=(not (not modalData.cancelButton.warn)) raised=(not (not modalData.cancelButton.raised)) onClick=(action "controller-action" "closeDialog" false)}}
+					{{paper-icon modalData.cancelButton.icon class="mr-1"}}<span>{{modalData.cancelButton.text}}</span>
+				{{/paper-button}}
+			{{/if}}
+
+			{{#if modalData.confirmButton}}
+				{{#paper-button primary=(not (not modalData.confirmButton.primary)) accent=(not (not modalData.confirmButton.accent)) warn=(not (not modalData.confirmButton.warn)) raised=(not (not modalData.confirmButton.raised)) onClick=(action "controller-action" "closeDialog" true)}}
+					{{paper-icon modalData.confirmButton.icon class="mr-1"}}<span>{{modalData.confirmButton.text}}</span>
+				{{/paper-button}}
+			{{/if}}
+		{{/paper-dialog-actions}}
+	{{/if}}
+{{/paper-dialog}}
+{{/liquid-if}}

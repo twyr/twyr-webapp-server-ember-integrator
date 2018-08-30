@@ -20,7 +20,8 @@ module.exports = function (environment) {
 
 		'googleFonts': [
 			'Noto+Sans:400,400i,700,700i',
-			'Noto+Serif:400,400i,700,700i&subset=devanagari'
+			'Noto+Serif:400,400i,700,700i&subset=devanagari',
+			'Keania+One'
 		],
 
 		// Set or update content security policies
@@ -71,34 +72,6 @@ module.exports = function (environment) {
 			// when it is created
 		}
 	};
-
-	// if (environment === 'development') {
-	// 	ENV.APP.LOG_RESOLVER = true;
-	// 	ENV.APP.LOG_ACTIVE_GENERATION = true;
-	// 	ENV.APP.LOG_TRANSITIONS = true;
-	// 	ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
-	// 	ENV.APP.LOG_VIEW_LOOKUPS = true;
-	// }
-
-	// if (environment === 'test') {
-	// 	// Testem prefers this...
-	// 	ENV.locationType = 'none';
-
-	// 	// keep test console output quieter
-	// 	ENV.APP.LOG_ACTIVE_GENERATION = false;
-	// 	ENV.APP.LOG_VIEW_LOOKUPS = false;
-
-	// 	ENV.APP.rootElement = '#ember-testing';
-	// 	ENV.APP.autoboot = false;
-	// }
-
-	// if (environment === 'production') {
-	// 	ENV.APP.LOG_RESOLVER = false;
-	// 	ENV.APP.LOG_ACTIVE_GENERATION = false;
-	// 	ENV.APP.LOG_TRANSITIONS = false;
-	// 	ENV.APP.LOG_TRANSITIONS_INTERNAL = false;
-	// 	ENV.APP.LOG_VIEW_LOOKUPS = false;
-	// }
 
 	return ENV;
 };

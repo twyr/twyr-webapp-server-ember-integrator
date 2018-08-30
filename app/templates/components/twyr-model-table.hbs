@@ -1,0 +1,34 @@
+{{models-table
+	data=data
+	columns=columns
+	columnComponents=(assign columnComponents (hash
+		twyrModelTableActions=(component "twyr-model-table-actions"
+			callbacks=callbacks
+			expandedRowComponent=expandedRowComponent
+			inlineEditEnabled=inlineEditEnabled
+			controller-action="controller-action"
+		)
+	))
+
+	themeInstance=themeInstance
+
+	expandedItems=expandedItems
+	expandedRowComponent=expandedRowComponent
+	multipleExpand=multipleExpand
+
+	selectedItems=selectedItems
+	multipleSelect=multipleSelect
+
+	filteringIgnoreCase=true
+	multipleColumnsSorting=true
+	showComponentFooter=true
+	showGlobalFilter=true
+	showPageSize=true
+	useFilteringByColumns=false
+	useNumericPagination=true
+
+	showColumnsDropdown=false
+
+	displayDataChangedAction=(action "controller-action" "displayDataChanged")
+	controller-action="controller-action"
+}}
