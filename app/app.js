@@ -6,9 +6,9 @@ import loadInitializers from 'ember-load-initializers';
 import config from './config/environment';
 
 const App = Application.extend(Evented, {
-  'modulePrefix': config.modulePrefix,
-  'podModulePrefix': config.podModulePrefix,
-  'Resolver': Resolver
+	'modulePrefix': config.modulePrefix,
+	'podModulePrefix': config.podModulePrefix,
+	'Resolver': Resolver
 });
 
 loadInitializers(App, config.modulePrefix);

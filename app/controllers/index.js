@@ -3,67 +3,33 @@
 /* eslint-disable ember/avoid-leaking-state-in-ember-objects */
 
 import { inject } from '@ember/service';
-import { task } from 'ember-concurrency';
-
 import BaseController from '../framework/base-controller';
 
 export default BaseController.extend({
-	'currentUser': inject('current-user'),
-	'realtimeData': inject('realtime-data'),
+	realtimeData: inject('realtime-data'),
 
-	'modalData': null,
-	'showDialog': false,
+	modalData: null,
+	showDialog: false,
 
-	'onInit': task(function* () {
-		const onDisplayStatusMessage = this['display-status-message'].bind(this);
+	init() {
+		this._super(...arguments);
+
+		const notification = this.get('notification');
 
 		this.get('realtimeData').on('websocket-data::display-status-message', (data) => {
-			onDisplayStatusMessage(data);
+			notification.display(data);
 		});
 
 		this.get('realtimeData').on('websocket-close', () => {
-			onDisplayStatusMessage('Realtime Data Connectivity lost! Will attempt reconnection!!');
+			notification.display('Realtime Data Connectivity lost! Will attempt reconnection!!');
 		});
 
 		this.get('realtimeData').on('websocket-disconnection', () => {
-			onDisplayStatusMessage('Realtime Data Connectivity lost!');
+			notification.display('Realtime Data Connectivity lost!');
 		});
-	}).on('init'),
-
-	'display-status-message': function(data) {
-		const toast = this.get('toast');
-		const options = Object.assign({}, { 'positionClass': 'toast-top-right' }, data.options);
-
-		if(data.type === 'danger')
-			data.type = 'error';
-
-		if(data.type !== 'error') {
-			toast[data.type ? data.type : 'info'](data.message || data, (data.title || (data.type ? data.type.capitalize() : '')), options);
-			return;
-		}
-
-		if(typeof data.error === 'string') {
-			toast.error(data.error.replace(/\\n/g, '\n').split('\n').splice(0, 2).join('\n'), 'Error', options);
-			return;
-		}
-
-		if(data.error.responseText) {
-			toast.error(data.error.responseText.replace(/\\n/g, '\n').split('\n').splice(0, 2).join('\n'), 'Error', options);
-			return;
-		}
-
-		if(data.error.errors && data.error.errors.length) {
-			data.error.errors.forEach((dataError) => {
-				toast.error(dataError.detail.replace(/\\n/g, '\n').split('\n').splice(0, 2).join('\n'), (dataError.title || 'Error'), options);
-			});
-
-			return;
-		}
-
-		toast.error(data.error.message, 'Error', options);
 	},
 
-	'display-modal': function(data) {
+	displayModal: function(data) {
 		const defaultData = {
 			'title': 'Twyr Modal',
 			'content': `This is the default. Someone forgot to override it!`,
@@ -99,7 +65,7 @@ export default BaseController.extend({
 		this.set('showDialog', true);
 	},
 
-	'closeDialog': function(proceed) {
+	closeDialog: function(proceed) {
 		if(proceed && this.get('modalData.confirmButton.callback')) {
 			this.get('modalData.confirmButton.callback')();
 		}
@@ -110,24 +76,5 @@ export default BaseController.extend({
 
 		this.set('showDialog', false);
 		this.set('modalData', null);
-	},
-
-	'actions': {
-		'controller-action': function(action, data) {
-			if(this.get('showDialog') && this.get('modalData') && this.get('modalData.actions')) {
-				const modalActions = this.get('modalData')['actions'][action];
-				if(modalActions) {
-					modalActions(data);
-					return;
-				}
-			}
-
-			if(this[action] && (typeof this[action] === 'function')) {
-				this[action](data);
-				return;
-			}
-
-			console.log(`TODO: Handle ${action} action with data: `, data);
-		}
 	}
 });

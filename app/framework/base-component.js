@@ -1,53 +1,43 @@
 /* eslint-disable require-yield */
 /* eslint-disable no-console */
 
-/* eslint-disable ember/avoid-leaking-state-in-ember-objects */
-/* eslint-disable ember/closure-actions */
-
 import Component from '@ember/component';
-import { observer } from '@ember/object';
 import { inject } from '@ember/service';
+import { observer } from '@ember/object';
+
 import { task } from 'ember-concurrency';
-
 export default Component.extend({
-	'store': inject('store'),
-	'currentUser': inject('current-user'),
+	store: inject('store'),
+	currentUser: inject('current-user'),
+	notification: inject('integrated-notification'),
 
-	'permissions': ['*'],
-	'hasPermission': false,
+	permissions: null,
+	hasPermission: true,
 
-	'onInit': task(function* () {
+	init() {
+		this._super(...arguments);
+		this.set('permissions', ['*']);
+
 		this.get('currentUser').on('userDataUpdated', () => {
 			this.get('updatePermissions').perform();
 		});
-	}).on('init'),
+	},
 
-	'updatePermissions': task(function* () {
+	onPermissionChanges: observer('permissions', function() {
+		this.get('updatePermissions').perform();
+	}),
+
+	updatePermissions: task(function* () {
 		if(this.get('permissions').includes('*')) {
 			this.set('hasPermission', true);
 			return;
 		}
 
-		let hasPermission = false;
+		let hasPerm = false;
 		this.get('permissions').forEach((permission) => {
-			hasPermission = hasPermission || this.get('currentUser').hasPermission(permission);
+			hasPerm = hasPerm || this.get('currentUser').hasPermission(permission);
 		});
 
-		this.set('hasPermission', hasPermission);
-	}).keepLatest(),
-
-	'hasPermissionChanged': observer('hasPermission', function() {
-		console.log(`User Permissions changed: ${this.get('hasPermission')}`);
-	}),
-
-	'actions': {
-		'controller-action': function(action, data) {
-			if(this[action] && (typeof this[action] === 'function')) {
-				this[action](data);
-				return;
-			}
-
-			this.sendAction('controller-action', action, data);
-		}
-	}
+		this.set('hasPermission', hasPerm);
+	}).keepLatest()
 });

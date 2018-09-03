@@ -7,20 +7,43 @@
 			{{/link-to}}
 		</div>
 		{{#navbar.content}}
-			{{#navbar.nav class="ml-auto orange-text nav-flex-icons" as |nav|}}
-				{{#nav.item}}{{fa-icon "sign-out-alt" class="h4 mb-0"}}{{/nav.item}}
+			{{#navbar.nav id="twyr-webapp-server-template-bhairavi-notification-area" class="ml-auto orange-text nav-flex-icons" as |nav|}}
+				{{#nav.item}}{{component "session/logout-component"}}{{/nav.item}}
 			{{/navbar.nav}}
 		{{/navbar.content}}
 	{{/bs-navbar}}
 </header>
 
 <!-- Main Area -->
-<main class="flex p-4">
-	{{liquid-outlet class="flex"}}
+<main class="flex p-1">
+	<div id="twyr-webapp-server-template-bhairavi-first-row" class="layout-row flex-initial">
+		<div id="twyr-webapp-server-template-bhairavi-first-row-position-1" class="flex-initial"></div>
+		<div id="twyr-webapp-server-template-bhairavi-first-row-position-2" class="flex-initial"></div>
+		<div id="twyr-webapp-server-template-bhairavi-first-row-position-3" class="flex-initial"></div>
+	</div>
+	<div id="twyr-webapp-server-template-bhairavi-second-row" class="layout-row flex-initial">
+		<div id="twyr-webapp-server-template-bhairavi-second-row-position-1" class="flex-initial"></div>
+		<div id="twyr-webapp-server-template-bhairavi-second-row-position-2" class="flex-initial"></div>
+		<div id="twyr-webapp-server-template-bhairavi-second-row-position-3" class="flex-initial"></div>
+	</div>
+	<div id="twyr-webapp-server-template-bhairavi-main-row" class="layout-row flex-initial">
+		<div id="twyr-webapp-server-template-bhairavi-main-row-left-column" class="layout-column layout-align-start flex-initial"></div>
+		<div id="twyr-webapp-server-template-bhairavi-main-row-outlet" class="layout-row layout-align-center-start flex">
+			{{liquid-outlet class="flex"}}
+		</div>
+		<div id="twyr-webapp-server-template-bhairavi-main-row-right-column" class="layout-column layout-align-start flex-initial">
+			{{component "session/login-component"}}
+		</div>
+	</div>
+	<div id="twyr-webapp-server-template-bhairavi-bottom-row" class="layout-row flex-initial">
+		<div id="twyr-webapp-server-template-bhairavi-bottom-row-position-1" class="flex-initial"></div>
+		<div id="twyr-webapp-server-template-bhairavi-bottom-row-position-2" class="flex-initial"></div>
+		<div id="twyr-webapp-server-template-bhairavi-bottom-row-position-3" class="flex-initial"></div>
+	</div>
 </main>
 
 <!-- Customizable Footer -->
-<footer class="page-footer mt-4 bg-secondary">
+<footer class="page-footer mt-2 bg-secondary">
 	<div class="px-1 py-3 text-right">
 		Copyright&copy; 2018 {{#link-to "index"}}Twy&apos;r{{/link-to}}. All rights reserved.
 	</div>
@@ -28,7 +51,7 @@
 
 <!-- Modal -->
 {{#liquid-if showDialog}}
-{{#paper-dialog class=modalData.dialogClass onClose=(action "controller-action" "closeDialog" false) parent=modalData.parentElement origin=modalData.dialogOrigin clickOutsideToClose=false escapeToClose=false}}
+{{#paper-dialog class=modalData.dialogClass onClose=(action "closeDialog" false) parent=modalData.parentElement origin=modalData.dialogOrigin clickOutsideToClose=false escapeToClose=false}}
 	{{#paper-toolbar class="stylish-color white-text"}}
 		{{#paper-toolbar-tools}}
 		<h2>{{modalData.title}}</h2>
@@ -37,7 +60,7 @@
 
 	{{#if modalData.componentName}}
 		{{#paper-dialog-content class="flex m-0 p-0"}}
-			{{component modalData.componentName state=modalData.componentState controller-action="controller-action"}}
+			{{component modalData.componentName state=modalData.componentState}}
 		{{/paper-dialog-content}}
 	{{else}}
 		{{#paper-dialog-content}}
@@ -49,13 +72,13 @@
 		{{paper-divider}}
 		{{#paper-dialog-actions class="layout-row layout-align-end-center"}}
 			{{#if modalData.cancelButton}}
-				{{#paper-button primary=(not (not modalData.cancelButton.primary)) accent=(not (not modalData.cancelButton.accent)) warn=(not (not modalData.cancelButton.warn)) raised=(not (not modalData.cancelButton.raised)) onClick=(action "controller-action" "closeDialog" false)}}
+				{{#paper-button primary=(not (not modalData.cancelButton.primary)) accent=(not (not modalData.cancelButton.accent)) warn=(not (not modalData.cancelButton.warn)) raised=(not (not modalData.cancelButton.raised)) onClick=(action "closeDialog" false)}}
 					{{paper-icon modalData.cancelButton.icon class="mr-1"}}<span>{{modalData.cancelButton.text}}</span>
 				{{/paper-button}}
 			{{/if}}
 
 			{{#if modalData.confirmButton}}
-				{{#paper-button primary=(not (not modalData.confirmButton.primary)) accent=(not (not modalData.confirmButton.accent)) warn=(not (not modalData.confirmButton.warn)) raised=(not (not modalData.confirmButton.raised)) onClick=(action "controller-action" "closeDialog" true)}}
+				{{#paper-button primary=(not (not modalData.confirmButton.primary)) accent=(not (not modalData.confirmButton.accent)) warn=(not (not modalData.confirmButton.warn)) raised=(not (not modalData.confirmButton.raised)) onClick=(action "closeDialog" true)}}
 					{{paper-icon modalData.confirmButton.icon class="mr-1"}}<span>{{modalData.confirmButton.text}}</span>
 				{{/paper-button}}
 			{{/if}}

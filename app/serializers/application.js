@@ -3,15 +3,15 @@ import DS from 'ember-data';
 import KeepOnlyChanged from 'ember-data-change-tracker/mixins/keep-only-changed';
 
 export default DS.JSONAPISerializer.extend(KeepOnlyChanged, {
-	'keyForAttribute': function(attr) {
+	keyForAttribute(attr) {
 		return String.underscore(attr);
 	},
 
-	'keyForLink': function(attr) {
+	keyForLink(attr) {
 		return String.underscore(attr);
 	},
 
-	'keyForRelationship': function(attr) {
+	keyForRelationship(attr) {
 		return String.underscore(attr);
 	}
 });

@@ -6,7 +6,7 @@ import BaseComponent from '../framework/base-component';
 export default BaseComponent.extend({
 	'view': function(record) {
 		if(this.get('callbacks.viewAction')) {
-			this.sendAction('controller-action', this.get('callbacks.viewAction'), record);
+			// this.sendAction('controller-action', this.get('callbacks.viewAction'), record);
 			return true;
 		}
 
@@ -25,7 +25,7 @@ export default BaseComponent.extend({
 		}
 
 		if(this.get('callbacks.editAction')) {
-			this.sendAction('controller-action', this.get('callbacks.editAction'), record);
+			// this.sendAction('controller-action', this.get('callbacks.editAction'), record);
 			return true;
 		}
 
@@ -43,7 +43,7 @@ export default BaseComponent.extend({
 		}
 
 		if(this.get('callbacks.saveAction')) {
-			this.sendAction('controller-action', this.get('callbacks.saveAction'), record);
+			// this.sendAction('controller-action', this.get('callbacks.saveAction'), record);
 			return true;
 		}
 
@@ -61,7 +61,7 @@ export default BaseComponent.extend({
 		}
 
 		if(this.get('callbacks.cancelAction')) {
-			this.sendAction('controller-action', this.get('callbacks.cancelAction'), record);
+			// this.sendAction('controller-action', this.get('callbacks.cancelAction'), record);
 			return true;
 		}
 
@@ -75,7 +75,7 @@ export default BaseComponent.extend({
 
 	'delete': function(record) {
 		if(this.get('callbacks.deleteAction')) {
-			this.sendAction('controller-action', this.get('callbacks.deleteAction'), record);
+			// this.sendAction('controller-action', this.get('callbacks.deleteAction'), record);
 			return true;
 		}
 

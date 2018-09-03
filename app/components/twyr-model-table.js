@@ -9,13 +9,13 @@ import Bootstrap4Theme from './../themes/bootstrap4';
 import BaseComponent from './../framework/base-component';
 
 export default BaseComponent.extend({
-	'themeInstance': null,
-	'_messages': {
-		'searchLabel': 'Filter: ',
-		'tableSummary': 'Showing %@ - %@ of %@'
+	themeInstance: null,
+	_messages: {
+		searchLabel: 'Filter: ',
+		tableSummary: 'Showing %@ - %@ of %@'
 	},
 
-	'onWillInsertElement': task(function* () {
+	onWillInsertElement: task(function* () {
 		const mergedMessages = Object.assign({}, this.get('_messages'), (this.get('messages') || {}));
 
 		this.set('themeInstance', Bootstrap4Theme.create({
@@ -44,7 +44,7 @@ export default BaseComponent.extend({
 
 	}).drop().on('willInsertElement'),
 
-	'onDidInsertElement': task(function* () {
+	onDidInsertElement: task(function* () {
 		if(!this.get('createEnabled'))
 			return;
 
@@ -61,14 +61,14 @@ export default BaseComponent.extend({
 );
 
 		createButton.on('click', () => {
-			if(this.get('callbacks.addAction')) {
-				this.sendAction('controller-action', this.get('callbacks.addAction'));
-				return;
-			}
+			// if(this.get('callbacks.addAction')) {
+			// 	this.sendAction('controller-action', this.get('callbacks.addAction'));
+			// 	return;
+			// }
 
-			if(this.get('callbacks.addTask')) {
-				this.get('callbacks.addTask').perform();
-			}
+			// if(this.get('callbacks.addTask')) {
+			// 	this.get('callbacks.addTask').perform();
+			// }
 		});
 
 		const lastHeaderColumn = window.$(this.$('table thead tr:first-child th:last-child')[0]);
@@ -76,20 +76,20 @@ export default BaseComponent.extend({
 		lastHeaderColumn.html(createButton);
 	}).drop().on('didInsertElement'),
 
-	'onWillDestroyElement': task(function* () {
+	onWillDestroyElement: task(function* () {
 		const createButton = window.$(this.$('table thead tr:first-child th:last-child button.md-button.md-primary')[0]);
 		createButton.off('click');
 	}).drop().on('willDestroyElement'),
 
-	'displayDataChanged': function(displayChangedData) {
-		if(this.get('callbacks.displayDataChangedAction')) {
-			this.sendAction('controller-action', this.get('callbacks.displayDataChangedAction'), displayChangedData);
-			return true;
-		}
+	displayDataChanged(displayChangedData) {
+		// if(this.get('callbacks.displayDataChangedAction')) {
+		// 	this.sendAction('controller-action', this.get('callbacks.displayDataChangedAction'), displayChangedData);
+		// 	return true;
+		// }
 
-		if(this.get('callbacks.displayDataChangedTask')) {
-			this.get('callbacks.displayDataChangedTask').perform(displayChangedData);
-			return true;
-		}
+		// if(this.get('callbacks.displayDataChangedTask')) {
+		// 	this.get('callbacks.displayDataChangedTask').perform(displayChangedData);
+		// 	return true;
+		// }
 	}
 });
