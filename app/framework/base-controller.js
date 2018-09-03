@@ -6,10 +6,6 @@ import { inject } from '@ember/service';
 export default Controller.extend({
 	'store': inject('store'),
 
-	'set-model': function(model) {
-		this.set('model', model);
-	},
-
 	'actions': {
 		'controller-action': function(action, data) {
 			if(this[action] && (typeof this[action] === 'function')) {

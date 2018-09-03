@@ -1,9 +1,10 @@
 /* eslint-disable require-yield */
 /* eslint-disable no-console */
 
-import Service from '@ember/service';
 import Evented from '@ember/object/evented';
+import Service from '@ember/service';
 
+import { getOwner } from '@ember/application';
 import { task } from 'ember-concurrency';
 import axios from 'axios';
 
@@ -16,18 +17,31 @@ export default Service.extend(Evented, {
 		const fetchUserData = this.get('fetchUserData');
 		yield fetchUserData.perform();
 
-		App.on('userChanged', fetchUserData.perform);
+		App.on('userChanged', () => {
+			fetchUserData.perform();
+		});
 	}).on('init'),
 
 	'fetchUserData': task(function* () {
+		this.trigger('userDataUpdating');
+
+		const owner = getOwner(this);
+		const router = owner.lookup('router:main');
+
 		yield axios.get('/session/user')
 		.then((userData) => {
 			this.set('userData', userData);
+			this.trigger('userDataUpdated');
 		})
 		.catch((err) => {
 			// TODO: Use the Beacon API to send all this back to the server;
 			this.set('userData', null);
-			if(window.developmentMode) console.error(`Error fetching current user data: `, err);
+			this.trigger('userDataUpdated');
+
+			router.send('controller-action', 'display-status-message', {
+				'type': 'error',
+				'error': err
+			});
 		});
 	}).keepLatest(),
 

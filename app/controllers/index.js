@@ -8,33 +8,35 @@ import { task } from 'ember-concurrency';
 import BaseController from '../framework/base-controller';
 
 export default BaseController.extend({
+	'currentUser': inject('current-user'),
 	'realtimeData': inject('realtime-data'),
 
 	'modalData': null,
 	'showDialog': false,
 
 	'onInit': task(function* () {
-		const onDisplayStatusMessage = this.get('display-status-message');
+		const onDisplayStatusMessage = this['display-status-message'].bind(this);
 
 		this.get('realtimeData').on('websocket-data::display-status-message', (data) => {
-			onDisplayStatusMessage.perform(data);
+			onDisplayStatusMessage(data);
 		});
 
 		this.get('realtimeData').on('websocket-close', () => {
-			onDisplayStatusMessage.perform('Realtime Data Connectivity lost! Will attempt reconnection!!');
+			onDisplayStatusMessage('Realtime Data Connectivity lost! Will attempt reconnection!!');
 		});
 
 		this.get('realtimeData').on('websocket-disconnection', () => {
-			onDisplayStatusMessage.perform('Realtime Data Connectivity lost!');
+			onDisplayStatusMessage('Realtime Data Connectivity lost!');
 		});
 	}).on('init'),
 
-	'display-status-message': task(function* (data) {
-		if(data.type === 'danger') data.type = 'error';
-
+	'display-status-message': function(data) {
+		const toast = this.get('toast');
 		const options = Object.assign({}, { 'positionClass': 'toast-top-right' }, data.options);
 
-		const toast = this.get('toast');
+		if(data.type === 'danger')
+			data.type = 'error';
+
 		if(data.type !== 'error') {
 			toast[data.type ? data.type : 'info'](data.message || data, (data.title || (data.type ? data.type.capitalize() : '')), options);
 			return;
@@ -59,7 +61,7 @@ export default BaseController.extend({
 		}
 
 		toast.error(data.error.message, 'Error', options);
-	}).keepLatest(),
+	},
 
 	'display-modal': function(data) {
 		const defaultData = {
@@ -120,7 +122,7 @@ export default BaseController.extend({
 				}
 			}
 
-			if(this[action]) {
+			if(this[action] && (typeof this[action] === 'function')) {
 				this[action](data);
 				return;
 			}
