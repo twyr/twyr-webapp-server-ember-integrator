@@ -5,11 +5,8 @@ import axios from 'axios';
 import Evented from '@ember/object/evented';
 import Service from '@ember/service';
 
-import { getOwner } from '@ember/application';
 import { inject } from '@ember/service';
 import { task } from 'ember-concurrency';
-
-import App from './../app';
 
 export default Service.extend(Evented, {
 	notification: inject('integrated-notification'),
@@ -19,30 +16,34 @@ export default Service.extend(Evented, {
 		const fetchUserData = this.get('fetchUserData');
 		yield fetchUserData.perform();
 
-		// App.on('userChanged', () => {
-		// 	fetchUserData.perform();
-		// });
+		// eslint-disable-next-line no-undef
+		TwyrApp.on('userChanged', this, this.onUserChanged);
 	}).on('init').drop(),
+
+	onUserChanged() {
+		const fetchUserData = this.get('fetchUserData');
+		fetchUserData.perform();
+	},
 
 	fetchUserData: task(function* () {
 		this.trigger('userDataUpdating');
-		this.trigger('userDataUpdated');
 
-		// yield axios.get('/session/user')
-		// .then((userData) => {
-		// 	this.set('userData', userData);
-		// 	this.trigger('userDataUpdated');
-		// })
-		// .catch((err) => {
-		// 	// TODO: Use the Beacon API to send all this back to the server;
-		// 	this.set('userData', null);
-		// 	this.trigger('userDataUpdated');
+		try {
+			const userData = yield axios.get('/session/user');
 
-		// 	this.get('notification').display({
-		// 		'type': 'error',
-		// 		'error': err
-		// 	});
-		// });
+			this.set('userData', userData.data);
+			this.trigger('userDataUpdated');
+		}
+		catch(err) {
+			// TODO: Use the Beacon API to send all this back to the server;
+			this.set('userData', null);
+			this.trigger('userDataUpdated');
+
+			this.get('notification').display({
+				'type': 'error',
+				'error': err
+			});
+		}
 	}).keepLatest(),
 
 	isLoggedIn() {

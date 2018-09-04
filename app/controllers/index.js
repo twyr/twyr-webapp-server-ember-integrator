@@ -6,6 +6,7 @@ import { inject } from '@ember/service';
 import BaseController from '../framework/base-controller';
 
 export default BaseController.extend({
+	notification: inject('integrated-notification'),
 	realtimeData: inject('realtime-data'),
 
 	modalData: null,
@@ -27,9 +28,21 @@ export default BaseController.extend({
 		this.get('realtimeData').on('websocket-disconnection', () => {
 			notification.display('Realtime Data Connectivity lost!');
 		});
+
+		// eslint-disable-next-line no-undef
+		TwyrApp.on('showModal', this, this.displayModal);
 	},
 
 	displayModal: function(data) {
+		if(this.get('showDialog')) {
+			this.get('notification').display({
+				'type': 'error',
+				'error': new Error('Multiple Modal Dialogs cannot be displayed simultaneously')
+			});
+
+			return;
+		}
+
 		const defaultData = {
 			'title': 'Twyr Modal',
 			'content': `This is the default. Someone forgot to override it!`,

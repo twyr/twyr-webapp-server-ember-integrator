@@ -1,9 +1,18 @@
+/* eslint-disable ember/avoid-leaking-state-in-ember-objects */
+
 import axios from 'axios';
 
 import BaseComponent from '../../framework/base-component';
+
+import { computed } from '@ember/object';
+import computedStyle from 'ember-computed-style';
+
 import { task } from 'ember-concurrency';
 
 export default BaseComponent.extend({
+	attributeBindings: ['style'],
+	style: computedStyle('minWidth'),
+
 	permissions: null,
 	displayForm: 'loginForm',
 
@@ -14,6 +23,9 @@ export default BaseComponent.extend({
 	lastName: '',
 	mobileNumber: '',
 
+	minWidth: computed('hasPermission', function() {
+		return { 'min-width': (this.get('hasPermission') ? '0rem' : '20rem') };
+	}),
 
 	onInit: task(function* () {
 		yield this.set('permissions', ['registered']);
@@ -30,18 +42,18 @@ export default BaseComponent.extend({
 		try {
 			const data = yield axios.post('/session/login', {
 				'dataType': 'json',
-				'data': {
-					'username': this.get('username'),
-					'password': this.get('password')
-				}
+				'username': this.get('username'),
+				'password': this.get('password')
 			});
 
+			const loginResult = data.data;
 			notification.display({
-				'type': data.status ? 'success' : 'error',
-				'message': data.responseText
+				'type': (loginResult.status < 400) ? 'success' : 'error',
+				'message': loginResult.info.message
 			});
 
-			if(data.status) window.location.href = '/';
+			// eslint-disable-next-line no-undef
+			TwyrApp.trigger('userChanged');
 		}
 		catch(err) {
 			notification.display({
@@ -60,7 +72,7 @@ export default BaseComponent.extend({
 		});
 
 		try {
-			let data = yield axios.post('/session/resetPassword', {
+			let data = yield axios.post('/session/reset-password', {
 				'dataType': 'json',
 				'data': {
 					'username': this.get('username')
@@ -104,7 +116,7 @@ export default BaseComponent.extend({
 		});
 
 		try {
-			let data = yield axios.post('/session/registerAccount', {
+			let data = yield axios.post('/session/register-account', {
 				'dataType': 'json',
 				'data': {
 					'firstname': this.get('firstName'),
@@ -130,7 +142,9 @@ export default BaseComponent.extend({
 		}
 	}).drop(),
 
-	setDisplayForm: function(formName) {
-		this.set('displayForm', formName);
+	actions: {
+		setDisplayForm(formName) {
+			this.set('displayForm', formName);
+		}
 	}
 });

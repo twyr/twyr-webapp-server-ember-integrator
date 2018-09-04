@@ -73,3 +73,13 @@ $warn: map-merge($color-amber, (
 @import "ember-paper-expansion-panel";
 @import "ember-paper-stepper";
 @import "ember-paper-link";
+
+/* Bug-fix :-( */
+md-input-container {
+	margin-bottom: 0 !important;
+}
+
+md-input-container .md-input {
+	height: unset !important;
+}
+

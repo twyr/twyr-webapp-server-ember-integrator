@@ -1,9 +1,9 @@
-{{#unless hasPermission}}
+{{#liquid-unless hasPermission}}
 {{#paper-card as |card|}}
 	{{#liquid-if (eq displayForm "loginForm")}}
-	{{#card.header as |header|}}
+	{{#card.header class="orange lighten-3" as |header|}}
 		{{#header.text as |text|}}
-			{{#text.title}}{{fa-icon "sign-in" class="mr-2"}}Login{{/text.title}}
+			{{#text.title}}{{fa-icon "sign-in-alt" class="mr-2"}}Login{{/text.title}}
 		{{/header.text}}
 	{{/card.header}}
 	{{#card.content}}
@@ -21,7 +21,7 @@
 						{{#liquid-if doLogin.isRunning}}
 							{{paper-icon "rotate-left" reverseSpin=true}}
 						{{else}}
-							{{fa-icon "sign-in" class="mr-2"}}<span>Login</span>
+							{{fa-icon "sign-in-alt" class="mr-2"}}<span>Login</span>
 						{{/liquid-if}}
 					{{/form.submit-button}}
 				</div>
@@ -32,9 +32,9 @@
 	{{/liquid-if}}
 
 	{{#liquid-if (eq displayForm "resetPasswordForm")}}
-	{{#card.header as |header|}}
+	{{#card.header class="amber lighten-3" as |header|}}
 		{{#header.text as |text|}}
-			{{#text.title}}{{paper-icon "lock-outline" class="mr-2 pb-1 white-text"}}Reset Password{{/text.title}}
+			{{#text.title}}{{paper-icon "lock-outline" class="mr-2 pb-1"}}Reset Password{{/text.title}}
 		{{/header.text}}
 	{{/card.header}}
 	{{#card.content}}
@@ -43,7 +43,7 @@
 			{{form.input type="email" label="Login / Username" value=resetUsername onChange=(action (mut resetUsername)) required=true}}
 			<div class="layout-row layout-align-space-between-center">
 				<div class="layout-column">
-					<a href="#" {{action "setDisplayForm" "loginForm"}}>PlantWorks Login</a>
+					<a href="#" {{action "setDisplayForm" "loginForm"}}>Twy&apos;r Login</a>
 					<a href="#" {{action "setDisplayForm" "registerForm"}}>Register Account</a>
 				</div>
 				<div class="layout-column">
@@ -62,9 +62,9 @@
 	{{/liquid-if}}
 
 	{{#liquid-if (eq displayForm "registerForm")}}
-	{{#card.header as |header|}}
+	{{#card.header class="yellow lighten-3" as |header|}}
 		{{#header.text as |text|}}
-			{{#text.title}}{{paper-icon "person-add" class="mr-2 pb-1 white-text"}}Create Account{{/text.title}}
+			{{#text.title}}{{paper-icon "person-add" class="mr-2 pb-1"}}Create Account{{/text.title}}
 		{{/header.text}}
 	{{/card.header}}
 	{{#card.content}}
@@ -84,7 +84,7 @@
 			</div>
 			<div class="layout-row layout-align-space-between-center">
 				<div class="layout-column">
-					<a href="#" {{action "setDisplayForm" "loginForm"}}>PlantWorks Login</a>
+					<a href="#" {{action "setDisplayForm" "loginForm"}}>Twy&apos;r Login</a>
 					<a href="#" {{action "setDisplayForm" "resetPasswordForm"}}>Reset Password</a>
 				</div>
 				<div class="layout-column">
@@ -102,4 +102,4 @@
 	{{/card.content}}
 	{{/liquid-if}}
 {{/paper-card}}
-{{/unless}}
+{{/liquid-unless}}
