@@ -4,11 +4,22 @@ const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 const broccoliAssetRevDefaults = require('broccoli-asset-rev/lib/default-options');
 
 module.exports = function(defaults) {
+	const environment = process.env.EMBER_ENV;
+	const pluginsToBlacklist = environment === 'production' ? ['ember-freestyle'] : [];
+
 	let app = new EmberApp(defaults, {
 		'name': 'twyr-webapp-server',
 
 		'storeConfigInMeta': false,
 		'autoRun': false,
+
+		'sassOptions': {
+			'implementation': require('node-sass')
+		},
+
+		'addons': {
+			'blacklist': pluginsToBlacklist
+		},
 
 		'fingerprint': {
 			'customHash': null,
