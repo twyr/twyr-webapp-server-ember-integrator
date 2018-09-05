@@ -57,21 +57,20 @@ $ember-power-select-material-active-color: rgb(25, 118, 210);
 
 /* Ember Paper */
 @import 'color-palette';
-$primary: map-merge($color-blue, (
-	'default': '700'
-));
+$default-color: '700';
+$primary: $color-blue;
 
-$accent: map-merge($color-green, (
-	'default': '300'
-));
+$default-color: '300';
+$accent: $color-green;
 
-$warn: map-merge($color-amber, (
-	'default': 'A200'
-));
+$default-color: 'A200';
+$warn: $color-amber;
 
 @import 'ember-paper';
 @import "ember-paper-expansion-panel";
 @import "ember-paper-stepper";
+
+$base-color: rgba(0, 0, 0, 0.87);
 @import "ember-paper-link";
 
 /* Bug-fix :-( */
