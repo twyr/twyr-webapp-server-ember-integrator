@@ -12,8 +12,11 @@ export default BaseController.extend({
 	modalData: null,
 	showDialog: false,
 
+	mainTitle: '',
+
 	init() {
 		this._super(...arguments);
+		this.set('mainTitle', document.title);
 
 		const notification = this.get('notification');
 

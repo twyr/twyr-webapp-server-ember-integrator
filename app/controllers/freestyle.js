@@ -1,3 +1,5 @@
+/* eslint-disable ember/avoid-leaking-state-in-ember-objects */
+
 import Ember from 'ember';
 import FreestyleController from 'ember-freestyle/controllers/freestyle';
 

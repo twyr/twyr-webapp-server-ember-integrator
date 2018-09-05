@@ -13,17 +13,8 @@ module.exports = function(defaults) {
 		'storeConfigInMeta': false,
 		'autoRun': false,
 
-		'sassOptions': {
-			'implementation': require('node-sass')
-		},
-
 		'addons': {
 			'blacklist': pluginsToBlacklist
-		},
-
-		'fingerprint': {
-			'customHash': null,
-			'extensions': broccoliAssetRevDefaults.extensions.concat(['svg'])
 		},
 
 		'ember-bootstrap': {
@@ -34,6 +25,20 @@ module.exports = function(defaults) {
 
 		'ember-power-select': {
 			'theme': 'material'
+		},
+
+		'funnel': {
+			'enabled': true,
+			'exclude': [`${defaults.project.pkg.name}/router.js`]
+		},
+
+		'fingerprint': {
+			'customHash': null,
+			'extensions': broccoliAssetRevDefaults.extensions.concat(['svg'])
+		},
+
+		'sassOptions': {
+			'implementation': require('node-sass')
 		}
 	});
 

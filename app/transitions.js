@@ -7,7 +7,7 @@ export default function() {
 			return true;
 		}),
 		this.use('crossFade', {
-			'duration': 300
+			'duration': 500
 		}),
 	);
 
@@ -19,7 +19,7 @@ export default function() {
 			return true;
 		}),
 		this.use('crossFade', {
-			'duration': 300
+			'duration': 500
 		}),
 	);
 }

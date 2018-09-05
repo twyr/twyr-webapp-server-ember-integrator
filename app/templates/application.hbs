@@ -1,13 +1,17 @@
+<!-- For the configurable Page Title -->
+{{head-layout}}
+{{page-title mainTitle}}
+
 <!-- Customizable Header -->
-<header>
+<header class="sticky-top">
 	{{#bs-navbar class="p-0 px-2 py-1" position="sticky-top" type="light" backgroundColor="twyr" collapsed=false fluid=true as |navbar|}}
 		<div class="navbar-header">
-			{{#link-to "index" class="navbar-brand"}}
-				<span class="h3 orange-text" style="font-family:Keania One;">Twy&apos;r</span>
+			{{#link-to "index" class="navbar-brand white-text"}}
+				<span class="h3" style="font-family:Keania One;">Twy&apos;r</span>
 			{{/link-to}}
 		</div>
 		{{#navbar.content}}
-			{{#navbar.nav id="twyr-webapp-server-template-bhairavi-notification-area" class="ml-auto orange-text nav-flex-icons" as |nav|}}
+			{{#navbar.nav id="twyr-webapp-server-template-bhairavi-notification-area" class="ml-auto nav-flex-icons white-text" as |nav|}}
 				{{#nav.item}}{{component "session/logout-component"}}{{/nav.item}}
 			{{/navbar.nav}}
 		{{/navbar.content}}
@@ -15,7 +19,7 @@
 </header>
 
 <!-- Main Area -->
-<main class="flex p-1">
+<main class="bg-light flex p-2" style="box-shadow:0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);">
 	<div id="twyr-webapp-server-template-bhairavi-first-row" class="layout-row flex-initial">
 		<div id="twyr-webapp-server-template-bhairavi-first-row-position-1" class="flex-initial"></div>
 		<div id="twyr-webapp-server-template-bhairavi-first-row-position-2" class="flex-initial"></div>
@@ -43,11 +47,21 @@
 </main>
 
 <!-- Customizable Footer -->
-<footer class="page-footer mt-2 layout-row layout-align-space-between bg-secondary">
-	<div class="flex px-1 py-3 text-right">
+<footer class="page-footer mt-2 layout-row layout-align-space-between grey">
+	<div class="flex p-3 text-left">
+		{{#link-to "freestyle"}}Styleguide{{/link-to}}
+	</div>
+	<div class="flex p-3 text-right">
 		Copyright&copy; 2018 {{#link-to "index"}}Twy&apos;r{{/link-to}}. All rights reserved.
 	</div>
 </footer>
+
+<!-- The mandatory empty div elements for wormhole, paper, etc. -->
+<div id="ember-bootstrap-wormhole"></div>
+<div id="ember-basic-dropdown-wormhole"></div>
+<div id="paper-wormhole"></div>
+<div id="paper-toast-fab-wormhole"></div>
+
 
 <!-- Modal -->
 {{#liquid-if showDialog}}
