@@ -1,9 +1,5 @@
-/* eslint-disable require-yield */
-/* eslint-disable no-console */
-/* eslint-disable ember/avoid-leaking-state-in-ember-objects */
-
-import { inject } from '@ember/service';
 import BaseController from '../framework/base-controller';
+import { inject } from '@ember/service';
 
 export default BaseController.extend({
 	notification: inject('integrated-notification'),
@@ -31,9 +27,6 @@ export default BaseController.extend({
 		this.get('realtimeData').on('websocket-disconnection', () => {
 			notification.display('Realtime Data Connectivity lost!');
 		});
-
-		// eslint-disable-next-line no-undef
-		TwyrApp.on('showModal', this, this.displayModal);
 	},
 
 	displayModal: function(data) {
@@ -92,5 +85,24 @@ export default BaseController.extend({
 
 		this.set('showDialog', false);
 		this.set('modalData', null);
+	},
+
+	actions: {
+		'controller-action': function(action, data) {
+			if(this.get('showDialog') && this.get('modalData') && this.get('modalData.actions')) {
+				const modalActions = this.get('modalData')['actions'][action];
+				if(modalActions) {
+					modalActions(data);
+					return;
+				}
+			}
+
+			if(this[action]) {
+				this[action](data);
+				return;
+			}
+
+			this.get('notification').display(`TODO: Handle ${action} action with data: `, data);
+		}
 	}
 });

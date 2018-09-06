@@ -4,9 +4,8 @@ import axios from 'axios';
 
 import BaseComponent from '../../framework/base-component';
 
-import { computed } from '@ember/object';
 import computedStyle from 'ember-computed-style';
-
+import { computed } from '@ember/object';
 import { task } from 'ember-concurrency';
 
 export default BaseComponent.extend({
@@ -142,9 +141,7 @@ export default BaseComponent.extend({
 		}
 	}).drop(),
 
-	actions: {
-		setDisplayForm(formName) {
-			this.set('displayForm', formName);
-		}
+	setDisplayForm(formName) {
+		this.set('displayForm', formName);
 	}
 });

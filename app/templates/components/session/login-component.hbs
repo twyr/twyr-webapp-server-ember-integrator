@@ -13,8 +13,8 @@
 			{{form.input type="password" label="Password" value=password onChange=(action (mut password)) required=true}}
 			<div class="layout-row layout-align-space-between-center">
 				<div class="layout-column">
-					<a href="#" {{action "setDisplayForm" "resetPasswordForm"}}>Forgot Password</a>
-					<a href="#" {{action "setDisplayForm" "registerForm"}}>Register Account</a>
+					<a href="#" {{action "controller-action" "setDisplayForm" "resetPasswordForm"}}>Forgot Password</a>
+					<a href="#" {{action "controller-action" "setDisplayForm" "registerForm"}}>Register Account</a>
 				</div>
 				<div class="layout-column">
 					{{#form.submit-button primary=true raised=true disabled=(or form.isInvalid doLogin.isRunning)}}
@@ -43,8 +43,8 @@
 			{{form.input type="email" label="Login / Username" value=resetUsername onChange=(action (mut resetUsername)) required=true}}
 			<div class="layout-row layout-align-space-between-center">
 				<div class="layout-column">
-					<a href="#" {{action "setDisplayForm" "loginForm"}}>Twy&apos;r Login</a>
-					<a href="#" {{action "setDisplayForm" "registerForm"}}>Register Account</a>
+					<a href="#" {{action "controller-action" "setDisplayForm" "loginForm"}}>Twy&apos;r Login</a>
+					<a href="#" {{action "controller-action" "setDisplayForm" "registerForm"}}>Register Account</a>
 				</div>
 				<div class="layout-column">
 					{{#form.submit-button raised=true accent=true disabled=(or form.isInvalid resetPassword.isRunning)}}
@@ -84,8 +84,8 @@
 			</div>
 			<div class="layout-row layout-align-space-between-center">
 				<div class="layout-column">
-					<a href="#" {{action "setDisplayForm" "loginForm"}}>Twy&apos;r Login</a>
-					<a href="#" {{action "setDisplayForm" "resetPasswordForm"}}>Reset Password</a>
+					<a href="#" {{action "controller-action" "setDisplayForm" "loginForm"}}>Twy&apos;r Login</a>
+					<a href="#" {{action "controller-action" "setDisplayForm" "resetPasswordForm"}}>Reset Password</a>
 				</div>
 				<div class="layout-column">
 					{{#form.submit-button raised=true accent=true disabled=(or form.isInvalid registerAccount.isRunning)}}
