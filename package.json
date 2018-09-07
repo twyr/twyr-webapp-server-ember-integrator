@@ -99,7 +99,7 @@
 		"liquid-fire": "^0.29.5",
 		"loader.js": "^4.2.3",
 		"node-sass": "^4.9.3",
-		"qunit-dom": "^0.6.2",
+		"qunit-dom": "^0.8.0",
 		"toastr": "^2.1.4"
 	},
 	"engines": {
