@@ -1,12 +1,11 @@
-/* eslint-disable ember/avoid-leaking-state-in-ember-objects */
-/* eslint-disable ember/closure-actions */
-
 import BaseComponent from '../framework/base-component';
 
-export default BaseComponent.extend({
-	'view': function(record) {
+import { InvokeActionMixin } from 'ember-invoke-action';
+
+export default BaseComponent.extend(InvokeActionMixin, {
+	view(record) {
 		if(this.get('callbacks.viewAction')) {
-			// this.sendAction('controller-action', this.get('callbacks.viewAction'), record);
+			this.invokeAction('controller-action', this.get('callbacks.viewAction'), record);
 			return true;
 		}
 
@@ -18,14 +17,14 @@ export default BaseComponent.extend({
 		return false;
 	},
 
-	'edit': function(record) {
+	edit(record) {
 		if(this.get('inlineEditEnabled')) {
 			this.get('editRow')();
 			return true;
 		}
 
 		if(this.get('callbacks.editAction')) {
-			// this.sendAction('controller-action', this.get('callbacks.editAction'), record);
+			this.invokeAction('controller-action', this.get('callbacks.editAction'), record);
 			return true;
 		}
 
@@ -37,13 +36,13 @@ export default BaseComponent.extend({
 		return false;
 	},
 
-	'save': function(record) {
+	save(record) {
 		if(this.get('inlineEditEnabled')) {
 			this.get('saveRow')();
 		}
 
 		if(this.get('callbacks.saveAction')) {
-			// this.sendAction('controller-action', this.get('callbacks.saveAction'), record);
+			this.invokeAction('controller-action', this.get('callbacks.saveAction'), record);
 			return true;
 		}
 
@@ -55,13 +54,13 @@ export default BaseComponent.extend({
 		return false;
 	},
 
-	'cancel': function(record) {
+	cancel(record) {
 		if(this.get('inlineEditEnabled')) {
 			this.get('cancelEditRow')();
 		}
 
 		if(this.get('callbacks.cancelAction')) {
-			// this.sendAction('controller-action', this.get('callbacks.cancelAction'), record);
+			this.invokeAction('controller-action', this.get('callbacks.cancelAction'), record);
 			return true;
 		}
 
@@ -73,9 +72,9 @@ export default BaseComponent.extend({
 		return false;
 	},
 
-	'delete': function(record) {
+	delete(record) {
 		if(this.get('callbacks.deleteAction')) {
-			// this.sendAction('controller-action', this.get('callbacks.deleteAction'), record);
+			this.invokeAction('controller-action', this.get('callbacks.deleteAction'), record);
 			return true;
 		}
 
@@ -87,12 +86,12 @@ export default BaseComponent.extend({
 		return false;
 	},
 
-	'actions': {
-		'collapseRow': function(index, record) {
+	actions: {
+		collapseRow(index, record) {
 			this.get('collapseRow')(index, record);
 		},
 
-		'expandRow': function(index, record) {
+		expandRow(index, record) {
 			this.get('expandRow')(index, record);
 		}
 

@@ -1,18 +1,23 @@
 /* eslint-disable require-yield */
-/* eslint-disable no-console */
-/* eslint-disable ember/closure-actions */
-/* eslint-disable ember/avoid-leaking-state-in-ember-objects */
-
-import { task } from 'ember-concurrency';
-import Bootstrap4Theme from './../themes/bootstrap4';
 
 import BaseComponent from './../framework/base-component';
+import Bootstrap4Theme from './../themes/bootstrap4';
 
-export default BaseComponent.extend({
+import { InvokeActionMixin } from 'ember-invoke-action';
+import { task } from 'ember-concurrency';
+
+
+export default BaseComponent.extend(InvokeActionMixin, {
 	themeInstance: null,
-	_messages: {
-		searchLabel: 'Filter: ',
-		tableSummary: 'Showing %@ - %@ of %@'
+	_messages: null,
+
+	init() {
+		this.set('_messages', {
+			searchLabel: 'Filter: ',
+			tableSummary: 'Showing %@ - %@ of %@'
+		});
+
+		this._super(...arguments);
 	},
 
 	onWillInsertElement: task(function* () {
@@ -58,17 +63,17 @@ export default BaseComponent.extend({
 <span>Add</span>
 <div class="md-ripple-container" style=""></div>
 `
-);
+		);
 
 		createButton.on('click', () => {
-			// if(this.get('callbacks.addAction')) {
-			// 	this.sendAction('controller-action', this.get('callbacks.addAction'));
-			// 	return;
-			// }
+			if(this.get('callbacks.addAction')) {
+				this.invokeAction('controller-action', this.get('callbacks.addAction'));
+				return;
+			}
 
-			// if(this.get('callbacks.addTask')) {
-			// 	this.get('callbacks.addTask').perform();
-			// }
+			if(this.get('callbacks.addTask')) {
+				this.get('callbacks.addTask').perform();
+			}
 		});
 
 		const lastHeaderColumn = window.$(this.$('table thead tr:first-child th:last-child')[0]);
@@ -82,14 +87,14 @@ export default BaseComponent.extend({
 	}).drop().on('willDestroyElement'),
 
 	displayDataChanged(displayChangedData) {
-		// if(this.get('callbacks.displayDataChangedAction')) {
-		// 	this.sendAction('controller-action', this.get('callbacks.displayDataChangedAction'), displayChangedData);
-		// 	return true;
-		// }
+		if(this.get('callbacks.displayDataChangedAction')) {
+			this.invokeAction('controller-action', this.get('callbacks.displayDataChangedAction'), displayChangedData);
+			return true;
+		}
 
-		// if(this.get('callbacks.displayDataChangedTask')) {
-		// 	this.get('callbacks.displayDataChangedTask').perform(displayChangedData);
-		// 	return true;
-		// }
+		if(this.get('callbacks.displayDataChangedTask')) {
+			this.get('callbacks.displayDataChangedTask').perform(displayChangedData);
+			return true;
+		}
 	}
 });

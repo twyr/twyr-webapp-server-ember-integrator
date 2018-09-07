@@ -23,6 +23,10 @@ module.exports = function(defaults) {
 			'importBootstrapCSS': false
 		},
 
+		'ember-fetch': {
+			'preferNative': true
+		},
+
 		'ember-power-select': {
 			'theme': 'material'
 		},
