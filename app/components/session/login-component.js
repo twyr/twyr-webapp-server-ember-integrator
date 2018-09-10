@@ -71,23 +71,22 @@ export default BaseComponent.extend({
 		});
 
 		try {
-			let data = yield axios.post('/session/reset-password', {
+			const data = yield axios.post('/session/reset-password', {
 				'dataType': 'json',
-				'data': {
-					'username': this.get('username')
-				}
+				'username': this.get('username')
 			});
 
-			if(data.status) {
+			const resetPassResult = data.data;
+			if(data.status < 400) {
 				notification.display({
-					'type': 'success',
-					'message': data.responseText
+					'type': (resetPassResult.status < 400) ? 'success' : 'error',
+					'message': resetPassResult.message
 				});
 
 				return;
 			}
 
-			throw new Error(data.responseText);
+			throw new Error(data.message);
 		}
 		catch(err) {
 			notification.display({
@@ -115,22 +114,21 @@ export default BaseComponent.extend({
 		});
 
 		try {
-			let data = yield axios.post('/session/register-account', {
+			const data = yield axios.post('/session/register-account', {
 				'dataType': 'json',
-				'data': {
-					'firstname': this.get('firstName'),
-					'lastname': this.get('lastName'),
+				'firstname': this.get('firstName'),
+				'lastname': this.get('lastName'),
 
-					'username': this.get('username'),
-					'mobileNumber': this.get('mobileNumber'),
+				'username': this.get('username'),
+				'mobileNumber': this.get('mobileNumber'),
 
-					'password': this.get('password')
-				}
+				'password': this.get('password')
 			});
 
+			const registerResult = data.data;
 			notification.display({
-				'type': data.status ? 'success' : 'warning',
-				'message': data.responseText
+				'type': (registerResult.status < 400) ? 'success' : 'error',
+				'message': registerResult.message
 			});
 		}
 		catch(err) {
