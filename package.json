@@ -107,6 +107,7 @@
   },
   "dependencies": {
     "axios": "*",
-    "corber": "^1.3.2"
+    "corber": "^1.3.2",
+    "notifyjs": "^3.0.0"
   }
 }
