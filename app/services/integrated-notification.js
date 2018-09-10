@@ -1,10 +1,48 @@
 import Service from '@ember/service';
+import Notify from 'notifyjs';
+
 import { inject } from '@ember/service';
 
 export default Service.extend({
 	toast: inject('toast'),
 
+	notifyEnabled: false,
+
+	init() {
+		this._super(...arguments);
+
+		if(!Notify.needsPermission) {
+			this.set('notifyEnabled', true);
+			return;
+		}
+
+		if(!Notify.isSupported()) {
+			this.set('notifyEnabled', false);
+			return;
+		}
+
+		const self = this;
+		Notify.requestPermission(function() {
+			self.set('notifyEnabled', true);
+			return;
+		}, function() {
+			self.set('notifyEnabled', false);
+			return;
+		});
+	},
+
 	display(data) {
+		if(this.get('notifyEnabled') && (((data.type || 'info') === 'success') || ((data.type || 'info') === 'error'))) {
+			const thisNotification = new Notify((data.title || (data.type ? data.type.capitalize() : '')), {
+				'body': (data.type !== 'error') ? (data.message || data) : (data.error.responseText || data.error.message || data.error),
+				'closeOnClick': true,
+				'timeout': 4000
+			});
+
+			thisNotification.show();
+			return;
+		}
+
 		const toast = this.get('toast');
 		const options = Object.assign({}, {
 			'positionClass': 'toast-bottom-right',
