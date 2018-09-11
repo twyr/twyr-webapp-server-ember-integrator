@@ -3,6 +3,7 @@
 import axios from 'axios';
 
 import BaseComponent from '../../framework/base-component';
+import env from 'twyr-webapp-server/config/environment';
 
 import computedStyle from 'ember-computed-style';
 import { computed } from '@ember/object';
@@ -51,8 +52,26 @@ export default BaseComponent.extend({
 				'message': loginResult.info.message
 			});
 
-			// eslint-disable-next-line no-undef
-			TwyrApp.trigger('userChanged');
+			if(loginResult.nextAction === 'proceed') {
+				window.TwyrApp.trigger('userChanged');
+				return;
+			}
+
+			if(loginResult.nextAction === 'redirect') {
+				const currentSubDomain = window.location.hostname.replace(env.twyr.domain, '');
+				const newHref = window.location.href.replace(currentSubDomain, loginResult.redirectDomain);
+
+				window.location.href = newHref;
+				return;
+			}
+
+			if(loginResult.nextAction === 'choose') {
+				notification.display({
+					'type': 'info',
+					'message': 'TBD: Allow user to choose tenant'
+				});
+				return;
+			}
 		}
 		catch(err) {
 			notification.display({

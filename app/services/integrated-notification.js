@@ -44,6 +44,8 @@ export default Service.extend({
 		}
 
 		const toast = this.get('toast');
+		toast.clear();
+
 		const options = Object.assign({}, {
 			'positionClass': 'toast-bottom-right',
 			'preventDuplicates': true

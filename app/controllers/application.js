@@ -1,4 +1,6 @@
 import BaseController from '../framework/base-controller';
+import env from 'twyr-webapp-server/config/environment';
+
 import { inject } from '@ember/service';
 
 export default BaseController.extend({
@@ -9,10 +11,18 @@ export default BaseController.extend({
 	showDialog: false,
 
 	mainTitle: '',
+	displayCurrentYear: false,
+
+	startYear: env.twyr.startYear,
+	currentYear: env.twyr.startYear,
 
 	init() {
 		this._super(...arguments);
 		this.set('mainTitle', document.title);
+
+		const currentYear = new Date().getFullYear();
+		this.set('currentYear', currentYear);
+		this.set('displayCurrentYear', (currentYear > this.get('startYear')));
 
 		const notification = this.get('notification');
 

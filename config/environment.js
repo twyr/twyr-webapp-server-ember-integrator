@@ -7,42 +7,16 @@ module.exports = function (environment) {
 		'rootURL': process.env.CORBER ? '' : '/',
 		'locationType': process.env.CORBER ? 'hash' : 'auto',
 
-		'pageTitle': {
-			'replace': false,
-			'separator': ' > '
-		},
-
 		'changeTracker': {
 			'trackHasMany': true,
 			'auto': true,
 			'enableIsDirty': true
 		},
 
-		'googleFonts': [
-			'Noto+Sans:400,400i,700,700i',
-			'Noto+Serif:400,400i,700,700i&subset=devanagari',
-			'Keania+One'
-		],
-
 		// Set or update content security policies
 		'contentSecurityPolicy': {
 			'font-src': "'self' fonts.gstatic.com",
 			'style-src': "'self' fonts.googleapis.com"
-		},
-
-		'moment': {
-			'allowEmpty': true,
-			'includeTimezone': 'all',
-
-			'includeLocales': true,
-			'localeOutputPath': '/moment-locales'
-		},
-
-		'resizeServiceDefaults': {
-			'debounceTimeout': 100,
-			'heightSensitive': true,
-			'widthSensitive': true,
-			'injectionFactories': ['component']
 		},
 
 		'ember-paper': {
@@ -53,6 +27,37 @@ module.exports = function (environment) {
 			'icons': {
 				'free-solid-svg-icons': 'all'
 			}
+		},
+
+		'googleFonts': [
+			'Noto+Sans:400,400i,700,700i',
+			'Noto+Serif:400,400i,700,700i&subset=devanagari',
+			'Keania+One'
+		],
+
+		'moment': {
+			'allowEmpty': true,
+			'includeTimezone': 'all',
+
+			'includeLocales': true,
+			'localeOutputPath': '/moment-locales'
+		},
+
+		'pageTitle': {
+			'replace': false,
+			'separator': ' > '
+		},
+
+		'resizeServiceDefaults': {
+			'debounceTimeout': 100,
+			'heightSensitive': true,
+			'widthSensitive': true,
+			'injectionFactories': ['component']
+		},
+
+		'twyr': {
+			'domain': '.twyr.com',
+			'startYear': 2016
 		},
 
 		'EmberENV': {

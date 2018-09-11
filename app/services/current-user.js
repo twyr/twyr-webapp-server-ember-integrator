@@ -52,5 +52,9 @@ export default Service.extend(Evented, {
 
 	hasPermission(permission) {
 		return ((this.get('userData.permissions') || []).includes(permission));
+	},
+
+	getUser() {
+		return this.get('userData');
 	}
 });
