@@ -37,8 +37,28 @@ module.exports = function(defaults) {
 			'extensions': broccoliAssetRevDefaults.extensions.concat(['svg'])
 		},
 
+		'outputPaths': {
+			'app': {
+				'html': 'index.ejs',
+				'css': {
+					'app': '/css/twyr-webapp-server.css'
+				},
+				'js': '/js/twyr-webapp-server.js'
+			},
+
+			'vendor': {
+				'css': '/css/vendor.css',
+				'js': '/js/vendor.js'
+			}
+		},
+
 		'sassOptions': {
 			'implementation': require('node-sass')
+		},
+
+		'sourcemaps': {
+			'enabled': true,
+			'extensions': ['css', 'js']
 		}
 	});
 

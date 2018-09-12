@@ -1,7 +1,9 @@
 import BaseComponent from '../../framework/base-component';
+import { inject } from '@ember/service';
 import { task } from 'ember-concurrency';
 
 export default BaseComponent.extend({
+	router: inject('router'),
 	permissions: null,
 
 	onInit: task(function* () {
@@ -24,7 +26,8 @@ export default BaseComponent.extend({
 			});
 
 			// eslint-disable-next-line no-undef
-			TwyrApp.trigger('userChanged');
+			window.TwyrApp.trigger('userChanged');
+			this.get('router').transitionTo('index');
 		}
 		catch(err) {
 			notification.display({

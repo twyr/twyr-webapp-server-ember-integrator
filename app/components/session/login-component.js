@@ -1,13 +1,14 @@
-/* eslint-disable ember/avoid-leaking-state-in-ember-objects */
-
 import BaseComponent from '../../framework/base-component';
 import env from 'twyr-webapp-server/config/environment';
 
 import computedStyle from 'ember-computed-style';
 import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 import { task } from 'ember-concurrency';
 
 export default BaseComponent.extend({
+	router: inject('router'),
+
 	attributeBindings: ['style'],
 	style: computedStyle('minWidth'),
 
@@ -53,6 +54,7 @@ export default BaseComponent.extend({
 
 			if(loginResult.nextAction === 'proceed') {
 				window.TwyrApp.trigger('userChanged');
+				// this.get('router').transitionTo('user-home');
 				return;
 			}
 
@@ -69,6 +71,7 @@ export default BaseComponent.extend({
 					'type': 'info',
 					'message': 'TBD: Allow user to choose tenant'
 				});
+
 				return;
 			}
 		}
