@@ -1,6 +1,6 @@
 import DS from 'ember-data';
-import AdapterFetch from 'ember-fetch/mixins/adapter-fetch';
+import AjaxServiceSupport from 'ember-ajax/mixins/ajax-support';
 
-export default DS.JSONAPIAdapter.extend(AdapterFetch, {
+export default DS.JSONAPIAdapter.extend(AjaxServiceSupport, {
 	'host': '/'
 });

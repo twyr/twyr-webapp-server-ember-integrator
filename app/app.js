@@ -2,8 +2,6 @@ import Application from '@ember/application';
 import Evented from '@ember/object/evented';
 import Resolver from './resolver';
 
-import axios from 'axios';
-
 import { inject } from '@ember/service';
 import { on } from 'rsvp';
 
@@ -15,6 +13,7 @@ const App = Application.extend(Evented, {
 	'podModulePrefix': config.podModulePrefix,
 	'Resolver': Resolver,
 
+	ajax: inject('ajax'),
 	currentUser: inject('current-user'),
 
 	init() {
@@ -23,34 +22,38 @@ const App = Application.extend(Evented, {
 		window.Ember.onerror = function(error) {
 			const beaconData = {
 				'dataType': 'json',
-				'user': this.get('currentUser').getUser(),
-				'urlPath': location.href,
-				'error': error.message,
-				'stack': error.stack
+				'data': {
+					'user': this.get('currentUser').getUser(),
+					'urlPath': location.href,
+					'error': error.message,
+					'stack': error.stack
+				}
 			};
 
 			if(navigator.sendBeacon) {
 				navigator.sendBeacon('/collectClientErrorData', beaconData);
 			}
 			else {
-				axios.post('/collectClientErrorData', beaconData);
+				this.get('ajax').post('/collectClientErrorData', beaconData);
 			}
 		}
 
 		on('error', function(error) {
 			const beaconData = {
 				'dataType': 'json',
-				'user': this.get('currentUser').getUser(),
-				'urlPath': location.href,
-				'error': error.message,
-				'stack': error.stack
+				'data': {
+					'user': this.get('currentUser').getUser(),
+					'urlPath': location.href,
+					'error': error.message,
+					'stack': error.stack
+				}
 			};
 
 			if(navigator.sendBeacon) {
 				navigator.sendBeacon('/collectClientErrorData', beaconData);
 			}
 			else {
-				axios.post('/collectClientErrorData', beaconData);
+				this.get('ajax').post('/collectClientErrorData', beaconData);
 			}
 		});
 	}

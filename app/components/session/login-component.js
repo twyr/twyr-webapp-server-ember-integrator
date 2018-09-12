@@ -1,7 +1,5 @@
 /* eslint-disable ember/avoid-leaking-state-in-ember-objects */
 
-import axios from 'axios';
-
 import BaseComponent from '../../framework/base-component';
 import env from 'twyr-webapp-server/config/environment';
 
@@ -40,13 +38,14 @@ export default BaseComponent.extend({
 		});
 
 		try {
-			const data = yield axios.post('/session/login', {
+			const loginResult = yield this.get('ajax').post('/session/login', {
 				'dataType': 'json',
-				'username': this.get('username'),
-				'password': this.get('password')
+				'data': {
+					'username': this.get('username'),
+					'password': this.get('password')
+				}
 			});
 
-			const loginResult = data.data;
 			notification.display({
 				'type': (loginResult.status < 400) ? 'success' : 'error',
 				'message': loginResult.info.message
@@ -90,22 +89,17 @@ export default BaseComponent.extend({
 		});
 
 		try {
-			const data = yield axios.post('/session/reset-password', {
+			const resetPassResult = yield this.get('ajax').post('/session/reset-password', {
 				'dataType': 'json',
-				'username': this.get('username')
+				'data': {
+					'username': this.get('username')
+				}
 			});
 
-			const resetPassResult = data.data;
-			if(data.status < 400) {
-				notification.display({
-					'type': (resetPassResult.status < 400) ? 'success' : 'error',
-					'message': resetPassResult.message
-				});
-
-				return;
-			}
-
-			throw new Error(data.message);
+			notification.display({
+				'type': (resetPassResult.status < 400) ? 'success' : 'error',
+				'message': resetPassResult.message
+			});
 		}
 		catch(err) {
 			notification.display({
@@ -133,18 +127,19 @@ export default BaseComponent.extend({
 		});
 
 		try {
-			const data = yield axios.post('/session/register-account', {
+			const registerResult = yield this.get('ajax').post('/session/register-account', {
 				'dataType': 'json',
-				'firstname': this.get('firstName'),
-				'lastname': this.get('lastName'),
+				'data': {
+					'firstname': this.get('firstName'),
+					'lastname': this.get('lastName'),
 
-				'username': this.get('username'),
-				'mobileNumber': this.get('mobileNumber'),
+					'username': this.get('username'),
+					'mobileNumber': this.get('mobileNumber'),
 
-				'password': this.get('password')
+					'password': this.get('password')
+				}
 			});
 
-			const registerResult = data.data;
 			notification.display({
 				'type': (registerResult.status < 400) ? 'success' : 'error',
 				'message': registerResult.message

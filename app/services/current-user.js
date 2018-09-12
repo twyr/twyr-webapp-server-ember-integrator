@@ -1,7 +1,5 @@
 /* eslint-disable no-console */
 
-import axios from 'axios';
-
 import Evented from '@ember/object/evented';
 import Service from '@ember/service';
 
@@ -9,6 +7,7 @@ import { inject } from '@ember/service';
 import { task } from 'ember-concurrency';
 
 export default Service.extend(Evented, {
+	ajax: inject('ajax'),
 	notification: inject('integrated-notification'),
 	userData: null,
 
@@ -29,9 +28,9 @@ export default Service.extend(Evented, {
 		this.trigger('userDataUpdating');
 
 		try {
-			const userData = yield axios.get('/session/user');
+			const userData = yield this.get('ajax').request('/session/user', { 'method': 'GET' });
 
-			this.set('userData', userData.data);
+			this.set('userData', userData);
 			this.trigger('userDataUpdated');
 		}
 		catch(err) {

@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import BaseComponent from '../../framework/base-component';
 import { task } from 'ember-concurrency';
 
@@ -19,9 +17,7 @@ export default BaseComponent.extend({
 		});
 
 		try {
-			const data = yield axios.get('/session/logout');
-
-			const logoutResult = data.data;
+			const logoutResult = yield this.get('ajax').request('/session/logout', { 'method': 'GET' });
 			notification.display({
 				'type': (logoutResult.status < 400) ? 'success' : 'error',
 				'message': logoutResult.info.message

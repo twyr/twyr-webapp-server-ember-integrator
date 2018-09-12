@@ -8,6 +8,7 @@ import { observer } from '@ember/object';
 import { task } from 'ember-concurrency';
 
 export default Component.extend(Evented, InvokeActionMixin, {
+	ajax: inject('ajax'),
 	store: inject('store'),
 	currentUser: inject('current-user'),
 	notification: inject('integrated-notification'),
