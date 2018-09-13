@@ -26,9 +26,10 @@ export default BaseComponent.extend({
 		return { 'min-width': (this.get('hasPermission') ? '0rem' : '20rem') };
 	}),
 
-	onInit: task(function* () {
-		yield this.set('permissions', ['registered']);
-	}).on('init').keepLatest(),
+	init() {
+		this._super(...arguments);
+		this.set('permissions', ['registered']);
+	},
 
 	doLogin: task(function* () {
 		const notification = this.get('notification');
@@ -53,8 +54,12 @@ export default BaseComponent.extend({
 			});
 
 			if(loginResult.nextAction === 'proceed') {
+				this.get('currentUser').one('userDataUpdated', () => {
+					const userData = this.get('currentUser').getUser();
+					this.get('router').transitionTo(userData.defaultApplication);
+				});
+
 				window.TwyrApp.trigger('userChanged');
-				// this.get('router').transitionTo('user-home');
 				return;
 			}
 
@@ -158,5 +163,10 @@ export default BaseComponent.extend({
 
 	setDisplayForm(formName) {
 		this.set('displayForm', formName);
-	}
+	},
+
+	// onHasPermissionChange: observer('hasPermission', function() {
+	// 	if(!this.get('hasPermission')) return;
+	// 	this.get('router').transitionTo('index');
+	// })
 });

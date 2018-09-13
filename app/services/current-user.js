@@ -15,9 +15,13 @@ export default Service.extend(Evented, {
 		const fetchUserData = this.get('fetchUserData');
 		yield fetchUserData.perform();
 
-		// eslint-disable-next-line no-undef
-		TwyrApp.on('userChanged', this, this.onUserChanged);
+		window.TwyrApp.on('userChanged', this, this.onUserChanged);
 	}).on('init').drop(),
+
+	destroy() {
+		window.TwyrApp.off('userchanged', this, this.onUserChanged);
+		this._super(...arguments);
+	},
 
 	onUserChanged() {
 		const fetchUserData = this.get('fetchUserData');
@@ -31,13 +35,18 @@ export default Service.extend(Evented, {
 			const userData = yield this.get('ajax').request('/session/user', { 'method': 'GET' });
 
 			this.set('userData', userData);
+			window.twyrUserId = userData['user_id'];
+			window.twyrTenantId = userData['tenant_id'];
+
 			this.trigger('userDataUpdated');
 		}
 		catch(err) {
 			// TODO: Use the Beacon API to send all this back to the server;
 			this.set('userData', null);
-			this.trigger('userDataUpdated');
+			window.twyrUserId = '';
+			window.twyrTenantId = '';
 
+			this.trigger('userDataUpdated');
 			this.get('notification').display({
 				'type': 'error',
 				'error': err

@@ -3,7 +3,6 @@ import BaseComponent from '../../framework/base-component';
 import computedStyle from 'ember-computed-style';
 import { computed } from '@ember/object';
 import { observer } from '@ember/object';
-import { task } from 'ember-concurrency';
 
 export default BaseComponent.extend({
 	attributeBindings: ['style'],
@@ -16,12 +15,15 @@ export default BaseComponent.extend({
 		return { 'display': (this.get('hasPermission') ? 'unset' : 'none') };
 	}),
 
-	onInit: task(function* () {
-		yield this.set('permissions', ['registered']);
-	}).on('init').keepLatest(),
+	init() {
+		this._super(...arguments);
+		this.set('permissions', ['registered']);
+	},
 
 	onHasPermissionChange: observer('hasPermission', function() {
+		if(!this.get('hasPermission')) return;
+
 		const userDetails = this.get('currentUser').getUser();
 		this.set('displayName', (userDetails ? userDetails['name'] : ''));
-	}),
+	})
 });

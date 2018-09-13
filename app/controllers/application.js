@@ -24,19 +24,32 @@ export default BaseController.extend({
 		this.set('currentYear', currentYear);
 		this.set('displayCurrentYear', (currentYear > this.get('startYear')));
 
+		this.get('realtimeData').on('websocket-data::display-status-message', this, this.onDisplayWebsocketStatusMessage);
+		this.get('realtimeData').on('websocket-close', this, this.onWebsocketClose);
+		this.get('realtimeData').on('websocket-disconnection', this, this.onWebsocketDisconnect);
+	},
+
+	destroy() {
+		this.get('realtimeData').off('websocket-disconnection', this, this.onWebsocketDisconnect);
+		this.get('realtimeData').off('websocket-close', this, this.onWebsocketClose);
+		this.get('realtimeData').off('websocket-data::display-status-message', this, this.onDisplayWebsocketStatusMessage);
+
+		this._super(...arguments);
+	},
+
+	onDisplayWebsocketStatusMessage(data) {
 		const notification = this.get('notification');
+		notification.display(data);
+	},
 
-		this.get('realtimeData').on('websocket-data::display-status-message', (data) => {
-			notification.display(data);
-		});
+	onWebsocketClose() {
+		const notification = this.get('notification');
+		notification.display('Realtime Data Connectivity lost! Will attempt reconnection!!');
+	},
 
-		this.get('realtimeData').on('websocket-close', () => {
-			notification.display('Realtime Data Connectivity lost! Will attempt reconnection!!');
-		});
-
-		this.get('realtimeData').on('websocket-disconnection', () => {
-			notification.display('Realtime Data Connectivity lost!');
-		});
+	onWebsocketDisconnect() {
+		const notification = this.get('notification');
+		notification.display('Realtime Data Connectivity lost!');
 	},
 
 	displayModal: function(data) {

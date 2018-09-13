@@ -6,9 +6,10 @@ export default BaseComponent.extend({
 	router: inject('router'),
 	permissions: null,
 
-	onInit: task(function* () {
-		yield this.set('permissions', ['registered']);
-	}).on('init').drop(),
+	init() {
+		this._super(...arguments);
+		this.set('permissions', ['registered']);
+	},
 
 	doLogout: task(function* () {
 		const notification = this.get('notification');
@@ -25,9 +26,11 @@ export default BaseComponent.extend({
 				'message': logoutResult.info.message
 			});
 
-			// eslint-disable-next-line no-undef
+			this.get('currentUser').one('userDataUpdated', () => {
+				this.get('router').transitionTo('index');
+			});
+
 			window.TwyrApp.trigger('userChanged');
-			this.get('router').transitionTo('index');
 		}
 		catch(err) {
 			notification.display({
@@ -39,5 +42,10 @@ export default BaseComponent.extend({
 
 	click() {
 		this.get('doLogout').perform();
-	}
+	},
+
+	// onHasPermissionChange: observer('hasPermission', function() {
+	// 	if(this.get('hasPermission')) return;
+	// 	this.get('router').transitionTo('index');
+	// })
 });

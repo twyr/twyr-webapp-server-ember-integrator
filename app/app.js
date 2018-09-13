@@ -2,7 +2,6 @@ import Application from '@ember/application';
 import Evented from '@ember/object/evented';
 import Resolver from './resolver';
 
-import { inject } from '@ember/service';
 import { on } from 'rsvp';
 
 import loadInitializers from 'ember-load-initializers';
@@ -13,47 +12,64 @@ const App = Application.extend(Evented, {
 	'podModulePrefix': config.podModulePrefix,
 	'Resolver': Resolver,
 
-	ajax: inject('ajax'),
-	currentUser: inject('current-user'),
-
 	init() {
 		this._super(...arguments);
 
 		window.Ember.onerror = function(error) {
 			const beaconData = {
-				'dataType': 'json',
 				'data': {
-					'user': this.get('currentUser').getUser(),
+					'user': window.twyrUserId,
+					'tenant': window.twyrTenantId,
 					'urlPath': location.href,
 					'error': error.message,
 					'stack': error.stack
 				}
 			};
 
+			let beaconStatus = false;
 			if(navigator.sendBeacon) {
-				navigator.sendBeacon('/collectClientErrorData', beaconData);
+				const formData = new FormData();
+				Object.keys(beaconData.data).forEach((key) => { formData.append(key, beaconData.data[key]); });
+
+				// beaconStatus = navigator.sendBeacon('/collectClientErrorData?source=onerror&method=beacon', formData);
 			}
-			else {
-				this.get('ajax').post('/collectClientErrorData', beaconData);
+
+			if(!beaconStatus) {
+				beaconData.dataType = 'json';
+				beaconData.method = 'post';
+				beaconData.type = 'post';
+				beaconData.url = '/collectClientErrorData?source=onerror&method=ajax';
+
+				window.$.ajax(beaconData);
 			}
 		}
 
 		on('error', function(error) {
 			const beaconData = {
-				'dataType': 'json',
 				'data': {
-					'user': this.get('currentUser').getUser(),
+					'user': window.twyrUserId,
+					'tenant': window.twyrTenantId,
 					'urlPath': location.href,
 					'error': error.message,
 					'stack': error.stack
 				}
 			};
 
+			let beaconStatus = false;
 			if(navigator.sendBeacon) {
-				navigator.sendBeacon('/collectClientErrorData', beaconData);
+				const formData = new FormData();
+				Object.keys(beaconData.data).forEach((key) => { formData.append(key, beaconData.data[key]); });
+
+				// beaconStatus = navigator.sendBeacon('/collectClientErrorData?source=rsvperror&method=beacon', formData);
 			}
-			else {
-				this.get('ajax').post('/collectClientErrorData', beaconData);
+
+			if(!beaconStatus) {
+				beaconData.dataType = 'json';
+				beaconData.method = 'post';
+				beaconData.type = 'post';
+				beaconData.url = '/collectClientErrorData?source=rsvperror&method=ajax';
+
+				window.$.ajax(beaconData);
 			}
 		});
 	}

@@ -19,14 +19,21 @@ export default Controller.extend(Evented, InvokeActionMixin, {
 		this._super(...arguments);
 		this.set('permissions', ['*']);
 
-		this.get('currentUser').on('userDataUpdated', () => {
-			this.get('updatePermissions').perform();
-		});
+		this.get('currentUser').on('userDataUpdated', this, this.onUserDataUpdated);
+	},
+
+	destroy() {
+		this.get('currentUser').off('userDataUpdated', this, this.onUserDataUpdated);
+		this._super(...arguments);
 	},
 
 	onPermissionChanges: observer('permissions', function() {
 		this.get('updatePermissions').perform();
 	}),
+
+	onUserDataUpdated() {
+		this.get('updatePermissions').perform();
+	},
 
 	updatePermissions: task(function* () {
 		if(this.get('permissions').includes('*')) {
