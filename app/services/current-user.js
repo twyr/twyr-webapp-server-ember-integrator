@@ -43,8 +43,8 @@ export default Service.extend(Evented, {
 		catch(err) {
 			// TODO: Use the Beacon API to send all this back to the server;
 			this.set('userData', null);
-			window.twyrUserId = '';
-			window.twyrTenantId = '';
+			window.twyrUserId = null;
+			window.twyrTenantId = null;
 
 			this.trigger('userDataUpdated');
 			this.get('notification').display({

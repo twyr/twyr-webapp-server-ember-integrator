@@ -1,19 +1,40 @@
 import DS from 'ember-data';
-import { computed } from '@ember/object';
+
+import { inject } from '@ember/service';
+
+import _moment from 'ember-moment/computeds/moment';
+import format from 'ember-moment/computeds/format';
+import locale from 'ember-moment/computeds/locale';
+
 
 export default DS.Model.extend({
-	createdAt: DS.attr('date', { defaultValue() { return new Date(); } }),
-	updatedAt: DS.attr('date', { defaultValue() { return new Date(); } }),
+	moment: inject('moment'),
 
-	formattedCreatedAt: computed('createdAt', {
-		get() {
-			return window.moment(this.get('createdAt')).format('DD/MMM/YYYY hh:mm A');
+	createdAt: DS.attr('date', {
+		defaultValue() {
+			return new Date();
 		}
-	}).readOnly(),
+	}),
 
-	formattedUpdatedAt: computed('updatedAt', {
-		get() {
-			return window.moment(this.get('updatedAt')).format('DD/MMM/YYYY hh:mm A');
+	updatedAt: DS.attr('date', {
+		defaultValue() {
+			return new Date();
 		}
-	}).readOnly()
+	}),
+
+	formattedCreatedAt: format(
+		locale(
+			_moment('createdAt'),
+			'moment.locale'
+		),
+		'DD/MMM/YYYY hh:mm A'
+	),
+
+	formattedUpdatedAt: format(
+		locale(
+			_moment('updatedAt'),
+			'moment.locale'
+		),
+		'DD/MMM/YYYY hh:mm A'
+	)
 });
