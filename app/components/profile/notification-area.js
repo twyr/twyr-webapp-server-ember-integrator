@@ -21,7 +21,10 @@ export default BaseComponent.extend({
 	},
 
 	onHasPermissionChange: observer('hasPermission', function() {
-		if(!this.get('hasPermission')) return;
+		if(!this.get('hasPermission')) {
+			this.set('displayName', '');
+			return;
+		}
 
 		const userDetails = this.get('currentUser').getUser();
 		this.set('displayName', (userDetails ? userDetails['name'] : ''));

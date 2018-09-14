@@ -1,0 +1,9 @@
+{{#paper-select
+	class="m-0 p-0"
+	options=allowedTenants
+	selected=currentTenant
+	onChange=(action "controller-action" "changeTenant")
+	as |tenant|
+}}
+	{{tenant.name}}
+{{/paper-select}}

@@ -42,10 +42,5 @@ export default BaseComponent.extend({
 
 	click() {
 		this.get('doLogout').perform();
-	},
-
-	// onHasPermissionChange: observer('hasPermission', function() {
-	// 	if(this.get('hasPermission')) return;
-	// 	this.get('router').transitionTo('index');
-	// })
+	}
 });

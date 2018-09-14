@@ -5,7 +5,6 @@ import { InvokeActionMixin } from 'ember-invoke-action';
 
 import { inject } from '@ember/service';
 import { observer } from '@ember/object';
-import { task } from 'ember-concurrency';
 
 export default Component.extend(Evented, InvokeActionMixin, {
 	ajax: inject('ajax'),
@@ -14,29 +13,25 @@ export default Component.extend(Evented, InvokeActionMixin, {
 	notification: inject('integrated-notification'),
 
 	permissions: null,
-	hasPermission: true,
+	hasPermission: false,
 
 	init() {
 		this._super(...arguments);
 		this.set('permissions', ['*']);
 
-		this.get('currentUser').on('userDataUpdated', this, this.onUserDataUpdated);
+		this.get('currentUser').on('userDataUpdated', this, this.updatePermissions);
 	},
 
 	destroy() {
-		this.get('currentUser').off('userDataUpdated', this, this.onUserDataUpdated);
+		this.get('currentUser').off('userDataUpdated', this, this.updatePermissions);
 		this._super(...arguments);
 	},
 
 	onPermissionChanges: observer('permissions', function() {
-		this.get('updatePermissions').perform();
+		this.updatePermissions();
 	}),
 
-	onUserDataUpdated() {
-		this.get('updatePermissions').perform();
-	},
-
-	updatePermissions: task(function* () {
+	updatePermissions() {
 		if(this.get('permissions').includes('*')) {
 			this.set('hasPermission', true);
 			return;
@@ -45,12 +40,12 @@ export default Component.extend(Evented, InvokeActionMixin, {
 		const requiredPermissions = this.get('permissions');
 		let hasPerm = false;
 		for(let permIdx = 0; permIdx < requiredPermissions.length; permIdx++) {
-			let hasCurrentPermission = yield this.get('currentUser').hasPermission(requiredPermissions[permIdx]);
+			let hasCurrentPermission = this.get('currentUser').hasPermission(requiredPermissions[permIdx]);
 			hasPerm = hasPerm || hasCurrentPermission;
 		}
 
 		this.set('hasPermission', hasPerm);
-	}).keepLatest(),
+	},
 
 	actions: {
 		'controller-action': function(action, data) {

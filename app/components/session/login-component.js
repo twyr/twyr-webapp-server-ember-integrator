@@ -10,7 +10,7 @@ export default BaseComponent.extend({
 	router: inject('router'),
 
 	attributeBindings: ['style'],
-	style: computedStyle('minWidth'),
+	style: computedStyle('display'),
 
 	permissions: null,
 	displayForm: 'loginForm',
@@ -22,8 +22,11 @@ export default BaseComponent.extend({
 	lastName: '',
 	mobileNumber: '',
 
-	minWidth: computed('hasPermission', function() {
-		return { 'min-width': (this.get('hasPermission') ? '0rem' : '20rem') };
+	display: computed('hasPermission', function() {
+		return {
+			'display': (this.get('hasPermission') ? 'none' : 'block'),
+			'min-width': (this.get('hasPermission') ? '0rem' : '20rem')
+		};
 	}),
 
 	init() {
@@ -163,10 +166,5 @@ export default BaseComponent.extend({
 
 	setDisplayForm(formName) {
 		this.set('displayForm', formName);
-	},
-
-	// onHasPermissionChange: observer('hasPermission', function() {
-	// 	if(!this.get('hasPermission')) return;
-	// 	this.get('router').transitionTo('index');
-	// })
+	}
 });
