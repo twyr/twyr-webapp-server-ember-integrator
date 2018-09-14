@@ -7,6 +7,10 @@ import { on } from 'rsvp';
 import loadInitializers from 'ember-load-initializers';
 import config from './config/environment';
 
+// Add a "retryable" to all ember-concurrency tasks
+import defineModifier from 'ember-concurrency-retryable/define-modifier';
+defineModifier();
+
 const App = Application.extend(Evented, {
 	'modulePrefix': config.modulePrefix,
 	'podModulePrefix': config.podModulePrefix,

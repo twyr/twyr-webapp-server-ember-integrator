@@ -57,6 +57,7 @@ export default Service.extend(Evented, {
 		this.get('streamer').off('reconnected', this.onStreamerReconnected.bind(this));
 		this.get('streamer').off('open', this.onStreamerOpen.bind(this));
 
+		this.get('streamer').end();
 		this._super(...arguments);
 	},
 

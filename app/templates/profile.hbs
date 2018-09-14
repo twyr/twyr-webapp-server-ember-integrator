@@ -1,1 +1,44 @@
-<h2>TODO: Profile Edit Form</h2>
+{{page-title "Profile"}}
+<div class="layout-row layout-align-center-start py-4">
+	<div class="layout-column layout-align-start-center flex flex-gt-sm-50 flex-gt-lg-40">
+		{{#paper-form class="w-100" onSubmit=(perform save) as |form|}}
+			{{#paper-card class="flex" as |card|}}
+				{{#card.title class="bg-twyr-component white-text" as |title|}}
+					{{#title.text as |text|}}
+						{{#text.headline}}Edit Profile{{/text.headline}}
+					{{/title.text}}
+				{{/card.title}}
+				{{#card.content class="pt-4"}}
+					<div class="layout-row layout-align-space-between layout-wrap">
+						<div class="layout-column layout-align-start-stretch flex-100 flex-gt-md-50 flex-gt-lg-40">
+							<div id="profile-basic-information-image" class="flex" contenteditable=true />
+						</div>
+						<div class="layout-column layout-align-start-stretch flex-100 flex-gt-md-50 flex-gt-lg-60">
+							<div class="layout-row">
+								{{form.input type="text" class="flex-100" label="Username / Login" value=model.email onChange=null disabled=true}}
+							</div>
+							<div class="layout-row">
+								{{form.input type="text" class="flex-100" label="First Name" value=model.firstName onChange=(action (mut model.firstName)) required=true}}
+							</div>
+							<div class="layout-row">
+								{{form.input type="text" class="flex-100" label="Middle Name(s)" value=model.middleNames onChange=(action (mut model.middleNames))}}
+							</div>
+							<div class="layout-row">
+								{{form.input type="text" class="flex-100" label="Last Name" value=model.lastName onChange=(action (mut model.lastName)) required=true}}
+							</div>
+						</div>
+					</div>
+				{{/card.content}}
+				{{#card.actions}}
+					{{#paper-button raised=true warn=true disabled=(not (or model.isDirty model.content.isDirty)) onClick=(perform cancel)}}
+						{{paper-icon "close" class="mr-1"}}<span>Cancel</span>
+					{{/paper-button}}
+
+					{{#form.submit-button raised=true primary=true disabled=(or form.isInvalid (not (or model.isDirty model.content.isDirty)))}}
+						{{paper-icon "save" class="mr-1"}}<span>Save</span>
+					{{/form.submit-button}}
+				{{/card.actions}}
+			{{/paper-card}}
+		{{/paper-form}}
+	</div>
+</div>

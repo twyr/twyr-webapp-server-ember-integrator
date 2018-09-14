@@ -35,9 +35,15 @@ export default Service.extend(Evented, {
 			const userData = yield this.get('ajax').request('/session/user', { 'method': 'GET' });
 
 			this.set('userData', userData);
-			window.twyrUserId = userData['user_id'];
-			window.twyrTenantId = userData['tenant_id'];
 
+			if(userData.loggedIn) {
+				window.twyrUserId = userData['user_id'];
+				window.twyrTenantId = userData['tenant_id'];
+			}
+			else {
+				window.twyrUserId = null;
+				window.twyrTenantId = null;
+			}
 			this.trigger('userDataUpdated');
 		}
 		catch(err) {

@@ -1,9 +1,9 @@
 import DS from 'ember-data';
-import KeepOnlyChanged from 'ember-data-change-tracker/mixins/keep-only-changed';
+// import KeepOnlyChanged from 'ember-data-change-tracker/mixins/keep-only-changed';
 
 import { underscore } from '@ember/string';
 
-export default DS.JSONAPISerializer.extend(KeepOnlyChanged, {
+export default DS.JSONAPISerializer.extend({
 	keyForAttribute(attr) {
 		return underscore(attr);
 	},

@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import Evented from '@ember/object/evented';
+
 import { InvokeActionMixin } from 'ember-invoke-action';
 
 import { inject } from '@ember/service';
