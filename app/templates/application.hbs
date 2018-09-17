@@ -67,7 +67,7 @@
 
 <!-- Modal -->
 {{#liquid-if showDialog}}
-{{#paper-dialog class=modalData.dialogClass onClose=(action "closeDialog" false) parent=modalData.parentElement origin=modalData.dialogOrigin clickOutsideToClose=false escapeToClose=false}}
+{{#paper-dialog class=modalData.dialogClass onClose=(action "controller-action" "closeDialog" false) parent=modalData.parentElement origin=modalData.dialogOrigin clickOutsideToClose=false escapeToClose=false}}
 	{{#paper-toolbar class="stylish-color white-text"}}
 		{{#paper-toolbar-tools}}
 		<h2>{{modalData.title}}</h2>
@@ -88,13 +88,13 @@
 		{{paper-divider}}
 		{{#paper-dialog-actions class="layout-row layout-align-end-center"}}
 			{{#if modalData.cancelButton}}
-				{{#paper-button primary=(not (not modalData.cancelButton.primary)) accent=(not (not modalData.cancelButton.accent)) warn=(not (not modalData.cancelButton.warn)) raised=(not (not modalData.cancelButton.raised)) onClick=(action "closeDialog" false)}}
+				{{#paper-button primary=(not (not modalData.cancelButton.primary)) accent=(not (not modalData.cancelButton.accent)) warn=(not (not modalData.cancelButton.warn)) raised=(not (not modalData.cancelButton.raised)) onClick=(action "controller-action" "closeDialog" false)}}
 					{{paper-icon modalData.cancelButton.icon class="mr-1"}}<span>{{modalData.cancelButton.text}}</span>
 				{{/paper-button}}
 			{{/if}}
 
 			{{#if modalData.confirmButton}}
-				{{#paper-button primary=(not (not modalData.confirmButton.primary)) accent=(not (not modalData.confirmButton.accent)) warn=(not (not modalData.confirmButton.warn)) raised=(not (not modalData.confirmButton.raised)) onClick=(action "closeDialog" true)}}
+				{{#paper-button primary=(not (not modalData.confirmButton.primary)) accent=(not (not modalData.confirmButton.accent)) warn=(not (not modalData.confirmButton.warn)) raised=(not (not modalData.confirmButton.raised)) onClick=(action "controller-action" "closeDialog" true)}}
 					{{paper-icon modalData.confirmButton.icon class="mr-1"}}<span>{{modalData.confirmButton.text}}</span>
 				{{/paper-button}}
 			{{/if}}

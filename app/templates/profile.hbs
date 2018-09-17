@@ -1,44 +1,98 @@
 {{page-title "Profile"}}
 <div class="layout-row layout-align-center-start py-4">
 	<div class="layout-column layout-align-start-center flex flex-gt-sm-50 flex-gt-lg-40">
-		{{#paper-form class="w-100" onSubmit=(perform save) as |form|}}
-			{{#paper-card class="flex" as |card|}}
-				{{#card.title class="bg-twyr-component white-text" as |title|}}
-					{{#title.text as |text|}}
-						{{#text.headline}}Edit Profile{{/text.headline}}
-					{{/title.text}}
-				{{/card.title}}
-				{{#card.content class="pt-4"}}
-					<div class="layout-row layout-align-space-between layout-wrap">
-						<div class="layout-column layout-align-start-stretch flex-100 flex-gt-md-50 flex-gt-lg-40">
-							<div id="profile-basic-information-image" class="flex" contenteditable=true />
-						</div>
-						<div class="layout-column layout-align-start-stretch flex-100 flex-gt-md-50 flex-gt-lg-60">
+		{{#bs-accordion class="w-100" selected=selectedAccordionItem onChange=(perform onChangeAccordionItem) as |accordion|}}
+			{{#accordion.item value="1" title="Edit Profile" as |accItem|}}
+				<!-- Profile Basics -->
+				{{#accItem.title class="bg-twyr-component p-0"}}
+					<h5 class="mb-0 white-text">Edit Profile</h5>
+				{{/accItem.title}}
+				{{#accItem.body class="p-0"}}
+				{{#paper-form class="w-100" onSubmit=(perform save) as |form|}}
+					{{#paper-card class="flex m-0" as |card|}}
+						{{#card.content class="pt-4"}}
+							<div class="layout-row layout-align-space-between layout-wrap">
+								<div class="layout-column layout-align-start-stretch flex-100 flex-gt-md-50 flex-gt-lg-40">
+									<div id="profile-basic-information-image" class="flex" contenteditable=true />
+								</div>
+								<div class="layout-column layout-align-start-stretch flex-100 flex-gt-md-50 flex-gt-lg-60">
+									<div class="layout-row">
+										{{form.input type="text" class="flex-100" label="Username / Login" value=model.email onChange=null disabled=true}}
+									</div>
+									<div class="layout-row">
+										{{form.input type="text" class="flex-100" label="First Name" value=model.firstName onChange=(action (mut model.firstName)) required=true}}
+									</div>
+									<div class="layout-row">
+										{{form.input type="text" class="flex-100" label="Middle Name(s)" value=model.middleNames onChange=(action (mut model.middleNames))}}
+									</div>
+									<div class="layout-row">
+										{{form.input type="text" class="flex-100" label="Last Name" value=model.lastName onChange=(action (mut model.lastName)) required=true}}
+									</div>
+								</div>
+							</div>
+						{{/card.content}}
+						{{#card.actions}}
+							{{#paper-button raised=true warn=true disabled=(not (or model.isDirty model.content.isDirty)) onClick=(perform cancel)}}
+								{{paper-icon "close" class="mr-1"}}<span>Cancel</span>
+							{{/paper-button}}
+							{{#form.submit-button raised=true primary=true disabled=(or form.isInvalid (not (or model.isDirty model.content.isDirty)))}}
+								{{paper-icon "save" class="mr-1"}}<span>Save</span>
+							{{/form.submit-button}}
+						{{/card.actions}}
+					{{/paper-card}}
+				{{/paper-form}}
+				{{/accItem.body}}
+			{{/accordion.item}}
+			{{#accordion.item class="mt-2" value="2" title="Change Password" as |accItem|}}
+				<!-- Password Change -->
+				{{#accItem.title class="p-0"}}
+					<h5 class="mb-0">Change Password</h5>
+				{{/accItem.title}}
+				{{#accItem.body class="p-0"}}
+				{{#paper-form class="w-100" onSubmit=(perform changePassword) as |form|}}
+					{{#paper-card class="flex m-0" as |card|}}
+						{{#card.content class="pt-4"}}
 							<div class="layout-row">
-								{{form.input type="text" class="flex-100" label="Username / Login" value=model.email onChange=null disabled=true}}
+								{{form.input type="password" class="flex-100" label="Current Password" value=currentPassword onChange=(action (mut currentPassword)) required=true}}
 							</div>
 							<div class="layout-row">
-								{{form.input type="text" class="flex-100" label="First Name" value=model.firstName onChange=(action (mut model.firstName)) required=true}}
+								{{form.input type="password" class="flex-100" label="New Password" value=newPassword1 onChange=(action (mut newPassword1)) required=true}}
 							</div>
 							<div class="layout-row">
-								{{form.input type="text" class="flex-100" label="Middle Name(s)" value=model.middleNames onChange=(action (mut model.middleNames))}}
+								{{form.input type="password" class="flex-100" label="Repeat New Password" value=newPassword2 onChange=(action (mut newPassword2)) required=true}}
 							</div>
-							<div class="layout-row">
-								{{form.input type="text" class="flex-100" label="Last Name" value=model.lastName onChange=(action (mut model.lastName)) required=true}}
-							</div>
-						</div>
-					</div>
-				{{/card.content}}
-				{{#card.actions}}
-					{{#paper-button raised=true warn=true disabled=(not (or model.isDirty model.content.isDirty)) onClick=(perform cancel)}}
-						{{paper-icon "close" class="mr-1"}}<span>Cancel</span>
+						{{/card.content}}
+						{{#card.actions}}
+							{{#paper-button raised=true warn=true disabled=(not (or (not-eq currentPassword '') (not-eq newPassword1 '') (not-eq newPassword2 ''))) onClick=(perform cancelChangePassword)}}
+								{{paper-icon "close" class="mr-1"}}<span>Cancel</span>
+							{{/paper-button}}
+							{{#form.submit-button raised=true primary=true disabled=(or (eq newPassword1 '') (not-eq newPassword1 newPassword2))}}
+								{{paper-icon "save" class="mr-1"}}<span>Save</span>
+							{{/form.submit-button}}
+						{{/card.actions}}
+					{{/paper-card}}
+				{{/paper-form}}
+				{{/accItem.body}}
+			{{/accordion.item}}
+			{{#accordion.item class="mt-2" value="3" title="Contact Information" as |accItem|}}
+				<!-- User contact Information -->
+				{{#accItem.title class="p-0"}}
+					<h5 class="mb-0">Contact Information</h5>
+				{{/accItem.title}}
+				{{#accItem.body class="p-0"}}
+				{{/accItem.body}}
+			{{/accordion.item}}
+			{{#accordion.item class="mt-2" value="4" title="Danger Zone" as |accItem|}}
+				<!-- User contact Information -->
+				{{#accItem.title class="p-0"}}
+					<h5 class="mb-0">Danger Zone</h5>
+				{{/accItem.title}}
+				{{#accItem.body class="layout-row layout-align-start-stretch"}}
+					{{#paper-button class="flex btn-danger" raised=true onClick=(perform deleteAccount)}}
+						{{mdi-icon "account-off" class="mr-1"}}<span>Delete Account</span>
 					{{/paper-button}}
-
-					{{#form.submit-button raised=true primary=true disabled=(or form.isInvalid (not (or model.isDirty model.content.isDirty)))}}
-						{{paper-icon "save" class="mr-1"}}<span>Save</span>
-					{{/form.submit-button}}
-				{{/card.actions}}
-			{{/paper-card}}
-		{{/paper-form}}
+				{{/accItem.body}}
+			{{/accordion.item}}
+		{{/bs-accordion}}
 	</div>
 </div>

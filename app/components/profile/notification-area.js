@@ -18,6 +18,13 @@ export default BaseComponent.extend({
 	init() {
 		this._super(...arguments);
 		this.set('permissions', ['registered']);
+
+		this.get('currentUser').on('userDataUpdated', this, this.onProfileUpdated);
+	},
+
+	destroy() {
+		this.get('currentUser').off('userDataUpdated', this, this.onProfileUpdated);
+		this._super(...arguments);
 	},
 
 	onHasPermissionChange: observer('hasPermission', function() {
@@ -28,5 +35,20 @@ export default BaseComponent.extend({
 
 		const userDetails = this.get('currentUser').getUser();
 		this.set('displayName', (userDetails ? userDetails['name'] : ''));
-	})
+	}),
+
+	onProfileUpdated() {
+		if(!this.get('hasPermission')) {
+			this.set('displayName', '');
+			return;
+		}
+
+		const userDetails = this.get('currentUser').getUser();
+		if(!userDetails) {
+			this.set('displayName', '');
+			return;
+		}
+
+		this.set('displayName', (userDetails ? userDetails['name'] : ''));
+	}
 });

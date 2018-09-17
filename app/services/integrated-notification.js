@@ -69,14 +69,16 @@ export default Service.extend({
 			return;
 		}
 
-		if(data.error.errors && data.error.errors.length) {
-			data.error.errors.forEach((dataError) => {
-				toast.error(dataError.detail.replace(/\\n/g, '\n').split('\n').splice(0, 2).join('\n'), (dataError.title || 'Error'), options);
+		if(data.error.payload.errors && data.error.payload.errors.length) {
+			data.error.payload.errors.forEach((dataError, idx) => {
+				if(!idx) return;
+				toast.error(dataError.detail, 'Error', options);
 			});
 
 			return;
 		}
 
+		// console.error(`Errors: `, data.error.payload.errors);
 		toast.error(data.error.message, 'Error', options);
 	}
 });

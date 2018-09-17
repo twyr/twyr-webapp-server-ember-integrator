@@ -65,6 +65,7 @@ export default BaseController.extend({
 		const defaultData = {
 			'title': 'Twyr Modal',
 			'content': `This is the default. Someone forgot to override it!`,
+			'dialogClass': 'flex',
 
 			'confirmButton': {
 				'text': 'OK',

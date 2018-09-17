@@ -53,7 +53,8 @@ export default BaseComponent.extend({
 
 			notification.display({
 				'type': (loginResult.status < 400) ? 'success' : 'error',
-				'message': loginResult.info.message
+				'message': loginResult.info.message,
+				'error': loginResult.info.message
 			});
 
 			if(loginResult.nextAction === 'proceed') {
@@ -109,7 +110,8 @@ export default BaseComponent.extend({
 
 			notification.display({
 				'type': (resetPassResult.status < 400) ? 'success' : 'error',
-				'message': resetPassResult.message
+				'message': resetPassResult.message,
+				'error': resetPassResult.message
 			});
 		}
 		catch(err) {
@@ -153,7 +155,8 @@ export default BaseComponent.extend({
 
 			notification.display({
 				'type': (registerResult.status < 400) ? 'success' : 'error',
-				'message': registerResult.message
+				'message': registerResult.message,
+				'error': registerResult.message
 			});
 		}
 		catch(err) {

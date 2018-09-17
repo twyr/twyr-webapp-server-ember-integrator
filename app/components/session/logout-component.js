@@ -23,7 +23,8 @@ export default BaseComponent.extend({
 			const logoutResult = yield this.get('ajax').request('/session/logout', { 'method': 'GET' });
 			notification.display({
 				'type': (logoutResult.status < 400) ? 'success' : 'error',
-				'message': logoutResult.info.message
+				'message': logoutResult.info.message,
+				'error': logoutResult.info.message
 			});
 
 			this.get('currentUser').one('userDataUpdated', () => {
