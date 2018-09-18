@@ -99,6 +99,7 @@
     "loader.js": "^4.2.3",
     "node-sass": "^4.9.3",
     "notifyjs": "^3.0.0",
+    "paper-data-table": "^0.1.4",
     "qunit-dom": "^0.8.0",
     "toastr": "^2.1.4"
   },
