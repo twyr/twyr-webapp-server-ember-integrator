@@ -56,10 +56,11 @@ export default Controller.extend(Evented, InvokeActionMixin, {
 		'controller-action': function(action, data) {
 			if(this[action] && (typeof this[action] === 'function')) {
 				this[action](data);
-				return;
+				return false;
 			}
 
-			return true;
+			this.get('target').send('controller-action', action, data);
+			return false;
 		}
 	}
 });

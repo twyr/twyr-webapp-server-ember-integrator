@@ -65,7 +65,7 @@ export default BaseController.extend({
 		const defaultData = {
 			'title': 'Twyr Modal',
 			'content': `This is the default. Someone forgot to override it!`,
-			'dialogClass': 'flex',
+			'dialogClass': '',
 
 			'confirmButton': {
 				'text': 'OK',
@@ -121,7 +121,7 @@ export default BaseController.extend({
 				}
 			}
 
-			if(this[action]) {
+			if(this[action] && (typeof this[action] === 'function')) {
 				this[action](data);
 				return;
 			}

@@ -1,0 +1,67 @@
+{{#paper-data-table sortProp="type" sortDir="asc" selectable=true as |table|}}
+	{{#table.head as |head|}}
+		{{#head.column sortProp="type" class="px-0 text-center"}}{{paper-icon "contacts" class="mr-0 mt-1"}}Type{{/head.column}}
+		{{#head.column sortProp="contact" class="px-0 text-center"}}{{paper-icon "info" class="mr-0 mt-1"}}Contact{{/head.column}}
+		{{#head.column sortProp="verified" class="px-0 text-center"}}{{paper-icon "verified-user" class="mr-0 mt-1"}}Verified{{/head.column}}
+		{{#head.column class="px-0 text-right"}}
+			{{#paper-button primary=true iconButton=true onClick=(perform addContact)}}
+				{{fa-icon "plus-circle" size="2x"}}
+			{{/paper-button}}
+		{{/head.column}}
+	{{/table.head}}
+	{{#table.body as |body|}}
+		{{#body.row as |row|}}
+			{{#row.cell class="p-0 px-3"}}Twyr Login{{/row.cell}}
+			{{#row.cell class="p-0 px-3"}}{{model.email}}{{/row.cell}}
+			{{#row.cell class="p-0 px-3 text-center"}}
+				{{paper-checkbox class="flex m-0" value=true onChange=null disabled=true}}
+			{{/row.cell}}
+			{{#row.cell class="p-0 text-right"}}&nbsp;{{/row.cell}}
+		{{/body.row}}
+		{{#each (sort-by table.sortDesc model.contacts) as |contact|}}
+			{{#if contact.isNew}}
+				{{#body.row as |row|}}
+					{{#row.cell class="p-0 px-3 pt-3"}}
+					<div class="layout-row layout-align-end-center">
+						{{#paper-select class="flex m-0" selected=contact.type options=contactTypes onChange=(action (mut contact.type)) required=true as |type|}}
+							{{titleize type}}
+						{{/paper-select}}
+					</div>
+					{{/row.cell}}
+					{{#row.cell class="p-0 px-3 pt-3"}}
+					<div class="layout-row layout-align-end-center">
+						{{paper-input type="text" class="flex m-0" value=contact.contact onChange=(action (mut contact.contact)) required=true}}
+					</div>
+					{{/row.cell}}
+					{{#row.cell class="p-0 px-3 pt-3"}}
+					<div class="layout-row layout-align-center-center">
+						{{paper-checkbox class="flex m-0" value=false onChange=null disabled=true}}
+					</div>
+					{{/row.cell}}
+					{{#row.cell class="p-0 text-right"}}
+						{{#paper-button primary=true iconButton=true class="m-0 p-0" onClick=(perform saveContact contact)}}
+							{{paper-icon "save"}}
+						{{/paper-button}}
+
+						{{#paper-button warn=true iconButton=true class="m-0 p-0" onClick=(perform deleteContact contact)}}
+							{{paper-icon "cancel"}}
+						{{/paper-button}}
+					{{/row.cell}}
+				{{/body.row}}
+			{{else}}
+				{{#body.row as |row|}}
+					{{#row.cell class="p-0 px-3"}}{{titleize contact.type}}{{/row.cell}}
+					{{#row.cell class="p-0 px-3"}}{{contact.contact}}{{/row.cell}}
+					{{#row.cell class="p-0 px-3 text-center"}}
+						{{paper-checkbox class="flex m-0" value=contact.verified onChange=null disabled=true}}
+					{{/row.cell}}
+					{{#row.cell class="p-0 text-right"}}
+						{{#paper-button warn=true iconButton=true class="m-0 p-0" onClick=(perform deleteContact contact)}}
+							{{paper-icon "delete"}}
+						{{/paper-button}}
+					{{/row.cell}}
+				{{/body.row}}
+			{{/if}}
+		{{/each}}
+	{{/table.body}}
+{{/paper-data-table}}

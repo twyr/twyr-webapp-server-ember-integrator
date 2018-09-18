@@ -1,6 +1,6 @@
 {{#liquid-if hasPermission}}
 	{{#link-to "profile" class="white-text mr-4"}}
-		{{fa-icon "user" class="h4 mb-0 mr-2"}}
+		<img src="{{displayImage}}" style="max-width:2rem; max-height:1.2rem;">
 		{{displayName}}
 	{{/link-to}}
 {{/liquid-if}}
