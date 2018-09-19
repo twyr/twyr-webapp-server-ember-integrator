@@ -1,0 +1,46 @@
+{{#if model.length}}
+<div class="layout-row layout-align-center-start py-4">
+	<div class="layout-column layout-align-start-stretch flex flex-gt-md-80 flex-gt-lg-70">
+		{{#if (get (filter-by "type" "feature" model) "length")}}
+		{{#paper-card class="flex" as |card|}}
+			{{#card.header class="bg-twyr-component" as |header|}}
+				{{#header.text as |text|}}
+					{{#text.title}}{{fa-icon "laptop-code" class="mr-2"}}Features{{/text.title}}
+				{{/header.text}}
+			{{/card.header}}
+			{{#card.content class="layout-row layout-align-start-center layout-wrap py-4"}}
+				{{#each model as |feature|}}
+					{{#if (eq feature.type "feature")}}
+					{{#paper-card class="flex flex-gt-sm-50 flex-gt-md-33 flex-gt-lg-25" as |card|}}
+						{{#link-to feature.route title=feature.description}}
+						{{#card.content class="text-center layout-column layout-align-start-center"}}
+							{{#if (eq feature.iconType 'fa')}}
+								{{fa-icon feature.iconPath size="4x"}}
+							{{/if}}
+
+							{{#if (eq feature.iconType 'paper')}}
+								{{paper-icon feature.iconPath size=64}}
+							{{/if}}
+
+							{{#if (eq feature.iconType 'mdi')}}
+								{{mdi-icon feature.iconPath size=64}}
+							{{/if}}
+
+							{{#if (eq feature.iconType 'img')}}
+								<img src={{feature.iconPath}} alt={{feature.name}} style="min-height:4rem; height:4rem; max-height:4rem;"/>
+							{{/if}}
+
+							<div class="mt-4" style="font-weight:900;">
+								{{feature.name}}
+							</div>
+						{{/card.content}}
+						{{/link-to}}
+					{{/paper-card}}
+					{{/if}}
+				{{/each}}
+			{{/card.content}}
+		{{/paper-card}}
+		{{/if}}
+	</div>
+</div>
+{{/if}}

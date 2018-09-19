@@ -19,27 +19,21 @@ export default BaseRoute.extend({
 	model() {
 		if(!window.twyrUserId) return;
 
-		const profileData =  this.store.peekRecord('profile/user', window.twyrUserId);
-		if(profileData) return profileData;
+		const featureData =  this.store.peekAll('dashboard/feature');
+		if(featureData.get('length')) return featureData;
 
-		return this.store.findRecord('profile/user', window.twyrUserId, {
-			'include': 'contacts'
-		});
+		return this.store.findAll('dashboard/feature');
 	},
 
 	onUserDataUpdated() {
 		if(!window.twyrUserId) return;
-		this.get('refreshProfileModel').perform();
+		this.get('refreshDashboardFeatures').perform();
 	},
 
-	refreshProfileModel: task(function* () {
-		let profileData =  this.store.peekRecord('profile/user', window.twyrUserId);
-		if(!profileData) {
-			profileData = yield this.store.findRecord('profile/user', window.twyrUserId, {
-				'include': 'contacts'
-			});
-		}
+	refreshDashboardFeatures: task(function* () {
+		let featureData =  this.store.peekAll('dashboard/feature');
+		if(!featureData.get('length')) featureData = yield this.store.findAll('dashboard/feature');
 
-		this.get('controller').set('model', profileData);
+		this.get('controller').set('model', featureData);
 	}).keepLatest()
 });

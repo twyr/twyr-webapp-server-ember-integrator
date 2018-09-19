@@ -1,3 +1,8 @@
 {
-	"github.remoteName": "twyr"
+	"git.enableSmartCommit": true,
+	"git.confirmSync": false,
+
+	"github.remoteName": "twyr",
+
+	"npm.enableScriptExplorer": true
 }

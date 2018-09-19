@@ -2,11 +2,12 @@ import Component from '@ember/component';
 import Evented from '@ember/object/evented';
 
 import { InvokeActionMixin } from 'ember-invoke-action';
+import { ContextBoundTasksMixin, ContextBoundEventListenersMixin, DisposableMixin } from 'ember-lifeline';
 
 import { inject } from '@ember/service';
 import { observer } from '@ember/object';
 
-export default Component.extend(Evented, InvokeActionMixin, {
+export default Component.extend(ContextBoundTasksMixin, ContextBoundEventListenersMixin, DisposableMixin, Evented, InvokeActionMixin, {
 	ajax: inject('ajax'),
 	store: inject('store'),
 	currentUser: inject('current-user'),

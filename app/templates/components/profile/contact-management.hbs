@@ -10,14 +10,6 @@
 		{{/head.column}}
 	{{/table.head}}
 	{{#table.body as |body|}}
-		{{#body.row as |row|}}
-			{{#row.cell class="p-0 px-3"}}Twyr Login{{/row.cell}}
-			{{#row.cell class="p-0 px-3"}}{{model.email}}{{/row.cell}}
-			{{#row.cell class="p-0 px-3 text-center"}}
-				{{paper-checkbox class="flex m-0" value=true onChange=null disabled=true}}
-			{{/row.cell}}
-			{{#row.cell class="p-0 text-right"}}&nbsp;{{/row.cell}}
-		{{/body.row}}
 		{{#each (sort-by table.sortDesc model.contacts) as |contact|}}
 			{{#if contact.isNew}}
 				{{#body.row as |row|}}

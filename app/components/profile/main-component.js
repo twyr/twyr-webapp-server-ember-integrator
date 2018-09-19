@@ -67,7 +67,7 @@ export default BaseComponent.extend({
 			.getElementById('profile-basic-information-image')
 			.removeEventListener('drop', this._processDroppedImage.bind(this));
 
-		this.get('_profileImageElem').croppie('destroy');
+		yield this.get('_profileImageElem').croppie('destroy');
 	}).drop().on('willDestroyElement'),
 
 	_processDroppedImage(event) {
@@ -96,11 +96,11 @@ export default BaseComponent.extend({
 			return;
 
 		if(this.get('_profileImageUploadTimeout')) {
-			clearTimeout(this.get('_profileImageUploadTimeout'));
+			this.cancelTask(this.get('_profileImageUploadTimeout'));
 			this.set('_profileImageUploadTimeout', null);
 		}
 
-		this.set('_profileImageUploadTimeout', setTimeout(() => {
+		this.set('_profileImageUploadTimeout', this.runTask(() => {
 			this.get('_uploadProfileImage').perform();
 		}, 10000));
 	},
