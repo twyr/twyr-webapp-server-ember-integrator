@@ -5,8 +5,11 @@ import Service from '@ember/service';
 import Evented from '@ember/object/evented';
 
 export default Service.extend(Evented, {
+	boundDataProcessor: null,
+
 	init() {
 		this._super(...arguments);
+		this.set('boundDataProcessor', this._websocketDataProcessor.bind(this));
 
 		const streamer = window.Primus.connect('/', {
 			'strategy': 'online, timeout, disconnect',
@@ -29,7 +32,10 @@ export default Service.extend(Evented, {
 		// 	this.trigger('websocket-reconnect-scheduled');
 		// });
 
-		streamer.on('reconnected', this.onStreamerReconnected.bind(this));
+		// streamer.on('reconnected', () => {
+		// 	if(window.developmentMode) console.log('twyr-webapp-server/services/websockets::streamer::on::reconnected: ', arguments);
+		// 	this.trigger('websocket-reconnected');
+		// });
 
 		// streamer.on('reconnect timeout', () => {
 		// 	if(window.developmentMode) console.log('twyr-webapp-server/services/websockets::streamer::on::reconnect timeout: ', arguments);
@@ -54,7 +60,6 @@ export default Service.extend(Evented, {
 		this.get('streamer').off('end', this.onStreamerEnd.bind(this));
 		this.get('streamer').off('close', this.onStreamerClose.bind(this));
 
-		this.get('streamer').off('reconnected', this.onStreamerReconnected.bind(this));
 		this.get('streamer').off('open', this.onStreamerOpen.bind(this));
 
 		this.get('streamer').end();
@@ -64,28 +69,21 @@ export default Service.extend(Evented, {
 	onStreamerOpen() {
 		if(window.developmentMode) console.log('twyr-webapp-server/services/websockets::streamer::on::open: ', arguments);
 
-		this.get('streamer').on('data', this._websocketDataProcessor.bind(this));
-		this.trigger('websocket-open');
-	},
-
-	onStreamerReconnected() {
-		if(window.developmentMode) console.log('twyr-webapp-server/services/websockets::streamer::on::reconnected: ', arguments);
-
-		this.get('streamer').on('data', this._websocketDataProcessor.bind(this));
+		this.get('streamer').on('data', this.get('boundDataProcessor'));
 		this.trigger('websocket-open');
 	},
 
 	onStreamerClose() {
 		if(window.developmentMode) console.log('twyr-webapp-server/services/websockets::streamer::on::close: ', arguments);
 
-		this.get('streamer').off('data', this._websocketDataProcessor.bind(this));
+		this.get('streamer').off('data', this.get('boundDataProcessor'));
 		this.trigger('websocket-close');
 	},
 
 	onStreamerEnd() {
 		if(window.developmentMode) console.log('twyr-webapp-server/services/websockets::streamer::on::end: ', arguments);
 
-		this.get('streamer').off('data', this._websocketDataProcessor.bind(this));
+		this.get('streamer').off('data', this.get('boundDataProcessor'));
 		this.trigger('websocket-end');
 	},
 

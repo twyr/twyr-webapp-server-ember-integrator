@@ -3,7 +3,7 @@
 	<div class="layout-column layout-align-start-stretch flex flex-gt-md-80 flex-gt-lg-70">
 		{{#if (get (filter-by "type" "feature" model) "length")}}
 		{{#paper-card class="flex" as |card|}}
-			{{#card.header class="bg-twyr-component" as |header|}}
+			{{#card.header class="bg-twyr-component white-text" as |header|}}
 				{{#header.text as |text|}}
 					{{#text.title}}{{fa-icon "laptop-code" class="mr-2"}}Features{{/text.title}}
 				{{/header.text}}

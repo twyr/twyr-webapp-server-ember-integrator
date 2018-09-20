@@ -79,7 +79,7 @@
 					<h5 class="mb-0">Contact Information</h5>
 				{{/accItem.title}}
 				{{#accItem.body class="p-2"}}
-					{{component "profile/contact-management" model=model controller-action=controller-action}}
+					{{component "profile/contact-management" model=model controller-action=(action "controller-action")}}
 				{{/accItem.body}}
 			{{/accordion.item}}
 			{{#accordion.item class="mt-2" value="4" title="Danger Zone" as |accItem|}}

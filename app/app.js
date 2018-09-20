@@ -35,7 +35,7 @@ const App = Application.extend(Evented, {
 				const formData = new FormData();
 				Object.keys(beaconData.data).forEach((key) => { formData.append(key, beaconData.data[key]); });
 
-				// beaconStatus = navigator.sendBeacon('/collectClientErrorData?source=onerror&method=beacon', formData);
+				beaconStatus = navigator.sendBeacon('/collectClientErrorData?source=onerror&method=beacon', formData);
 			}
 
 			if(!beaconStatus) {
@@ -64,7 +64,7 @@ const App = Application.extend(Evented, {
 				const formData = new FormData();
 				Object.keys(beaconData.data).forEach((key) => { formData.append(key, beaconData.data[key]); });
 
-				// beaconStatus = navigator.sendBeacon('/collectClientErrorData?source=rsvperror&method=beacon', formData);
+				beaconStatus = navigator.sendBeacon('/collectClientErrorData?source=rsvperror&method=beacon', formData);
 			}
 
 			if(!beaconStatus) {

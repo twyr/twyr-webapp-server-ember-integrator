@@ -22,7 +22,7 @@ export default BaseRoute.extend({
 		if((userData.defaultApplication === '') || (userData.defaultApplication === 'index'))
 			return;
 
-		this.replaceWith(userData.defaultApplication);
+		this.transitionTo(userData.defaultApplication);
 	},
 
 	onUserDataUpdated() {
@@ -35,6 +35,6 @@ export default BaseRoute.extend({
 		if((userData.defaultApplication === '') || (userData.defaultApplication === 'index'))
 			return;
 
-		this.replaceWith(userData.defaultApplication);
+		this.transitionTo(userData.defaultApplication);
 	}
 });
