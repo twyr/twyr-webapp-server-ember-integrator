@@ -10,7 +10,7 @@ export default BaseComponent.extend({
 	permissions: null,
 
 	display: computed('hasPermission', function() {
-		return { 'display': (this.get('hasPermission') ? 'unset' : 'none') };
+		return { 'display': (this.get('hasPermission') ? 'block' : 'none') };
 	}),
 
 	init() {

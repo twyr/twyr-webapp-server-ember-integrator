@@ -17,25 +17,36 @@ export default BaseRoute.extend({
 	},
 
 	model() {
-		if(!window.twyrUserId) return;
+		if(!window.twyrUserId) {
+			this.get('store').unloadAll('profile/user');
+			this.get('store').unloadAll('profile/user-contact');
 
-		const profileData =  this.store.peekRecord('profile/user', window.twyrUserId);
+			return;
+		}
+
+		const profileData =  this.get('store').peekRecord('profile/user', window.twyrUserId);
 		if(profileData) return profileData;
 
-		return this.store.findRecord('profile/user', window.twyrUserId, {
+		return this.get('store').findRecord('profile/user', window.twyrUserId, {
 			'include': 'contacts'
 		});
 	},
 
 	onUserDataUpdated() {
-		if(!window.twyrUserId) return;
+		if(!window.twyrUserId) {
+			this.get('store').unloadAll('profile/user');
+			this.get('store').unloadAll('profile/user-contact');
+
+			return;
+		}
+
 		this.get('refreshProfileModel').perform();
 	},
 
 	refreshProfileModel: task(function* () {
-		let profileData =  this.store.peekRecord('profile/user', window.twyrUserId);
+		let profileData =  this.get('store').peekRecord('profile/user', window.twyrUserId);
 		if(!profileData) {
-			profileData = yield this.store.findRecord('profile/user', window.twyrUserId, {
+			profileData = yield this.get('store').findRecord('profile/user', window.twyrUserId, {
 				'include': 'contacts'
 			});
 		}

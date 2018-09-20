@@ -17,22 +17,29 @@ export default BaseRoute.extend({
 	},
 
 	model() {
-		if(!window.twyrUserId) return;
+		if(!window.twyrUserId) {
+			this.get('store').unloadAll('dashboard/feature');
+			return;
+		}
 
-		const featureData =  this.store.peekAll('dashboard/feature');
+		const featureData =  this.get('store').peekAll('dashboard/feature');
 		if(featureData.get('length')) return featureData;
 
-		return this.store.findAll('dashboard/feature');
+		return this.get('store').findAll('dashboard/feature');
 	},
 
 	onUserDataUpdated() {
-		if(!window.twyrUserId) return;
+		if(!window.twyrUserId) {
+			this.get('store').unloadAll('dashboard/feature');
+			return;
+		}
+
 		this.get('refreshDashboardFeatures').perform();
 	},
 
 	refreshDashboardFeatures: task(function* () {
-		let featureData =  this.store.peekAll('dashboard/feature');
-		if(!featureData.get('length')) featureData = yield this.store.findAll('dashboard/feature');
+		let featureData =  this.get('store').peekAll('dashboard/feature');
+		if(!featureData.get('length')) featureData = yield this.get('store').findAll('dashboard/feature');
 
 		this.get('controller').set('model', featureData);
 	}).keepLatest()
