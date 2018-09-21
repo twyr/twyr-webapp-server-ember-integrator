@@ -41,13 +41,15 @@ export default Service.extend(Evented, {
 				window.twyrTenantId = userData['tenant_id'];
 			}
 			else {
+console.log('`Current User Service, setting null #1');
 				window.twyrUserId = null;
 				window.twyrTenantId = null;
 			}
+
 			this.trigger('userDataUpdated');
 		}
 		catch(err) {
-			// TODO: Use the Beacon API to send all this back to the server;
+console.log('`Current User Service, setting null #2', err);
 			this.set('userData', null);
 			window.twyrUserId = null;
 			window.twyrTenantId = null;
@@ -65,7 +67,8 @@ export default Service.extend(Evented, {
 	},
 
 	hasPermission(permission) {
-		return ((this.get('userData.permissions') || []).includes(permission));
+		const userPermissions = this.get('userData.permissions') || [];
+		return (userPermissions.includes('super-administrator') || userPermissions.includes(permission));
 	},
 
 	getUser() {

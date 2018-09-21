@@ -34,6 +34,9 @@ export default BaseRoute.extend({
 			return;
 		}
 
+		const isActive = this.get('router').isActive(this.get('fullRouteName'));
+		if(!isActive) return;
+
 		this.get('refreshDashboardFeatures').perform();
 	},
 

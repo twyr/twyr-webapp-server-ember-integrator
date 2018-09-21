@@ -15,6 +15,7 @@ export default BaseModel.extend({
 	'profileImageMetadata': DS.attr(),
 
 	'contacts': DS.hasMany('profile/user-contact', {
+		'async': true,
 		'inverse': 'user'
 	}),
 

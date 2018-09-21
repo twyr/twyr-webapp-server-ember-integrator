@@ -1,6 +1,10 @@
 import Route from '@ember/routing/route';
+import { inject } from '@ember/service';
 
 export default Route.extend({
+	currentUser: inject('current-user'),
+	router: inject('router'),
+
 	actions: {
 		'controller-action': function(action, data) {
 			const controller = this.get('controller');

@@ -32,17 +32,22 @@ export default Controller.extend(Evented, InvokeActionMixin, {
 	}),
 
 	updatePermissions() {
-		if(this.get('permissions').includes('*')) {
-			this.set('hasPermission', true);
-			return;
+		let hasPerm = false;
+		if(this.get('permissions').includes('*') || this.get('permissions').includes('super-administrator')) {
+			hasPerm = true;
+		}
+		else {
+			const requiredPermissions = this.get('permissions');
+			for(let permIdx = 0; permIdx < requiredPermissions.length; permIdx++) {
+				let hasCurrentPermission = this.get('currentUser').hasPermission(requiredPermissions[permIdx]);
+				hasPerm = hasPerm || hasCurrentPermission;
+
+				if(hasPerm) break;
+			}
 		}
 
-		const requiredPermissions = this.get('permissions');
-		let hasPerm = false;
-		for(let permIdx = 0; permIdx < requiredPermissions.length; permIdx++) {
-			let hasCurrentPermission = this.get('currentUser').hasPermission(requiredPermissions[permIdx]);
-			hasPerm = hasPerm || hasCurrentPermission;
-		}
+		if(hasPerm === this.get('hasPermission'))
+			return;
 
 		this.set('hasPermission', hasPerm);
 	},

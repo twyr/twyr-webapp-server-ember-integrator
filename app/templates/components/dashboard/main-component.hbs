@@ -11,14 +11,14 @@
 			{{#card.content class="layout-row layout-align-start-center layout-wrap py-4"}}
 				{{#each model as |feature|}}
 					{{#if (eq feature.type "feature")}}
-					{{#paper-card class="flex flex-gt-sm-50 flex-gt-md-33 flex-gt-lg-25" as |card|}}
+					{{#paper-card class="flex flex-gt-xs-50 flex-gt-sm-33 flex-gt-md-25 flex-gt-lg-20" as |card|}}
 						{{#link-to feature.route title=feature.description}}
 						{{#card.content class="text-center layout-column layout-align-start-center"}}
 							{{#if (eq feature.iconType 'fa')}}
 								{{fa-icon feature.iconPath size="4x"}}
 							{{/if}}
 
-							{{#if (eq feature.iconType 'paper')}}
+							{{#if (eq feature.iconType 'md')}}
 								{{paper-icon feature.iconPath size=64}}
 							{{/if}}
 
@@ -28,6 +28,10 @@
 
 							{{#if (eq feature.iconType 'img')}}
 								<img src={{feature.iconPath}} alt={{feature.name}} style="min-height:4rem; height:4rem; max-height:4rem;"/>
+							{{/if}}
+
+							{{#if (eq feature.iconType 'custom')}}
+								{{{feature.iconPath}}}
 							{{/if}}
 
 							<div class="mt-4" style="font-weight:900;">

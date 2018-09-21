@@ -1,0 +1,42 @@
+<div class="layout-row layout-align-center-start py-4">
+	<div class="layout-column layout-align-start-stretch flex flex-gt-md-80">
+		{{#paper-card class="flex" as |card|}}
+			{{#card.header class="bg-twyr-component white-text" as |header|}}
+				{{#header.text as |text|}}
+					{{#text.title}}{{mdi-icon "account-settings" class="mr-2"}}Administration{{/text.title}}
+				{{/header.text}}
+			{{/card.header}}
+			{{#card.content class="p-0 layout-row layout-align-space-between flex"}}
+				{{#paper-form class="flex flex-gt-md-25" onSubmit=(perform save) as |form|}}
+					{{#paper-card class="flex" as |card|}}
+						{{#card.header as |header|}}
+							{{#header.text as |text|}}
+								{{#text.title}}Basics{{/text.title}}
+							{{/header.text}}
+						{{/card.header}}
+						{{#card.content}}
+							{{form.input type="text" class="flex-100" label="Name" value=model.name onChange=(action (mut model.name)) required=true}}
+							{{form.input type="url" class="flex-100" label="Domain" value=model.fullDomain onChange=(action (mut model.fullDomain)) required=true}}
+						{{/card.content}}
+						{{#card.actions class="layout-row layout-align-end-center"}}
+							{{#form.submit-button primary=true raised=true onClick=(perform save) disabled=(or form.isInvalid save.isRunning cancel.isRunning (not model.hasDirtyAttributes))}}
+								{{#liquid-if save.isRunning}}
+									{{paper-icon "rotate-left" reverseSpin=true}}
+								{{else}}
+									{{paper-icon "save" class="mr-1"}}<span>Save</span>
+								{{/liquid-if}}
+							{{/form.submit-button}}
+							{{#paper-button warn=true raised=true onClick=(perform cancel) disabled=(or save.isRunning cancel.isRunning (not model.hasDirtyAttributes))}}
+								{{#liquid-if cancel.isRunning}}
+									{{paper-icon "rotate-left" reverseSpin=true}}
+								{{else}}
+									{{paper-icon "cancel" class="mr-1"}}<span>Cancel</span>
+								{{/liquid-if}}
+							{{/paper-button}}
+						{{/card.actions}}
+					{{/paper-card}}
+				{{/paper-form}}
+			{{/card.content}}
+		{{/paper-card}}
+	</div>
+</div>
