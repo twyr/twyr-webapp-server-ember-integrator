@@ -19,6 +19,15 @@ module.exports = function (environment) {
 			'style-src': "'self' fonts.googleapis.com"
 		},
 
+		'ember-google-maps': {
+			'key': 'AIzaSyDof1Dp2E9O1x5oe78cOm0nDbYcnrWiPgA',
+			'language': 'en',
+			'region': 'IN',
+			'protocol': 'https',
+			'version': '3.34'
+			// 'libraries': ['geometry', 'places']
+		},
+
 		'ember-paper': {
 			'insertFontLinks': false
 		},
