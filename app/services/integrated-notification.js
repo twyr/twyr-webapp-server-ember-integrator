@@ -69,7 +69,7 @@ export default Service.extend({
 			return;
 		}
 
-		if(data.error.payload.errors && data.error.payload.errors.length) {
+		if(data.error.payload && data.error.payload.errors && data.error.payload.errors.length) {
 			data.error.payload.errors.forEach((dataError, idx) => {
 				if(!idx) return;
 				toast.error(dataError.detail, 'Error', options);
@@ -78,7 +78,6 @@ export default Service.extend({
 			return;
 		}
 
-		// console.error(`Errors: `, data.error.payload.errors);
 		toast.error(data.error.message, 'Error', options);
 	}
 });

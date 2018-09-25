@@ -1,0 +1,37 @@
+{{#paper-card class="m-0" as |card|}}
+	{{#card.header as |header|}}
+		{{#header.text as |text|}}
+			{{#text.title}}
+				{{state.model.name}}
+			{{/text.title}}
+		{{/header.text}}
+	{{/card.header}}
+	{{#card.content}}
+	<div class="layout-row layout-align-space-between">
+		<div class="flex-65 layout-column layout-align-start-stretch">
+			<div class="layout-row layout-align-start-center">
+				{{paper-input type="text" class="flex" label="Approximate Location" value=approxLocation onChange=(action (mut approxLocation))}}
+			</div>
+			<div class="flex layout-row layout-align-start-stretch">
+				<div class="flex" id="tenant-location-editor-map-container-{{state.model.id}}" />
+			</div>
+		</div>
+		<div class="flex-30 layout-column layout-align-center-stretch">
+			{{paper-input type="text" class="flex-90" label="Name" value=state.model.name required=true disabled=(not state.model.latitude) onChange=(action (mut state.model.name))}}
+			{{paper-input type="text" class="flex-90" label="Line #1" value=state.model.line1 required=true disabled=(not state.model.latitude) onChange=(action (mut state.model.line1))}}
+			{{paper-input type="text" class="flex-90" label="Line #2" value=state.model.line2 disabled=(not state.model.latitude) onChange=(action (mut state.model.line2))}}
+			{{paper-input type="text" class="flex-90" label="Line #3" value=state.model.line3 disabled=(not state.model.latitude) onChange=(action (mut state.model.line3))}}
+			{{paper-input type="text" class="flex-90" label="Area" value=state.model.area required=true disabled=(not state.model.latitude) onChange=(action (mut state.model.area))}}
+			{{paper-input type="text" class="flex-90" label="City" value=state.model.city required=true disabled=(not state.model.latitude) onChange=(action (mut state.model.city))}}
+			{{paper-input type="text" class="flex-90" label="State" value=state.model.state required=true disabled=(not state.model.latitude) onChange=(action (mut state.model.state))}}
+			{{paper-input type="text" class="flex-90" label="Country" value=state.model.country required=true disabled=(not state.model.latitude) onChange=(action (mut state.model.country))}}
+			{{paper-input type="text" class="flex-90" label="Postal Code" value=state.model.postalCode required=true disabled=(not state.model.latitude) onChange=(action (mut state.model.postalCode))}}
+			<div class="flex-90 layout-row layout-align-space-between">
+				{{paper-input type="text" class="flex-45" label="Latitude" value=state.model.latitude disabled=true onChange=(action (mut state.model.latitude))}}
+				{{paper-input type="text" class="flex-45" label="Longitude" value=state.model.longitude disabled=true onChange=(action (mut state.model.longitude))}}
+			</div>
+			{{paper-input type="text" class="flex-90" label="Timezone" value=state.model.timezoneName disabled=true onChange=(action (mut state.model.timezoneName))}}
+		</div>
+	</div>
+	{{/card.content}}
+{{/paper-card}}

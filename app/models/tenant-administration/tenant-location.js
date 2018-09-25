@@ -7,7 +7,7 @@ export default BaseModel.extend({
 		'inverse': 'location'
 	}),
 
-	'name': DS.attr('string', { 'defaultValue': 'Main Office' }),
+	'name': DS.attr('string', { 'defaultValue': '' }),
 	'line1': DS.attr('string', { 'defaultValue': '' }),
 	'line2': DS.attr('string', { 'defaultValue': '' }),
 	'line3': DS.attr('string', { 'defaultValue': '' }),
@@ -21,5 +21,7 @@ export default BaseModel.extend({
 	'longitude': DS.attr('number', { 'defaultValue': 0 }),
 
 	'timezoneId': DS.attr('string', { 'defaultValue': 'Asia/Kolkata' }),
-	'timezoneName': DS.attr('string', { 'defaultValue': 'India Standard Time' })
+	'timezoneName': DS.attr('string', { 'defaultValue': 'India Standard Time' }),
+
+	'isPrimary': DS.attr('boolean', { 'defaultValue': false })
 });

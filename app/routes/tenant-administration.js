@@ -1,11 +1,7 @@
 import BaseRoute from '../framework/base-route';
-
-import { inject } from '@ember/service';
 import { task } from 'ember-concurrency';
 
 export default BaseRoute.extend({
-	currentUser: inject('current-user'),
-
 	init() {
 		this._super(...arguments);
 		this.get('currentUser').on('userDataUpdated', this, this.onUserDataUpdated);
@@ -30,6 +26,13 @@ export default BaseRoute.extend({
 		return this.get('store').findRecord('tenant-administration/tenant', window.twyrTenantId, {
 			'include': 'location'
 		});
+	},
+
+	afterModel() {
+		const isActive = this.get('router').isActive(this.get('fullRouteName'));
+		if(!isActive) return;
+
+		this.transitionTo('tenant-administration.features');
 	},
 
 	onUserDataUpdated() {

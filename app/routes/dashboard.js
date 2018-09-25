@@ -1,11 +1,8 @@
 import BaseRoute from '../framework/base-route';
 
-import { inject } from '@ember/service';
 import { task } from 'ember-concurrency';
 
 export default BaseRoute.extend({
-	currentUser: inject('current-user'),
-
 	init() {
 		this._super(...arguments);
 		this.get('currentUser').on('userDataUpdated', this, this.onUserDataUpdated);

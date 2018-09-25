@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import Evented from '@ember/object/evented';
 import Service from '@ember/service';
 
@@ -41,7 +39,6 @@ export default Service.extend(Evented, {
 				window.twyrTenantId = userData['tenant_id'];
 			}
 			else {
-console.log('`Current User Service, setting null #1');
 				window.twyrUserId = null;
 				window.twyrTenantId = null;
 			}
@@ -49,7 +46,6 @@ console.log('`Current User Service, setting null #1');
 			this.trigger('userDataUpdated');
 		}
 		catch(err) {
-console.log('`Current User Service, setting null #2', err);
 			this.set('userData', null);
 			window.twyrUserId = null;
 			window.twyrTenantId = null;

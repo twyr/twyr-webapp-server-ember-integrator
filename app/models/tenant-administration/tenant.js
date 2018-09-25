@@ -10,6 +10,7 @@ export default BaseModel.extend({
 	'subDomain': DS.attr('string'),
 
 	'location': DS.belongsTo('tenant-administration/tenant-location', {
+		'async': true,
 		'inverse': 'tenant'
 	}),
 
