@@ -31,7 +31,7 @@ export default BaseRoute.extend({
 			return;
 		}
 
-		const isActive = this.get('router').isActive(this.get('fullRouteName'));
+		const isActive = this.get('router').get('currentRouteName').includes(this.get('fullRouteName'));
 		if(!isActive) return;
 
 		this.get('refreshDashboardFeatures').perform();

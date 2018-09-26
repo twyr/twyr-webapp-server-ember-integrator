@@ -65,7 +65,7 @@
 								{{model.location.country}}&nbsp;{{model.location.postalCode}}
 							</div>
 						{{else}}
-							{{#paper-button class="flex" primary=true raised=true onClick=(perform addPrimaryLocation) bubbles=false}}
+							{{#paper-button class="flex" onClick=(perform addPrimaryLocation) bubbles=false}}
 								{{fa-icon "map-marked" class="mr-1"}} Add Main Office Location
 							{{/paper-button}}
 						{{/if}}
@@ -79,9 +79,21 @@
 				{{#bs-navbar type="light" backgroundColor="white" collapsed=false fluid=true as |navbar|}}
 					{{#navbar.content}}
 						{{#navbar.nav class="layout-row layout-align-start-center" as |nav|}}
-							{{#nav.item class="mr-4"}}Feature Management{{/nav.item}}
-							{{#nav.item class="mr-4"}}Groups &amp; Permissions{{/nav.item}}
-							{{#nav.item}}User Management{{/nav.item}}
+							{{#nav.item class="mr-4"}}
+								{{#link-to "tenant-administration.feature-manager"}}
+									{{mdi-icon "star-circle-outline"}} Feature Management
+								{{/link-to}}
+							{{/nav.item}}
+							{{#nav.item class="mr-4"}}
+								{{#link-to "tenant-administration.group-manager"}}
+									{{mdi-icon "group"}} Groups &amp; Permissions
+								{{/link-to}}
+							{{/nav.item}}
+							{{#nav.item}}
+								{{#link-to "tenant-administration.user-manager"}}
+									{{mdi-icon "account-multiple-outline"}} User Management
+								{{/link-to}}
+							{{/nav.item}}
 						{{/navbar.nav}}
 					{{/navbar.content}}
 				{{/bs-navbar}}

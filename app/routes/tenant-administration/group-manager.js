@@ -31,7 +31,7 @@ export default BaseRoute.extend({
 
 	onUserDataUpdated() {
 		if(!window.twyrTenantId) {
-			this.get('store').unloadAll('tenant-administration/feature-manager/tenant-feature');
+			this.get('store').unloadAll('tenant-administration/group-manager/tenant-group');
 			return;
 		}
 	}

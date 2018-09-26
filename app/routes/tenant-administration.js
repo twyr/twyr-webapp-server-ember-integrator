@@ -28,11 +28,9 @@ export default BaseRoute.extend({
 		});
 	},
 
-	afterModel() {
-		const isActive = this.get('router').isActive(this.get('fullRouteName'));
-		if(!isActive) return;
-
-		this.transitionTo('tenant-administration.features');
+	redirect(model, transition) {
+		if(transition.targetName === `${this.get('fullRouteName')}.index`)
+			this.transitionTo(`${this.get('fullRouteName')}.feature-manager`);
 	},
 
 	onUserDataUpdated() {
@@ -43,7 +41,7 @@ export default BaseRoute.extend({
 			return;
 		}
 
-		const isActive = this.get('router').isActive(this.get('fullRouteName'));
+		const isActive = this.get('router').get('currentRouteName').includes(this.get('fullRouteName'));
 		if(!isActive) return;
 
 		this.get('refreshTenantModel').perform();
