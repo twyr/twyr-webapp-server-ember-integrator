@@ -1,0 +1,34 @@
+{{#paper-card class="m-0 flex" as |card|}}
+	{{#card.header as |header|}}
+		{{#header.text as |text|}}
+			{{#text.title}}Main Office Location{{/text.title}}
+		{{/header.text}}
+		{{#paper-button primary=true raised=true mini=true onClick=(perform editPrimaryLocation) bubbles=false}}
+			{{paper-icon "edit"}}
+		{{/paper-button}}
+	{{/card.header}}
+	{{#card.content class="flex layout-row layout-align-center-stretch layout-wrap"}}
+		{{#if model.location}}
+			<div id="tenant-administrator-main-component-static-location-display" class="p-0 text-center flex-100 flex-gt-lg-70" style="min-height:5rem;">
+				{{#if staticUrl}}
+					<img border="0" src="{{staticUrl}}" alt="{{model.location.name}}" />
+				{{else}}
+					Fetching map...
+				{{/if}}
+			</div>
+			<div class="flex-100 flex-gt-lg-30" style="font-style:italic;">
+				{{model.location.line1}}<br />
+				{{#if (not-eq model.location.line2 '')}}{{model.location.line2}}<br />{{/if}}
+				{{#if (not-eq model.location.line3 '')}}{{model.location.line3}}<br />{{/if}}
+				{{#if (not-eq model.location.area '')}}{{model.location.area}}<br />{{/if}}
+				{{model.location.city}}<br />
+				{{model.location.state}}<br />
+				{{model.location.country}}&nbsp;{{model.location.postalCode}}
+			</div>
+		{{else}}
+			{{#paper-button class="flex" onClick=(perform addPrimaryLocation) bubbles=false}}
+				{{fa-icon "map-marked" class="mr-1"}} Add Main Office Location
+			{{/paper-button}}
+		{{/if}}
+	{{/card.content}}
+{{/paper-card}}

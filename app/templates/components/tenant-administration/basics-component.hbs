@@ -1,0 +1,29 @@
+{{#paper-form class="flex h-100 layout-row layout-align-center-stretch" onSubmit=(perform save) as |form|}}
+	{{#paper-card class="m-0 flex" as |card|}}
+		{{#card.header as |header|}}
+			{{#header.text as |text|}}
+				{{#text.title}}Basics{{/text.title}}
+			{{/header.text}}
+		{{/card.header}}
+		{{#card.content class="layout-column layout-align-start-stretch"}}
+			{{form.input type="text" class="flex-100" label="Name" value=model.name onChange=(action (mut model.name)) required=true}}
+			{{form.input type="url" class="flex-100" label="Domain" value=model.fullDomain onChange=(action (mut model.fullDomain)) required=true}}
+		{{/card.content}}
+		{{#card.actions class="layout-row layout-align-end-center layout-wrap"}}
+			{{#form.submit-button primary=true raised=true onClick=(perform save) disabled=(or form.isInvalid save.isRunning cancel.isRunning (not model.hasDirtyAttributes))}}
+				{{#liquid-if save.isRunning}}
+					{{paper-icon "rotate-left" reverseSpin=true}}
+				{{else}}
+					{{paper-icon "save" class="mr-1"}}<span>Save</span>
+				{{/liquid-if}}
+			{{/form.submit-button}}
+			{{#paper-button warn=true raised=true onClick=(perform cancel) disabled=(or save.isRunning cancel.isRunning (not model.hasDirtyAttributes))}}
+				{{#liquid-if cancel.isRunning}}
+					{{paper-icon "rotate-left" reverseSpin=true}}
+				{{else}}
+					{{paper-icon "cancel" class="mr-1"}}<span>Cancel</span>
+				{{/liquid-if}}
+			{{/paper-button}}
+		{{/card.actions}}
+	{{/paper-card}}
+{{/paper-form}}

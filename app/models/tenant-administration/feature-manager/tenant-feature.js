@@ -5,5 +5,10 @@ export default BaseModel.extend({
 	'tenant': DS.belongsTo('tenant-administration/tenant', {
 		'async': true,
 		'inverse': 'features'
+	}),
+
+	'feature': DS.belongsTo('server-administration/feature', {
+		'async': true,
+		'inverse': null
 	})
 });

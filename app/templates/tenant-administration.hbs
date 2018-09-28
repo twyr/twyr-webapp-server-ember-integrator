@@ -1,2 +1,43 @@
 {{page-title "Tenant Administration"}}
-{{component "tenant-administration/main-component" model=model controller-action=(action "controller-action")}}
+<div class="layout-row layout-align-center-start py-4">
+	<div class="layout-column layout-align-start-stretch flex flex-gt-md-80">
+		{{#paper-card class="flex" as |card|}}
+			{{#card.header class="bg-twyr-component white-text" as |header|}}
+				{{#header.text as |text|}}
+					{{#text.title}}{{mdi-icon "account-settings" class="mr-2"}}Administration{{/text.title}}
+				{{/header.text}}
+			{{/card.header}}
+			{{#card.content class="p-0 layout-row layout-align-start-stretch layout-wrap flex"}}
+				{{component "tenant-administration/basics-component" model=model controller-action=(action "controller-action")}}
+				{{component "tenant-administration/location-component" model=model controller-action=(action "controller-action")}}
+			{{/card.content}}
+		{{/paper-card}}
+		{{#paper-card class="flex" as |card|}}
+			{{#card.content class="p-0 layout-column layout-align-start-stretch"}}
+				{{#bs-navbar type="light" backgroundColor="white" collapsed=false fluid=true as |navbar|}}
+					{{#navbar.content}}
+						{{#navbar.nav class="layout-row layout-align-start-center" as |nav|}}
+							{{#nav.item class="mr-4"}}
+								{{#link-to "tenant-administration.feature-manager"}}
+									{{mdi-icon "star-circle-outline"}} Feature Management
+								{{/link-to}}
+							{{/nav.item}}
+							{{#nav.item class="mr-4"}}
+								{{#link-to "tenant-administration.group-manager"}}
+									{{mdi-icon "group"}} Groups &amp; Permissions
+								{{/link-to}}
+							{{/nav.item}}
+							{{#nav.item}}
+								{{#link-to "tenant-administration.user-manager"}}
+									{{mdi-icon "account-multiple-outline"}} User Management
+								{{/link-to}}
+							{{/nav.item}}
+						{{/navbar.nav}}
+					{{/navbar.content}}
+				{{/bs-navbar}}
+
+				{{liquid-outlet class="mt-1 flex"}}
+			{{/card.content}}
+		{{/paper-card}}
+	</div>
+</div>

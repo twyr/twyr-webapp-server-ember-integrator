@@ -14,6 +14,8 @@ const backoffPolicy = new ExponentialBackoffPolicy({
 });
 
 export default BaseComponent.extend(ResizeAware, {
+	classNames: ['flex-100', 'flex-gt-sm-50', 'flex-gt-md-60', 'flex-gt-lg-70', 'layout-row', 'layout-align-center-stretch'], // eslint-disable-line ember/avoid-leaking-state-in-ember-objects
+
 	resizeWidthSensitive: true,
 	resizeHeightSensitive: true,
 	staticUrl: null,
@@ -26,7 +28,8 @@ export default BaseComponent.extend(ResizeAware, {
 		this.get('displayPrimaryLocation').perform();
 	}),
 
-	debouncedDidResize() {
+	debouncedDidResize(width, height) {
+		if(!width || !height) return;
 		this.get('displayPrimaryLocation').perform();
 	},
 
@@ -103,7 +106,7 @@ export default BaseComponent.extend(ResizeAware, {
 					'raised': true,
 
 					'callback': () => {
-						self.get('saveLocation').perform(this.get('model.location'));
+						self.get('saveLocation').perform(self.get('model.location'));
 					}
 				},
 
@@ -112,7 +115,17 @@ export default BaseComponent.extend(ResizeAware, {
 					'icon': 'cancel',
 
 					'warn': true,
-					'raised': true
+					'raised': true,
+
+					'callback': () => {
+						const location = self.get('model.location');
+						if(location.rollback) {
+							location.rollback();
+							return;
+						}
+
+						if(location.content.rollback) location.content.rollback();
+					}
 				}
 			};
 
@@ -149,26 +162,6 @@ export default BaseComponent.extend(ResizeAware, {
 
 		this.set('staticUrl', `//maps.googleapis.com/maps/api/staticmap?center=${mapParameters.lat},${mapParameters.lng}&size=${mapWidth}x${mapHeight}&maptype=roadmap&markers=color:blue%7Clabel:S%7C${mapParameters.lat},${mapParameters.lng}&key=${mapParameters.key}`);
 	}).keepLatest(),
-
-	save: task(function* () {
-		try {
-			yield this.get('model').save();
-			this.get('notification').display({
-				'type': 'success',
-				'message': 'Tenant saved successfully'
-			});
-		}
-		catch(err) {
-			this.get('notification').display({
-				'type': 'error',
-				'error': err
-			});
-		}
-	}).drop().retryable(backoffPolicy),
-
-	cancel: task(function* () {
-		yield this.get('model').rollback();
-	}).drop(),
 
 	saveLocation: task(function* (tenantLocation) {
 		try {
