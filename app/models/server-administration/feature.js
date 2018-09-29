@@ -9,6 +9,7 @@ export default BaseModel.extend({
 	'displayName': DS.attr('string'),
 	'deploy': DS.attr('string', { 'defaultValue': 'default' }),
 	'description': DS.attr('string'),
+	'type': DS.attr('string'),
 
 	'parent': DS.belongsTo('server-administration/feature', {
 		'async': true,

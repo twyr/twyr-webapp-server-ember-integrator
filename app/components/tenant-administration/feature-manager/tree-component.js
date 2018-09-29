@@ -32,7 +32,7 @@ export default BaseComponent.extend({
 				},
 
 				'data': {
-					'url': '/tenant-administration/feature-manager/tree',
+					'url': '/server-administration/features/tree',
 					'dataType': 'json',
 					'data': function(node) {
 						return { 'id': node.id };
@@ -64,28 +64,17 @@ export default BaseComponent.extend({
 
 	onActivateNode: task(function* (treeNode) {
 		try {
-			const serverFeature = yield this.get('selectedFeature.feature');
+			let serverFeature = yield this.get('selectedFeature');
 			if(serverFeature && (serverFeature.get('id') === treeNode.id))
 				return;
 
 			const store = this.get('store');
-
-			let loadedFeatureModels = store.peekAll('tenant-administration/feature-manager/tenant-feature');
-			if(!loadedFeatureModels.get('length')) {
-				yield store.findAll('tenant-administration/feature-manager/tenant-feature');
-				loadedFeatureModels = store.peekAll('tenant-administration/feature-manager/tenant-feature');
-
-				for(let idx = 0; idx < loadedFeatureModels.get('length'); idx++) {
-					const loadedFeatureModel = loadedFeatureModels.objectAt(idx);
-					yield loadedFeatureModel.get('feature');
-				}
-			}
-
-			const featureModel = loadedFeatureModels.filter((loadedFeatureModel) => {
-				return loadedFeatureModel.get('feature.id') === treeNode.id
+			serverFeature = store.peekRecord('server-administration/feature', treeNode.id);
+			if(!serverFeature) serverFeature = yield store.findRecord('server-administration/feature', treeNode.id, {
+				'include': 'permissions'
 			});
 
-			this.invokeAction('controller-action', 'setSelectedFeature', featureModel.shift());
+			this.invokeAction('controller-action', 'setSelectedFeature', serverFeature);
 		}
 		catch(err) {
 			this.get('notification').display({
@@ -99,11 +88,11 @@ export default BaseComponent.extend({
 		if(!this.get('selectedFeature'))
 			return;
 
-		if(this.$('div#tenant-administration-feature-manager-tree-container').jstree('get_selected')[0] === this.get('selectedFeature.feature.id'))
+		if(this.$('div#tenant-administration-feature-manager-tree-container').jstree('get_selected')[0] === this.get('selectedFeature.id'))
 			return;
 
-		this.$('div#tenant-administration-feature-manager-tree-container').jstree('activate_node', this.get('selectedFeature.feature.id'), false, false);
-		this.$('div#tenant-administration-feature-manager-tree-container').jstree('open_node', this.get('selectedFeature.feature.id'));
+		this.$('div#tenant-administration-feature-manager-tree-container').jstree('activate_node', this.get('selectedFeature.id'), false, false);
+		this.$('div#tenant-administration-feature-manager-tree-container').jstree('open_node', this.get('selectedFeature.id'));
 	}),
 
 });

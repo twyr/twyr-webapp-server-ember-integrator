@@ -1,16 +1,15 @@
 {{#paper-card class="m-0 flex" as |card|}}
 	{{#card.content class="p-0 layout-column layout-align-start-stretch"}}
-		{{#paper-subheader}}Basics{{/paper-subheader}}
-		<div class="mx-2 mt-4 layout-row layout-align-space-between-center">
-			{{paper-input class="flex-80" label="Path" placeholder="Feature Name" value=(await selectedFeature.feature.path) onChange=null readonly=true}}
-			{{paper-switch label="Subscribed" value=true onChange=(perform modifyTenantFeatureStatus) disabled=(not-eq (get (await selectedFeature.feature) 'deploy') 'custom')}}
+		{{#paper-subheader}}
+		<div class="layout-row layout-align-space-between-start">
+			{{paper-input class="m-0 flex-80" value=(await selectedFeature.path) onChange=null readonly=true}}
+			{{paper-switch class="m-0" label="Subscribed" value=true onChange=(perform modifyTenantFeatureStatus) disabled=(not-eq selectedFeature.deploy 'custom')}}
 		</div>
-		{{paper-divider class="mt-4"}}
-		{{#paper-subheader}}Description{{/paper-subheader}}
+		{{/paper-subheader}}
 		<div class="mx-2 pt-2 pb-4 layout-row layout-align-start-center">
-			{{get (await selectedFeature.feature) 'description'}}
+			{{selectedFeature.description}}
 		</div>
-		{{#if (get (await selectedFeature.feature.permissions) 'length')}}
+		{{#if (get (await selectedFeature.permissions) 'length')}}
 			{{paper-divider class="mt-4"}}
 			{{#paper-subheader}}Permissions{{/paper-subheader}}
 			{{#paper-data-table sortProp="displayName" sortDir="asc" as |table|}}
@@ -19,7 +18,7 @@
 					{{#head.column}}Description{{/head.column}}
 				{{/table.head}}
 				{{#table.body as |body|}}
-					{{#each (sort-by table.sortDesc (await selectedFeature.feature.permissions)) as |permission|}}
+					{{#each (sort-by table.sortDesc (await selectedFeature.permissions)) as |permission|}}
 						{{#body.row as |row|}}
 							{{#row.cell}}{{permission.displayName}}{{/row.cell}}
 							{{#row.cell}}{{permission.description}}{{/row.cell}}
@@ -28,7 +27,7 @@
 				{{/table.body}}
 			{{/paper-data-table}}
 		{{/if}}
-		{{#if (get (await selectedFeature.feature.features) 'length')}}
+		{{#if (get (await selectedFeature.features) 'length')}}
 			{{paper-divider class="mt-4"}}
 			{{#paper-subheader}}Sub Features{{/paper-subheader}}
 			{{#paper-data-table sortProp="displayName" sortDir="asc" as |table|}}
@@ -38,12 +37,14 @@
 					{{#head.column}}Access Level{{/head.column}}
 				{{/table.head}}
 				{{#table.body as |body|}}
-					{{#each (sort-by table.sortDesc (await selectedFeature.feature.features)) as |feature|}}
-						{{#body.row onClick=(perform changeSelectedFeature feature) as |row|}}
-							{{#row.cell}}{{feature.displayName}}{{/row.cell}}
-							{{#row.cell}}{{feature.description}}{{/row.cell}}
-							{{#row.cell}}{{titleize feature.deploy}}{{/row.cell}}
-						{{/body.row}}
+					{{#each (sort-by table.sortDesc (await selectedFeature.features)) as |feature|}}
+						{{#if (eq feature.type 'feature')}}
+							{{#body.row onClick=(action "controller-action" "changeSelectedFeature" feature) as |row|}}
+								{{#row.cell}}{{feature.displayName}}{{/row.cell}}
+								{{#row.cell}}{{feature.description}}{{/row.cell}}
+								{{#row.cell}}{{titleize feature.deploy}}{{/row.cell}}
+							{{/body.row}}
+						{{/if}}
 					{{/each}}
 				{{/table.body}}
 			{{/paper-data-table}}
