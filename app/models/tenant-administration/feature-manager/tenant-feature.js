@@ -4,11 +4,11 @@ import DS from 'ember-data';
 export default BaseModel.extend({
 	'tenant': DS.belongsTo('tenant-administration/tenant', {
 		'async': true,
-		'inverse': 'features'
+		'inverse': 'tenantFeatures'
 	}),
 
 	'feature': DS.belongsTo('server-administration/feature', {
 		'async': true,
-		'inverse': null
+		'inverse': 'tenantFeatures'
 	})
 });
