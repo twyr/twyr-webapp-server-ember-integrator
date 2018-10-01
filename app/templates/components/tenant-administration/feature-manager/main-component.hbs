@@ -3,7 +3,13 @@
 		{{#paper-subheader}}
 		<div class="layout-row layout-align-space-between-start">
 			{{paper-input class="m-0 flex-80" value=(await selectedFeature.path) onChange=null readonly=true}}
-			{{paper-switch class="m-0" label="Subscribed" value=(await selectedFeature.isTenantSubscribed) onChange=(perform modifyTenantFeatureStatus) disabled=(not-eq selectedFeature.deploy 'custom')}}
+			{{#paper-switch class="m-0" value=(await selectedFeature.isTenantSubscribed) onChange=(perform modifyTenantFeatureStatus) disabled=(not-eq selectedFeature.deploy 'custom')}}
+				{{#if (await selectedFeature.isTenantSubscribed)}}
+					Subscribed
+				{{else}}
+					Unsubscribed
+				{{/if}}
+			{{/paper-switch}}
 		</div>
 		{{/paper-subheader}}
 		<div class="mx-3 pt-2 pb-4 layout-row layout-align-start-center" style="font-size:14px;">

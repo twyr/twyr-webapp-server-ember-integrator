@@ -74,6 +74,7 @@ export default BaseComponent.extend({
 				'include': 'permissions'
 			});
 
+			this.$('div#tenant-administration-feature-manager-tree-container').jstree('open_node', treeNode.id);
 			this.invokeAction('controller-action', 'setSelectedFeature', serverFeature);
 		}
 		catch(err) {

@@ -23,7 +23,7 @@ export function initialize( /* application */ ) {
 
 		'isTenantSubscribed': computed('tenantFeatures.[]', {
 			get() {
-				if(this.get('type') !== 'custom')
+				if(this.get('deploy') !== 'custom')
 					return true;
 
 				return this.get('getTenantFeature').perform();
@@ -33,8 +33,10 @@ export function initialize( /* application */ ) {
 		'getTenantFeature': task(function* () {
 			const tenantFeatures = yield this.get('tenantFeatures');
 
-			for(let idx = 0; idx < tenantFeatures.get('length'); idx ++) {
-				const tenant = yield tenantFeatures.objectAt(idx).get('tenant');
+			for(let idx = 0; idx < tenantFeatures.get('length'); idx++) {
+				const tenantFeature = tenantFeatures.objectAt(idx);
+				const tenant = yield tenantFeature.get('tenant');
+
 				if(tenant.get('id') === window.twyrTenantId)
 					return true;
 			}
