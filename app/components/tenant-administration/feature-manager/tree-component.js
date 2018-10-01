@@ -64,7 +64,7 @@ export default BaseComponent.extend({
 
 	onActivateNode: task(function* (treeNode) {
 		try {
-			let serverFeature = yield this.get('selectedFeature');
+			let serverFeature = yield this.get('model');
 			if(serverFeature && (serverFeature.get('id') === treeNode.id))
 				return;
 
@@ -85,15 +85,15 @@ export default BaseComponent.extend({
 		}
 	}).keepLatest(),
 
-	onSelectedFeatureChanged: observer('selectedFeature', function() {
-		if(!this.get('selectedFeature'))
+	onSelectedFeatureChanged: observer('model', function() {
+		if(!this.get('model'))
 			return;
 
-		if(this.$('div#tenant-administration-feature-manager-tree-container').jstree('get_selected')[0] === this.get('selectedFeature.id'))
+		if(this.$('div#tenant-administration-feature-manager-tree-container').jstree('get_selected')[0] === this.get('model.id'))
 			return;
 
-		this.$('div#tenant-administration-feature-manager-tree-container').jstree('activate_node', this.get('selectedFeature.id'), false, false);
-		this.$('div#tenant-administration-feature-manager-tree-container').jstree('open_node', this.get('selectedFeature.id'));
+		this.$('div#tenant-administration-feature-manager-tree-container').jstree('activate_node', this.get('model.id'), false, false);
+		this.$('div#tenant-administration-feature-manager-tree-container').jstree('open_node', this.get('model.id'));
 	}),
 
 });

@@ -2,9 +2,9 @@
 	{{#card.content class="p-0 layout-column layout-align-start-stretch"}}
 		{{#paper-subheader}}
 		<div class="layout-row layout-align-space-between-start">
-			{{paper-input class="m-0 flex-80" value=(await selectedFeature.path) onChange=null readonly=true}}
-			{{#paper-switch class="m-0" value=(await selectedFeature.isTenantSubscribed) onChange=(perform modifyTenantFeatureStatus) disabled=(not-eq selectedFeature.deploy 'custom')}}
-				{{#if (await selectedFeature.isTenantSubscribed)}}
+			{{paper-input class="m-0 flex-80" value=(await model.path) onChange=null readonly=true}}
+			{{#paper-switch class="m-0" value=(await model.isTenantSubscribed) onChange=(perform modifyTenantFeatureStatus) disabled=(not-eq model.deploy 'custom')}}
+				{{#if (await model.isTenantSubscribed)}}
 					Subscribed
 				{{else}}
 					Unsubscribed
@@ -13,9 +13,9 @@
 		</div>
 		{{/paper-subheader}}
 		<div class="mx-3 pt-2 pb-4 layout-row layout-align-start-center" style="font-size:14px;">
-			{{selectedFeature.description}}
+			{{model.description}}
 		</div>
-		{{#if (get (await selectedFeature.permissions) 'length')}}
+		{{#if (get (await model.permissions) 'length')}}
 			{{paper-divider class="mt-4"}}
 			{{#paper-subheader}}Permissions{{/paper-subheader}}
 			{{#paper-data-table sortProp="displayName" sortDir="asc" as |table|}}
@@ -24,7 +24,7 @@
 					{{#head.column}}Description{{/head.column}}
 				{{/table.head}}
 				{{#table.body as |body|}}
-					{{#each (sort-by table.sortDesc (await selectedFeature.permissions)) as |permission|}}
+					{{#each (sort-by table.sortDesc (await model.permissions)) as |permission|}}
 						{{#body.row as |row|}}
 							{{#row.cell}}{{permission.displayName}}{{/row.cell}}
 							{{#row.cell}}{{permission.description}}{{/row.cell}}
@@ -33,7 +33,7 @@
 				{{/table.body}}
 			{{/paper-data-table}}
 		{{/if}}
-		{{#if (get (await selectedFeature.features) 'length')}}
+		{{#if (get (await model.features) 'length')}}
 			{{paper-divider class="mt-4"}}
 			{{#paper-subheader}}Sub Features{{/paper-subheader}}
 			{{#paper-data-table sortProp="displayName" sortDir="asc" as |table|}}
@@ -43,7 +43,7 @@
 					{{#head.column}}Access Level{{/head.column}}
 				{{/table.head}}
 				{{#table.body as |body|}}
-					{{#each (sort-by table.sortDesc (await selectedFeature.features)) as |feature|}}
+					{{#each (sort-by table.sortDesc (await model.features)) as |feature|}}
 						{{#if (eq feature.type 'feature')}}
 							{{#body.row onClick=(action "controller-action" "changeSelectedFeature" feature) as |row|}}
 								{{#row.cell}}{{feature.displayName}}{{/row.cell}}

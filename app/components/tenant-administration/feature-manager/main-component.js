@@ -20,7 +20,7 @@ export default BaseComponent.extend({
 	},
 
 	modifyTenantFeatureStatus: task(function* () {
-		const tenantFeatures = yield this.get('selectedFeature.tenantFeatures');
+		const tenantFeatures = yield this.get('model.tenantFeatures');
 
 		let tenantFeature = tenantFeatures.filter((tenantFeature) => {
 			return tenantFeature.get('tenant.id') === window.twyrTenantId;
@@ -28,12 +28,12 @@ export default BaseComponent.extend({
 
 		if(tenantFeature) {
 			try {
-				this.get('selectedFeature.tenantFeatures').removeObject(tenantFeature);
+				this.get('model.tenantFeatures').removeObject(tenantFeature);
 				yield tenantFeature.destroyRecord();
 			}
 			catch(err) {
 				tenantFeature.rollback();
-				this.get('selectedFeature.tenantFeatures').addObject(tenantFeature);
+				this.get('model.tenantFeatures').addObject(tenantFeature);
 			}
 
 			return;
@@ -42,15 +42,15 @@ export default BaseComponent.extend({
 		const tenant = this.get('store').peekRecord('tenant-administration/tenant', window.twyrTenantId);
 		tenantFeature = this.get('store').createRecord('tenant-administration/feature-manager/tenant-feature', {
 			'tenant': tenant,
-			'feature': this.get('selectedFeature')
+			'feature': this.get('model')
 		});
 
 		try {
-			this.get('selectedFeature.tenantFeatures').addObject(tenantFeature);
+			this.get('model.tenantFeatures').addObject(tenantFeature);
 			yield tenantFeature.save();
 		}
 		catch(err) {
-			this.get('selectedFeature.tenantFeatures').removeObject(tenantFeature);
+			this.get('model.tenantFeatures').removeObject(tenantFeature);
 			tenantFeature.deleteRecord();
 		}
 	}).drop().retryable(backoffPolicy)
