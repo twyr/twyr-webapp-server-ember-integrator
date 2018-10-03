@@ -7,8 +7,6 @@ export default BaseComponent.extend({
 	attributeBindings: ['style'],
 	style: computedStyle('display'),
 
-	permissions: null,
-
 	display: computed('hasPermission', function() {
 		return { 'display': (this.get('hasPermission') ? 'block' : 'none') };
 	}),

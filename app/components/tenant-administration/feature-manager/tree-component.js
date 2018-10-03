@@ -1,9 +1,34 @@
 import BaseComponent from '../../../framework/base-component';
 
+import computedStyle from 'ember-computed-style';
+
+import { computed } from '@ember/object';
 import { observer } from '@ember/object';
 import { task } from 'ember-concurrency';
 
 export default BaseComponent.extend({
+	attributeBindings: ['style'],
+	style: computedStyle('display'),
+
+	display: computed('hasPermission', function() {
+		return { 'display': (this.get('hasPermission') ? 'flex' : 'none') };
+	}),
+
+	init() {
+		this._super(...arguments);
+		this.set('permissions', ['feature-administration-read']);
+	},
+
+	onHasPermissionChange: observer('hasPermission', function() {
+		if(!this.get('hasPermission')) {
+			this.set('readonly', true);
+			return;
+		}
+
+		const updatePerm = this.get('currentUser').hasPermission('feature-administration-update');
+		if(updatePerm) this.set('readonly', false);
+	}),
+
 	didInsertElement() {
 		this._super(...arguments);
 

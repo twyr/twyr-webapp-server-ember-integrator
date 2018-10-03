@@ -1,8 +1,19 @@
 {{#paper-card class="m-0 flex" as |card|}}
 	{{#card.content class="p-0 layout-column layout-align-start-stretch"}}
 		{{#paper-subheader}}
-		<div class="layout-row layout-align-space-between-start">
-			{{paper-input class="m-0 flex-80" value=(await model.path) onChange=null readonly=true}}
+		<div class="layout-row layout-align-space-between-center" style="font-size:16px;">
+			<div class="flex layout-row layout-align-start-center">
+			{{#each breadcrumbStack as |parentCrumb idx|}}
+				{{#if idx}}&nbsp; &gt; &nbsp;{{/if}}
+				{{#if (eq idx (sub breadcrumbStack.length 1))}}
+					{{parentCrumb.displayName}}
+				{{else}}
+					<a href="#" {{action "controller-action" "changeSelectedFeature" parentCrumb}}>
+						{{parentCrumb.displayName}}
+					</a>
+				{{/if}}
+			{{/each}}
+			</div>
 			{{#paper-switch class="m-0" value=(await model.isTenantSubscribed) onChange=(perform modifyTenantFeatureStatus) disabled=(not-eq model.deploy 'custom')}}
 				{{#if (await model.isTenantSubscribed)}}
 					Subscribed
@@ -12,7 +23,7 @@
 			{{/paper-switch}}
 		</div>
 		{{/paper-subheader}}
-		<div class="mx-3 pt-2 pb-4 layout-row layout-align-start-center" style="font-size:14px;">
+		<div class="mx-3 pt-2 pb-4 layout-row layout-align-start-center">
 			{{model.description}}
 		</div>
 		{{#if (get (await model.permissions) 'length')}}

@@ -6,10 +6,11 @@
 			{{/header.text}}
 		{{/card.header}}
 		{{#card.content class="layout-column layout-align-start-stretch"}}
-			{{form.input type="text" class="flex-100" label="Name" value=model.name onChange=(action (mut model.name)) required=true}}
-			{{form.input type="url" class="flex-100" label="Domain" value=model.fullDomain onChange=(action (mut model.fullDomain)) required=true}}
+			{{form.input type="text" class="flex-100" label="Name" value=model.name onChange=(action (mut model.name)) readonly=readonly required=true}}
+			{{form.input type="url" class="flex-100" label="Domain" value=model.fullDomain onChange=(action (mut model.fullDomain)) readonly=readonly required=true}}
 		{{/card.content}}
 		{{#card.actions class="layout-row layout-align-end-center layout-wrap"}}
+			{{#unless readonly}}
 			{{#form.submit-button primary=true raised=true onClick=(perform save) disabled=(or form.isInvalid save.isRunning cancel.isRunning (not model.hasDirtyAttributes))}}
 				{{#liquid-if save.isRunning}}
 					{{paper-icon "rotate-left" reverseSpin=true}}
@@ -24,6 +25,7 @@
 					{{paper-icon "cancel" class="mr-1"}}<span>Cancel</span>
 				{{/liquid-if}}
 			{{/paper-button}}
+			{{/unless}}
 		{{/card.actions}}
 	{{/paper-card}}
 {{/paper-form}}

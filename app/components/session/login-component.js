@@ -12,7 +12,6 @@ export default BaseComponent.extend({
 	attributeBindings: ['style'],
 	style: computedStyle('display'),
 
-	permissions: null,
 	displayForm: 'loginForm',
 
 	username: '',

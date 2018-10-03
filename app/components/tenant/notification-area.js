@@ -15,7 +15,6 @@ export default BaseComponent.extend({
 	style: computedStyle('display'),
 
 	currentTenant: null,
-	permissions: null,
 	allowedTenants: null,
 
 	display: computed('allowedTenants', 'hasPermission', function() {
@@ -29,11 +28,11 @@ export default BaseComponent.extend({
 		this._super(...arguments);
 		this.set('permissions', ['registered']);
 
-		this.get('currentUser').on('userDataUpdated', this, this.onAllowedTenantsUpdated);
+		this.get('currentUser').on('userDataUpdated', this, 'onAllowedTenantsUpdated');
 	},
 
 	destroy() {
-		this.get('currentUser').off('userDataUpdated', this, this.onAllowedTenantsUpdated);
+		this.get('currentUser').off('userDataUpdated', this, 'onAllowedTenantsUpdated');
 		this._super(...arguments);
 	},
 

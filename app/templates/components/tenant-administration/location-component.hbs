@@ -3,9 +3,11 @@
 		{{#header.text as |text|}}
 			{{#text.title}}Main Office Location{{/text.title}}
 		{{/header.text}}
+		{{#if (and model.location (not model.location.isNew) (not readonly))}}
 		{{#paper-button primary=true raised=true mini=true onClick=(perform editPrimaryLocation) bubbles=false}}
 			{{paper-icon "edit"}}
 		{{/paper-button}}
+		{{/if}}
 	{{/card.header}}
 	{{#card.content class="flex layout-row layout-align-center-stretch layout-wrap"}}
 		{{#if model.location}}
@@ -26,9 +28,11 @@
 				{{model.location.country}}&nbsp;{{model.location.postalCode}}
 			</div>
 		{{else}}
+			{{#unless readonly}}
 			{{#paper-button class="flex" onClick=(perform addPrimaryLocation) bubbles=false}}
 				{{fa-icon "map-marked" class="mr-1"}} Add Main Office Location
 			{{/paper-button}}
+			{{/unless}}
 		{{/if}}
 	{{/card.content}}
 {{/paper-card}}

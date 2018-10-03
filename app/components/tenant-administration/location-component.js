@@ -3,7 +3,9 @@ import ExponentialBackoffPolicy from 'ember-concurrency-retryable/policies/expon
 import ResizeAware from 'ember-resize/mixins/resize-aware';
 
 import env from 'twyr-webapp-server/config/environment';
+import computedStyle from 'ember-computed-style';
 
+import { computed } from '@ember/object';
 import { observer } from '@ember/object';
 import { task, timeout } from 'ember-concurrency';
 
@@ -19,6 +21,30 @@ export default BaseComponent.extend(ResizeAware, {
 	resizeWidthSensitive: true,
 	resizeHeightSensitive: true,
 	staticUrl: null,
+
+	readonly: true,
+
+	attributeBindings: ['style'],
+	style: computedStyle('display'),
+
+	display: computed('hasPermission', function() {
+		return { 'display': (this.get('hasPermission') ? 'flex' : 'none') };
+	}),
+
+	init() {
+		this._super(...arguments);
+		this.set('permissions', ['tenant-administration-read']);
+	},
+
+	onHasPermissionChange: observer('hasPermission', function() {
+		if(!this.get('hasPermission')) {
+			this.set('readonly', true);
+			return;
+		}
+
+		const updatePerm = this.get('currentUser').hasPermission('tenant-administration-update');
+		if(updatePerm) this.set('readonly', false);
+	}),
 
 	onDidInsertElement: task(function* () {
 		yield this.get('displayPrimaryLocation').perform();

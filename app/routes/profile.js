@@ -4,11 +4,11 @@ import { task } from 'ember-concurrency';
 export default BaseRoute.extend({
 	init() {
 		this._super(...arguments);
-		this.get('currentUser').on('userDataUpdated', this, this.onUserDataUpdated);
+		this.get('currentUser').on('userDataUpdated', this, 'onUserDataUpdated');
 	},
 
 	destroy() {
-		this.get('currentUser').off('userDataUpdated', this, this.onUserDataUpdated);
+		this.get('currentUser').off('userDataUpdated', this, 'onUserDataUpdated');
 		this._super(...arguments);
 	},
 

@@ -7,11 +7,11 @@ export default BaseRoute.extend({
 		this.set('parentController', this.controllerFor('tenant-administration'));
 
 		this.get('parentController').addObserver('model', this, 'onParentModelChange');
-		this.get('currentUser').on('userDataUpdated', this, this.onUserDataUpdated);
+		this.get('currentUser').on('userDataUpdated', this, 'onUserDataUpdated');
 	},
 
 	destroy() {
-		this.get('currentUser').off('userDataUpdated', this, this.onUserDataUpdated);
+		this.get('currentUser').off('userDataUpdated', this, 'onUserDataUpdated');
 		this.get('parentController').removeObserver('model', this, 'onParentModelChange');
 		this._super(...arguments);
 	},

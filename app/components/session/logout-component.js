@@ -4,7 +4,6 @@ import { task } from 'ember-concurrency';
 
 export default BaseComponent.extend({
 	router: inject('router'),
-	permissions: null,
 
 	init() {
 		this._super(...arguments);

@@ -5,6 +5,7 @@ import { InvokeActionMixin } from 'ember-invoke-action';
 
 import { inject } from '@ember/service';
 import { observer } from '@ember/object';
+import { on } from '@ember/object/evented';
 
 export default Controller.extend(Evented, InvokeActionMixin, {
 	ajax: inject('ajax'),
@@ -19,21 +20,21 @@ export default Controller.extend(Evented, InvokeActionMixin, {
 		this._super(...arguments);
 		this.set('permissions', ['*']);
 
-		this.get('currentUser').on('userDataUpdated', this, this.updatePermissions);
+		this.get('currentUser').on('userDataUpdated', this, 'updatePermissions');
 	},
 
 	destroy() {
-		this.get('currentUser').off('userDataUpdated', this, this.updatePermissions);
+		this.get('currentUser').off('userDataUpdated', this, 'updatePermissions');
 		this._super(...arguments);
 	},
 
-	onPermissionChanges: observer('permissions', function() {
+	onPermissionChanges: on('init', observer('permissions', 'permissions.[]', 'permissions.@each', function() {
 		this.updatePermissions();
-	}),
+	})),
 
 	updatePermissions() {
 		let hasPerm = false;
-		if(this.get('permissions').includes('*') || this.get('permissions').includes('super-administrator')) {
+		if(this.get('permissions').includes('*')) {
 			hasPerm = true;
 		}
 		else {

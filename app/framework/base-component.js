@@ -6,6 +6,7 @@ import { ContextBoundTasksMixin, ContextBoundEventListenersMixin, DisposableMixi
 
 import { inject } from '@ember/service';
 import { observer } from '@ember/object';
+import { on } from '@ember/object/evented';
 
 export default Component.extend(ContextBoundTasksMixin, ContextBoundEventListenersMixin, DisposableMixin, Evented, InvokeActionMixin, {
 	ajax: inject('ajax'),
@@ -20,29 +21,30 @@ export default Component.extend(ContextBoundTasksMixin, ContextBoundEventListene
 		this._super(...arguments);
 		this.set('permissions', ['*']);
 
-		this.get('currentUser').on('userDataUpdated', this, this.updatePermissions);
+		this.get('currentUser').on('userDataUpdated', this, 'updatePermissions');
 	},
 
 	destroy() {
-		this.get('currentUser').off('userDataUpdated', this, this.updatePermissions);
+		this.get('currentUser').off('userDataUpdated', this, 'updatePermissions');
 		this._super(...arguments);
 	},
 
-	onPermissionChanges: observer('permissions', function() {
+	// eslint-disable-next-line ember/no-on-calls-in-components
+	onPermissionChanges: on('init', observer('permissions', 'permissions.[]', 'permissions.@each', function() {
 		this.updatePermissions();
-	}),
+	})),
 
 	updatePermissions() {
 		let hasPerm = false;
-		if(this.get('permissions').includes('*') || this.get('permissions').includes('super-administrator')) {
+		if(this.get('permissions').includes('*')) {
 			hasPerm = true;
 		}
 		else {
 			const requiredPermissions = this.get('permissions');
 			for(let permIdx = 0; permIdx < requiredPermissions.length; permIdx++) {
-				let hasCurrentPermission = this.get('currentUser').hasPermission(requiredPermissions[permIdx]);
-				hasPerm = hasPerm || hasCurrentPermission;
+				const hasCurrentPermission = this.get('currentUser').hasPermission(requiredPermissions[permIdx]);
 
+				hasPerm = hasPerm || hasCurrentPermission;
 				if(hasPerm) break;
 			}
 		}

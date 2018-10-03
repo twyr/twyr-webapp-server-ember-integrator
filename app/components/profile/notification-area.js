@@ -8,7 +8,6 @@ export default BaseComponent.extend({
 	attributeBindings: ['style'],
 	style: computedStyle('display'),
 
-	permissions: null,
 	displayName: '',
 	displayImage: '',
 
@@ -20,11 +19,11 @@ export default BaseComponent.extend({
 		this._super(...arguments);
 		this.set('permissions', ['registered']);
 
-		this.get('currentUser').on('userDataUpdated', this, this.onProfileUpdated);
+		this.get('currentUser').on('userDataUpdated', this, 'onProfileUpdated');
 	},
 
 	destroy() {
-		this.get('currentUser').off('userDataUpdated', this, this.onProfileUpdated);
+		this.get('currentUser').off('userDataUpdated', this, 'onProfileUpdated');
 		this._super(...arguments);
 	},
 

@@ -3,6 +3,11 @@ import ExponentialBackoffPolicy from 'ember-concurrency-retryable/policies/expon
 
 import { task } from 'ember-concurrency';
 
+import computedStyle from 'ember-computed-style';
+
+import { computed } from '@ember/object';
+import { observer } from '@ember/object';
+
 const backoffPolicy = new ExponentialBackoffPolicy({
 	'multiplier': 1.5,
 	'minDelay': 30,
@@ -10,10 +15,27 @@ const backoffPolicy = new ExponentialBackoffPolicy({
 });
 
 export default BaseComponent.extend({
-	didInsertElement() {
+	attributeBindings: ['style'],
+	style: computedStyle('display'),
+
+	display: computed('hasPermission', function() {
+		return { 'display': (this.get('hasPermission') ? 'flex' : 'none') };
+	}),
+
+	init() {
 		this._super(...arguments);
-		this.$('div.md-subheader-inner').addClass('pb-0');
+		this.set('permissions', ['feature-administration-read']);
 	},
+
+	onHasPermissionChange: observer('hasPermission', function() {
+		if(!this.get('hasPermission')) {
+			this.set('readonly', true);
+			return;
+		}
+
+		const updatePerm = this.get('currentUser').hasPermission('feature-administration-update');
+		if(updatePerm) this.set('readonly', false);
+	}),
 
 	changeSelectedFeature(feature) {
 		this.invokeAction('controller-action', 'setSelectedFeature', feature);
