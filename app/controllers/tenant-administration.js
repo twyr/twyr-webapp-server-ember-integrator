@@ -13,6 +13,8 @@ export default BaseController.extend({
 
 	init() {
 		this._super(...arguments);
+
+		this.set('permissions', ['tenant-administration-read']);
 		this.get('currentUser').on('userDataUpdated', this, 'onUserDataUpdated');
 	},
 

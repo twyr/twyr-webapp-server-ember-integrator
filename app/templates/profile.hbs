@@ -1,2 +1,4 @@
-{{page-title "Profile"}}
-{{component "profile/main-component" model=model controller-action=(action "controller-action")}}
+{{#if hasPermission}}
+	{{page-title "Profile"}}
+	{{component "profile/main-component" model=model controller-action=(action "controller-action")}}
+{{/if}}

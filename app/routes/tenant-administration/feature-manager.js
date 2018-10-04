@@ -16,8 +16,14 @@ export default BaseRoute.extend({
 			this.get('store').unloadAll('tenant-administration/feature-manager/tenant-feature');
 			this.get('store').unloadAll('server-administration/feature');
 			this.get('store').unloadAll('server-administration/feature-permission');
+		}
 
-			return null;
+		const isActive = this.get('router').get('currentRouteName').includes(this.get('fullRouteName'));
+		if(!isActive) return;
+
+		if(!window.twyrUserId) {
+			this.transitionTo('index');
+			return;
 		}
 	}
 });

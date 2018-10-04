@@ -29,20 +29,25 @@ export default BaseRoute.extend({
 	},
 
 	redirect(model, transition) {
-		if(transition.targetName === `${this.get('fullRouteName')}.index`)
-			this.transitionTo(`${this.get('fullRouteName')}.feature-manager`);
+		if(transition.targetName !== `${this.get('fullRouteName')}.index`)
+			return;
+
+		this.transitionTo(`${this.get('fullRouteName')}.feature-manager`);
 	},
 
 	onUserDataUpdated() {
 		if(!window.twyrTenantId) {
 			this.get('store').unloadAll('tenant-administration/tenant');
 			this.get('store').unloadAll('tenant-administration/tenant-location');
-
-			return;
 		}
 
 		const isActive = this.get('router').get('currentRouteName').includes(this.get('fullRouteName'));
 		if(!isActive) return;
+
+		if(!window.twyrUserId) {
+			this.transitionTo('index');
+			return;
+		}
 
 		this.get('refreshTenantModel').perform();
 	},

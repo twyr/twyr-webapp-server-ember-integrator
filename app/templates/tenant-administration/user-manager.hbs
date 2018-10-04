@@ -1,3 +1,5 @@
-{{page-title "User Manager"}}
-{{!-- component "tenant-administration/user-manager/main-component" model=model controller-action=(action "controller-action") --}}
-TODO User Management...
+{{#if hasPermission}}
+	{{page-title "User Manager"}}
+	{{!-- component "tenant-administration/user-manager/main-component" model=model controller-action=(action "controller-action") --}}
+	TODO User Management...
+{{/if}}

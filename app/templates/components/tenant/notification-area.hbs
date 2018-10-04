@@ -1,3 +1,4 @@
+{{#liquid-if hasPermission}}
 {{#paper-select
 	class="m-0 p-0"
 	options=allowedTenants
@@ -7,3 +8,4 @@
 }}
 	{{tenant.name}}
 {{/paper-select}}
+{{/liquid-if}}

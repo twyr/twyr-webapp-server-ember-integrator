@@ -1,4 +1,4 @@
-{{#if model.length}}
+{{#if (and hasPermission model.length)}}
 <div class="layout-row layout-align-center-start py-4">
 	<div class="layout-column layout-align-start-stretch flex flex-gt-md-80 flex-gt-lg-70">
 		{{#if (get (filter-by "type" "feature" model) "length")}}

@@ -17,6 +17,11 @@ export default BaseComponent.extend({
 	newPassword1: '',
 	newPassword2: '',
 
+	init() {
+		this._super(...arguments);
+		this.set('permissions', ['registered']);
+	},
+
 	onDidInsertElement: task(function* () {
 		try {
 			this.set('_profileImageElem', this.$('div#profile-basic-information-image'));

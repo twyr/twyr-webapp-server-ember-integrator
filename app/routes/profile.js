@@ -32,12 +32,15 @@ export default BaseRoute.extend({
 		if(!window.twyrUserId) {
 			this.get('store').unloadAll('profile/user');
 			this.get('store').unloadAll('profile/user-contact');
-
-			return;
 		}
 
 		const isActive = this.get('router').get('currentRouteName').includes(this.get('fullRouteName'));
 		if(!isActive) return;
+
+		if(!window.twyrUserId) {
+			this.transitionTo('index');
+			return;
+		}
 
 		this.get('refreshProfileModel').perform();
 	},

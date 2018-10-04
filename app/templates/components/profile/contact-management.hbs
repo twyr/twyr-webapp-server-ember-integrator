@@ -1,3 +1,4 @@
+{{#if hasPermission}}
 {{#paper-data-table sortProp="type" sortDir="asc" selectable=true as |table|}}
 	{{#table.head as |head|}}
 		{{#head.column sortProp="type" class="px-0 text-center"}}{{paper-icon "contacts" class="mr-0 mt-1"}}Type{{/head.column}}
@@ -57,3 +58,4 @@
 		{{/each}}
 	{{/table.body}}
 {{/paper-data-table}}
+{{/if}}

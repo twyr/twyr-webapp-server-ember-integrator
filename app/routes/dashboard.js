@@ -28,11 +28,15 @@ export default BaseRoute.extend({
 	onUserDataUpdated() {
 		if(!window.twyrUserId) {
 			this.get('store').unloadAll('dashboard/feature');
-			return;
 		}
 
 		const isActive = this.get('router').get('currentRouteName').includes(this.get('fullRouteName'));
 		if(!isActive) return;
+
+		if(!window.twyrUserId) {
+			this.transitionTo('index');
+			return;
+		}
 
 		this.get('refreshDashboardFeatures').perform();
 	},

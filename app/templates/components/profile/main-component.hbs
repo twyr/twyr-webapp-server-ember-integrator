@@ -1,3 +1,4 @@
+{{#if hasPermission}}
 <div class="layout-row layout-align-center-start py-4">
 	<div class="layout-column layout-align-start-center flex flex-gt-md-50 flex-gt-lg-40">
 		{{#bs-accordion class="w-100" selected=selectedAccordionItem onChange=(perform onChangeAccordionItem) as |accordion|}}
@@ -96,3 +97,4 @@
 		{{/bs-accordion}}
 	</div>
 </div>
+{{/if}}

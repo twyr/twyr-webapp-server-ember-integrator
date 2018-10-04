@@ -32,6 +32,13 @@ export default BaseRoute.extend({
 	onUserDataUpdated() {
 		if(!window.twyrTenantId) {
 			this.get('store').unloadAll('tenant-administration/user-manager/tenant-user');
+		}
+
+		const isActive = this.get('router').get('currentRouteName').includes(this.get('fullRouteName'));
+		if(!isActive) return;
+
+		if(!window.twyrUserId) {
+			this.transitionTo('index');
 			return;
 		}
 	}

@@ -1,15 +1,16 @@
+{{#if hasPermission}}
 {{#paper-card class="m-0 flex" as |card|}}
 	{{#card.header as |header|}}
 		{{#header.text as |text|}}
 			{{#text.title}}Main Office Location{{/text.title}}
 		{{/header.text}}
-		{{#if (and model.location (not model.location.isNew) (not readonly))}}
+		{{#if (and model.location editable (not model.location.isNew))}}
 		{{#paper-button primary=true raised=true mini=true onClick=(perform editPrimaryLocation) bubbles=false}}
 			{{paper-icon "edit"}}
 		{{/paper-button}}
 		{{/if}}
 	{{/card.header}}
-	{{#card.content class="flex layout-row layout-align-center-stretch layout-wrap"}}
+	{{#card.content class="flex pt-0 layout-row layout-align-center-stretch layout-wrap"}}
 		{{#if model.location}}
 			<div id="tenant-administrator-main-component-static-location-display" class="p-0 text-center flex-100 flex-gt-lg-70" style="min-height:5rem;">
 				{{#if staticUrl}}
@@ -28,11 +29,12 @@
 				{{model.location.country}}&nbsp;{{model.location.postalCode}}
 			</div>
 		{{else}}
-			{{#unless readonly}}
+			{{#if editable}}
 			{{#paper-button class="flex" onClick=(perform addPrimaryLocation) bubbles=false}}
 				{{fa-icon "map-marked" class="mr-1"}} Add Main Office Location
 			{{/paper-button}}
-			{{/unless}}
+			{{/if}}
 		{{/if}}
 	{{/card.content}}
 {{/paper-card}}
+{{/if}}

@@ -11,6 +11,13 @@ const backoffPolicy = new ExponentialBackoffPolicy({
 });
 
 export default BaseComponent.extend({
+	'contactTypes': null,
+
+	init() {
+		this._super(...arguments);
+		this.set('permissions', ['registered']);
+	},
+
 	onInit: task(function* () {
 		try {
 			const contactTypes = yield this.get('ajax').request('/masterdata/contactTypes', { 'method': 'GET' });
@@ -145,7 +152,9 @@ export default BaseComponent.extend({
 			});
 		}
 		catch(err) {
+			yield this.get('model.contacts').addObject(contact);
 			yield contact.rollback();
+
 			this.get('notification').display({
 				'type': 'error',
 				'error': err

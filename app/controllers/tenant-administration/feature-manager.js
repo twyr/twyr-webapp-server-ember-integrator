@@ -3,6 +3,11 @@ import BaseController from '../../framework/base-controller';
 export default BaseController.extend({
 	'breadcrumbStack': null,
 
+	init() {
+		this._super(...arguments);
+		this.set('permissions', ['feature-manager-read']);
+	},
+
 	setSelectedFeature(featureModel) {
 		this.set('model', featureModel);
 
