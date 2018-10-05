@@ -1,4 +1,6 @@
 import BaseRoute from '../framework/base-route';
+
+import { runTask } from 'ember-lifeline';
 import { task } from 'ember-concurrency';
 
 export default BaseRoute.extend({
@@ -32,7 +34,7 @@ export default BaseRoute.extend({
 		if(transition.targetName !== `${this.get('fullRouteName')}.index`)
 			return;
 
-		this.transitionTo(`${this.get('fullRouteName')}.feature-manager`);
+		runTask(this, this._redirectToSubRoute, 500);
 	},
 
 	onUserDataUpdated() {
@@ -61,5 +63,26 @@ export default BaseRoute.extend({
 		}
 
 		this.get('controller').set('model', tenantData);
-	}).keepLatest()
+	}).keepLatest(),
+
+	_redirectToSubRoute() {
+		if(!this.get('controller.hasSubModulePermissions')) {
+			return;
+		}
+
+		if(this.get('controller.canViewFeatureAdministrator')) {
+			this.transitionTo(`${this.get('fullRouteName')}.feature-manager`);
+			return;
+		}
+
+		if(this.get('controller.canViewGroupAdministrator')) {
+			this.transitionTo(`${this.get('fullRouteName')}.group-manager`);
+			return;
+		}
+
+		if(this.get('controller.canViewUserAdministrator')) {
+			this.transitionTo(`${this.get('fullRouteName')}.user-manager`);
+			return;
+		}
+	}
 });

@@ -21,7 +21,7 @@ export default BaseRoute.extend({
 		const isActive = this.get('router').get('currentRouteName').includes(this.get('fullRouteName'));
 		if(!isActive) return;
 
-		if(!window.twyrUserId) {
+		if(!window.twyrTenantId) {
 			this.transitionTo('index');
 			return;
 		}
