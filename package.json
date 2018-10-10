@@ -25,7 +25,7 @@
     "corber-ember-livereload": "0.0.1",
     "ember-addons-inspector": "^1.1.0",
     "ember-ag-grid": "^0.4.1",
-    "ember-ajax": "^3.1.1",
+    "ember-ajax": "^3.1.2",
     "ember-assign-helper": "^0.2.0",
     "ember-auto-import": "^1.2.13",
     "ember-awesome-macros": "^3.0.0",
