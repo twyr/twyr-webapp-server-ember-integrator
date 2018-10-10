@@ -6,7 +6,7 @@ import { task } from 'ember-concurrency';
 export default BaseComponent.extend({
 	init() {
 		this._super(...arguments);
-		this.set('permissions', ['feature-administration-read']);
+		this.set('permissions', ['feature-manager-read']);
 	},
 
 	didInsertElement() {

@@ -15,11 +15,11 @@ export default BaseComponent.extend({
 
 	init() {
 		this._super(...arguments);
-		this.set('permissions', ['feature-administration-read']);
+		this.set('permissions', ['feature-manager-read']);
 	},
 
 	onHasPermissionChange: observer('hasPermission', function() {
-		const updatePerm = this.get('currentUser').hasPermission('feature-administration-update');
+		const updatePerm = this.get('currentUser').hasPermission('feature-manager-update');
 		this.set('editable', updatePerm);
 	}),
 
@@ -42,24 +42,64 @@ export default BaseComponent.extend({
 			catch(err) {
 				tenantFeature.rollback();
 				this.get('model.tenantFeatures').addObject(tenantFeature);
+
+				throw err;
 			}
 
-			return;
+			yield this.get('removeSubFeatures').perform(this.get('model'));
 		}
+		else {
+			const tenant = this.get('store').peekRecord('tenant-administration/tenant', window.twyrTenantId);
+			tenantFeature = this.get('store').createRecord('tenant-administration/feature-manager/tenant-feature', {
+				'tenant': tenant,
+				'feature': this.get('model')
+			});
 
+			try {
+				this.get('model.tenantFeatures').addObject(tenantFeature);
+				yield tenantFeature.save();
+			}
+			catch(err) {
+				this.get('model.tenantFeatures').removeObject(tenantFeature);
+				tenantFeature.deleteRecord();
+
+				throw err;
+			}
+
+			yield this.get('addSubFeatures').perform(this.get('model'));
+		}
+	}).drop().retryable(backoffPolicy),
+
+	addSubFeatures: task(function* (serverFeature) {
 		const tenant = this.get('store').peekRecord('tenant-administration/tenant', window.twyrTenantId);
-		tenantFeature = this.get('store').createRecord('tenant-administration/feature-manager/tenant-feature', {
-			'tenant': tenant,
-			'feature': this.get('model')
-		});
+		const subFeatures = yield serverFeature.get('features');
 
-		try {
-			this.get('model.tenantFeatures').addObject(tenantFeature);
-			yield tenantFeature.save();
+		for(let idx = 0; idx < subFeatures.get('length'); idx++) {
+			const subFeature = subFeatures.objectAt(idx);
+			if(subFeature.get('deploy') === 'custom')
+				continue;
+
+			const tenantFeature = this.get('store').createRecord('tenant-administration/feature-manager/tenant-feature', {
+				'tenant': tenant,
+				'feature': subFeature
+			});
+
+			const subTenantFeatures = yield subFeature.get('tenantFeatures');
+			subTenantFeatures.addObject(tenantFeature);
+
+			yield this.get('addSubFeatures').perform(subFeature);
 		}
-		catch(err) {
-			this.get('model.tenantFeatures').removeObject(tenantFeature);
-			tenantFeature.deleteRecord();
+	}),
+
+	removeSubFeatures: task(function* (serverFeature) {
+		const subFeatures = yield serverFeature.get('features');
+		for(let idx = 0; idx < subFeatures.get('length'); idx++) {
+			const subFeature = subFeatures.objectAt(idx);
+
+			const subTenantFeatures = yield subFeature.get('tenantFeatures');
+			subTenantFeatures.clear();
+
+			yield this.get('removeSubFeatures').perform(subFeature);
 		}
-	}).drop().retryable(backoffPolicy)
+	})
 });
