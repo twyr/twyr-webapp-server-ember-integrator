@@ -15,7 +15,7 @@
 				{{/if}}
 			{{/each}}
 			</div>
-			{{#paper-switch class="m-0" value=(await model.isTenantSubscribed) onChange=(perform modifyTenantFeatureStatus) disabled=(not (and model.parent.isTenantSubscribed (eq model.deploy 'custom')))}}
+			{{#paper-switch class="m-0" value=(await model.isTenantSubscribed) onChange=(perform modifyTenantFeatureStatus) disabled=(not (and (await model.parent.isTenantSubscribed) (eq model.deploy 'custom')))}}
 				{{#if (await model.isTenantSubscribed)}}
 					Subscribed
 				{{else}}

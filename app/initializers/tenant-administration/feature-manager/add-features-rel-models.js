@@ -4,6 +4,7 @@ import TenantModel from '../../../models/tenant-administration/tenant';
 import FeatureModel from '../../../models/server-administration/feature';
 
 import { computed } from '@ember/object';
+import { task } from 'ember-concurrency';
 
 export function initialize( /* application */ ) {
 	// application.inject('route', 'foo', 'service:foo');
@@ -20,11 +21,22 @@ export function initialize( /* application */ ) {
 			'inverse': 'feature'
 		}),
 
-		'isTenantSubscribed': computed('deploy', 'tenantFeatures', 'tenantFeatures.[]', {
+		'isTenantSubscribed': computed('tenantFeatures', 'tenantFeatures.length', 'parent.isTenantSubscribed', {
 			get() {
-				return this.get('tenantFeatures.length');
+				return this.get('computeTenantSubscription').perform();
 			}
-		})
+		}),
+
+		'computeTenantSubscription': task(function* () {
+			const isFeatureSubscribed = this.get('tenantFeatures.length');
+			if(!isFeatureSubscribed) return false;
+
+			const parentModule = yield this.get('parent');
+			if(!parentModule) return true;
+
+			const isParentSubscribed = yield parentModule.get('isTenantSubscribed');
+			return isParentSubscribed;
+		}).keepLatest()
 	});
 }
 
