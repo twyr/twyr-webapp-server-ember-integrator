@@ -9,17 +9,25 @@ export default BaseController.extend({
 	},
 
 	setSelectedFeature(featureModel) {
-		this.set('model', featureModel);
+		featureModel.reload()
+		.then((reloadedModel) => {
+			this.set('model', reloadedModel);
 
+			let currentFeature = reloadedModel;
+			const breadcrumbHierarchy = [];
 
-		let currentFeature = featureModel;
-		const breadcrumbHierarchy = [];
+			while(currentFeature) {
+				if(currentFeature.get('path')) breadcrumbHierarchy.unshift(currentFeature);
+				currentFeature = currentFeature.get('parent');
+			}
 
-		while(currentFeature) {
-			if(currentFeature.get('path')) breadcrumbHierarchy.unshift(currentFeature);
-			currentFeature = currentFeature.get('parent');
-		}
-
-		this.set('breadcrumbStack', breadcrumbHierarchy);
+			this.set('breadcrumbStack', breadcrumbHierarchy);
+		})
+		.catch((err) => {
+			this.get('notification').display({
+				'type': 'error',
+				'error': err
+			});
+		});
 	}
 });

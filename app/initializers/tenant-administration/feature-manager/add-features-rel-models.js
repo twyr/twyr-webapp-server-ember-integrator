@@ -4,7 +4,6 @@ import TenantModel from '../../../models/tenant-administration/tenant';
 import FeatureModel from '../../../models/server-administration/feature';
 
 import { computed } from '@ember/object';
-import { task } from 'ember-concurrency';
 
 export function initialize( /* application */ ) {
 	// application.inject('route', 'foo', 'service:foo');
@@ -21,28 +20,11 @@ export function initialize( /* application */ ) {
 			'inverse': 'feature'
 		}),
 
-		'isTenantSubscribed': computed('tenantFeatures.[]', {
+		'isTenantSubscribed': computed('deploy', 'tenantFeatures', 'tenantFeatures.[]', {
 			get() {
-				if(this.get('deploy') !== 'custom')
-					return true;
-
-				return this.get('getTenantFeature').perform();
+				return this.get('tenantFeatures.length');
 			}
-		}),
-
-		'getTenantFeature': task(function* () {
-			const tenantFeatures = yield this.get('tenantFeatures');
-
-			for(let idx = 0; idx < tenantFeatures.get('length'); idx++) {
-				const tenantFeature = tenantFeatures.objectAt(idx);
-				const tenant = yield tenantFeature.get('tenant');
-
-				if(tenant.get('id') === window.twyrTenantId)
-					return true;
-			}
-
-			return false;
-		}).keepLatest()
+		})
 	});
 }
 

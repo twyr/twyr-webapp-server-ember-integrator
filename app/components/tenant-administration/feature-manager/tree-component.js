@@ -75,9 +75,11 @@ export default BaseComponent.extend({
 
 			const store = this.get('store');
 			serverFeature = store.peekRecord('server-administration/feature', treeNode.id);
-			if(!serverFeature) serverFeature = yield store.findRecord('server-administration/feature', treeNode.id, {
-				'include': 'permissions'
-			});
+			if(!serverFeature) {
+				serverFeature = yield store.findRecord('server-administration/feature', treeNode.id, {
+					'include': 'permissions'
+				});
+			}
 
 			this.$('div#tenant-administration-feature-manager-tree-container').jstree('open_node', treeNode.id);
 			this.invokeAction('controller-action', 'setSelectedFeature', serverFeature);

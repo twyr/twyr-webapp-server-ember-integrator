@@ -29,10 +29,7 @@ export default BaseComponent.extend({
 
 	modifyTenantFeatureStatus: task(function* () {
 		const tenantFeatures = yield this.get('model.tenantFeatures');
-
-		let tenantFeature = tenantFeatures.filter((tenantFeature) => {
-			return tenantFeature.get('tenant.id') === window.twyrTenantId;
-		}).shift();
+		let tenantFeature = tenantFeatures.get('firstObject');
 
 		if(tenantFeature) {
 			try {
@@ -45,8 +42,6 @@ export default BaseComponent.extend({
 
 				throw err;
 			}
-
-			yield this.get('removeSubFeatures').perform(this.get('model'));
 		}
 		else {
 			const tenant = this.get('store').peekRecord('tenant-administration/tenant', window.twyrTenantId);
@@ -65,41 +60,6 @@ export default BaseComponent.extend({
 
 				throw err;
 			}
-
-			yield this.get('addSubFeatures').perform(this.get('model'));
 		}
-	}).drop().retryable(backoffPolicy),
-
-	addSubFeatures: task(function* (serverFeature) {
-		const tenant = this.get('store').peekRecord('tenant-administration/tenant', window.twyrTenantId);
-		const subFeatures = yield serverFeature.get('features');
-
-		for(let idx = 0; idx < subFeatures.get('length'); idx++) {
-			const subFeature = subFeatures.objectAt(idx);
-			if(subFeature.get('deploy') === 'custom')
-				continue;
-
-			const tenantFeature = this.get('store').createRecord('tenant-administration/feature-manager/tenant-feature', {
-				'tenant': tenant,
-				'feature': subFeature
-			});
-
-			const subTenantFeatures = yield subFeature.get('tenantFeatures');
-			subTenantFeatures.addObject(tenantFeature);
-
-			yield this.get('addSubFeatures').perform(subFeature);
-		}
-	}),
-
-	removeSubFeatures: task(function* (serverFeature) {
-		const subFeatures = yield serverFeature.get('features');
-		for(let idx = 0; idx < subFeatures.get('length'); idx++) {
-			const subFeature = subFeatures.objectAt(idx);
-
-			const subTenantFeatures = yield subFeature.get('tenantFeatures');
-			subTenantFeatures.clear();
-
-			yield this.get('removeSubFeatures').perform(subFeature);
-		}
-	})
+	}).drop().retryable(backoffPolicy)
 });
