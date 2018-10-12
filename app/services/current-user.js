@@ -64,7 +64,7 @@ export default Service.extend(Evented, {
 
 	hasPermission(permission) {
 		const userPermissions = this.get('userData.permissions') || [];
-		return (userPermissions.includes('super-administrator') || userPermissions.includes(permission));
+		return userPermissions.includes(permission);
 	},
 
 	getUser() {

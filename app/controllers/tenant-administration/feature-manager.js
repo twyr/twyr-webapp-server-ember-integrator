@@ -9,6 +9,13 @@ export default BaseController.extend({
 	},
 
 	setSelectedFeature(featureModel) {
+		if(!featureModel) {
+			this.set('model', null);
+			this.set('breadcrumbStack', null);
+
+			return;
+		}
+
 		featureModel.reload()
 		.then((reloadedModel) => {
 			this.set('model', reloadedModel);

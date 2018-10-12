@@ -28,6 +28,9 @@ export default BaseComponent.extend({
 	},
 
 	modifyTenantFeatureStatus: task(function* () {
+		if(!this.get('model'))
+			return;
+
 		const tenantFeatures = yield this.get('model.tenantFeatures');
 		let tenantFeature = tenantFeatures.get('firstObject');
 

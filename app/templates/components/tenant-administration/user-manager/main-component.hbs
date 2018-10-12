@@ -2,6 +2,24 @@
 {{#paper-card class="m-0 flex" as |card|}}
 	{{#card.content class="p-0 layout-column layout-align-start-stretch"}}
 		{{#paper-subheader}}User Manager{{/paper-subheader}}
+		{{#paper-data-table sortProp="user.email" sortDir="asc" as |table|}}
+			{{#table.head as |head|}}
+				{{#head.column sortProp="user.email"}}Login{{/head.column}}
+				{{#head.column sortProp="user.firstName"}}First Name{{/head.column}}
+				{{#head.column sortProp="user.lastName"}}Last Name{{/head.column}}
+				{{#head.column sortProp="accessStatus"}}Access{{/head.column}}
+			{{/table.head}}
+			{{#table.body as |body|}}
+				{{#each (sort-by table.sortDesc model) as |tenantUser|}}
+					{{#body.row as |row|}}
+						{{#row.cell}}{{tenantUser.user.email}}{{/row.cell}}
+						{{#row.cell}}{{tenantUser.user.firstName}}{{/row.cell}}
+						{{#row.cell}}{{tenantUser.user.lastName}}{{/row.cell}}
+						{{#row.cell}}{{titleize tenantUser.accessStatus}}{{/row.cell}}
+					{{/body.row}}
+				{{/each}}
+			{{/table.body}}
+		{{/paper-data-table}}
 	{{/card.content}}
 {{/paper-card}}
 {{/if}}

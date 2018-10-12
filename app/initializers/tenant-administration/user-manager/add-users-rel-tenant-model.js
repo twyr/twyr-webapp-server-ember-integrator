@@ -4,7 +4,7 @@ import DS from 'ember-data';
 export function initialize( /* application */ ) {
 	// application.inject('route', 'foo', 'service:foo');
 	TenantModel.reopen({
-		'users': DS.hasMany('tenant-administration/user-manager/tenant-user', {
+		'tenantUsers': DS.hasMany('tenant-administration/user-manager/tenant-user', {
 			'async': true,
 			'inverse': 'tenant'
 		})
