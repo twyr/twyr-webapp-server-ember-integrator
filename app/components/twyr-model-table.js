@@ -10,11 +10,17 @@ import { task } from 'ember-concurrency';
 export default BaseComponent.extend(InvokeActionMixin, {
 	themeInstance: null,
 	_messages: null,
+	_customIcons: null,
 
 	init() {
 		this.set('_messages', {
 			searchLabel: 'Filter: ',
 			tableSummary: 'Showing %@ - %@ of %@'
+		});
+
+		this.set('_customIcons', {
+			'sort-asc': 'fas fa-sort-up',
+			'sort-desc': 'fas fa-sort-down'
 		});
 
 		this._super(...arguments);
@@ -24,8 +30,8 @@ export default BaseComponent.extend(InvokeActionMixin, {
 		const mergedMessages = Object.assign({}, this.get('_messages'), (this.get('messages') || {}));
 
 		this.set('themeInstance', Bootstrap4Theme.create({
-			'table': 'm-0 p-0 table table-hover table-condensed',
-			'globalFilterWrapper': 'float-right pr-2 mb-2',
+			'table': 'table table-hover table-condensed',
+			'globalFilterWrapper': 'float-right',
 
 			'messages': mergedMessages
 		}));

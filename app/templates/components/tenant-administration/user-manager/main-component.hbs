@@ -7,7 +7,10 @@
 				{{#head.column sortProp="user.email"}}Login{{/head.column}}
 				{{#head.column sortProp="user.firstName"}}First Name{{/head.column}}
 				{{#head.column sortProp="user.lastName"}}Last Name{{/head.column}}
-				{{#head.column sortProp="accessStatus"}}Access{{/head.column}}
+				{{#head.column sortProp="accessStatus"}}Access Status{{/head.column}}
+				{{#if editable}}
+					{{#head.column}}Actions{{/head.column}}
+				{{/if}}
 			{{/table.head}}
 			{{#table.body as |body|}}
 				{{#each (sort-by table.sortDesc model) as |tenantUser|}}
@@ -16,6 +19,14 @@
 						{{#row.cell}}{{tenantUser.user.firstName}}{{/row.cell}}
 						{{#row.cell}}{{tenantUser.user.lastName}}{{/row.cell}}
 						{{#row.cell}}{{titleize tenantUser.accessStatus}}{{/row.cell}}
+						{{#if editable}}
+						{{#row.cell}}
+							<span class="mr-3" style="cursor:pointer;" title="Reset Password">{{mdi-icon "lock-reset"}}</span>
+							<span class="mr-3" style="cursor:pointer;" title="Edit Account">{{mdi-icon "account-edit"}}</span>
+							<span class="mr-3" style="cursor:pointer;" title="Clone Account">{{mdi-icon "account-switch"}}</span>
+							<span style="cursor:pointer;" title="Delete Account">{{mdi-icon "account-remove"}}</span>
+						{{/row.cell}}
+						{{/if}}
 					{{/body.row}}
 				{{/each}}
 			{{/table.body}}
