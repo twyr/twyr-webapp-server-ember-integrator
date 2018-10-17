@@ -1,36 +1,148 @@
 {{#if hasPermission}}
-{{#paper-card class="m-0 flex" as |card|}}
-	{{#card.content class="p-0 layout-column layout-align-start-stretch"}}
-		{{#paper-subheader}}User Manager{{/paper-subheader}}
-		{{#paper-data-table sortProp="user.email" sortDir="asc" as |table|}}
-			{{#table.head as |head|}}
-				{{#head.column sortProp="user.email"}}Login{{/head.column}}
-				{{#head.column sortProp="user.firstName"}}First Name{{/head.column}}
-				{{#head.column sortProp="user.lastName"}}Last Name{{/head.column}}
-				{{#head.column sortProp="accessStatus"}}Access Status{{/head.column}}
-				{{#if editable}}
-					{{#head.column}}Actions{{/head.column}}
-				{{/if}}
-			{{/table.head}}
-			{{#table.body as |body|}}
-				{{#each (sort-by table.sortDesc model) as |tenantUser|}}
-					{{#body.row as |row|}}
-						{{#row.cell}}{{tenantUser.user.email}}{{/row.cell}}
-						{{#row.cell}}{{tenantUser.user.firstName}}{{/row.cell}}
-						{{#row.cell}}{{tenantUser.user.lastName}}{{/row.cell}}
-						{{#row.cell}}{{titleize tenantUser.accessStatus}}{{/row.cell}}
-						{{#if editable}}
-						{{#row.cell}}
-							<span class="mr-3" style="cursor:pointer;" title="Reset Password">{{mdi-icon "lock-reset"}}</span>
-							<span class="mr-3" style="cursor:pointer;" title="Edit Account">{{mdi-icon "account-edit"}}</span>
-							<span class="mr-3" style="cursor:pointer;" title="Clone Account">{{mdi-icon "account-switch"}}</span>
-							<span style="cursor:pointer;" title="Delete Account">{{mdi-icon "account-remove"}}</span>
-						{{/row.cell}}
-						{{/if}}
-					{{/body.row}}
-				{{/each}}
-			{{/table.body}}
-		{{/paper-data-table}}
-	{{/card.content}}
-{{/paper-card}}
+{{#bs-accordion class="w-100" selected=selectedAccordionItem onChange=(perform onChangeAccordionItem) as |accordion|}}
+	{{#accordion.item value="1" title="Current Users" as |accItem|}}
+		{{#accItem.title class="p-0"}}
+			<h5 class="mb-0">Current Users</h5>
+		{{/accItem.title}}
+		{{#accItem.body class="p-0"}}
+			{{#paper-data-table sortProp="user.email" sortDir="asc" as |table|}}
+				{{#table.head as |head|}}
+					{{#head.column sortProp="user.email"}}Login{{/head.column}}
+					{{#head.column sortProp="user.firstName"}}First Name{{/head.column}}
+					{{#head.column sortProp="user.middleNames"}}Middle Name{{/head.column}}
+					{{#head.column sortProp="user.lastName"}}Last Name{{/head.column}}
+					{{#if editable}}
+						{{#head.column}}&nbsp;{{/head.column}}
+					{{/if}}
+				{{/table.head}}
+				{{#table.body as |body|}}
+					{{#each (sort-by table.sortDesc (filter-by "accessStatus" "authorized" model)) as |tenantUser|}}
+						{{#body.row as |row|}}
+							{{#row.cell}}{{tenantUser.user.email}}{{/row.cell}}
+							{{#row.cell}}{{tenantUser.user.firstName}}{{/row.cell}}
+							{{#row.cell}}{{tenantUser.user.middleNames}}{{/row.cell}}
+							{{#row.cell}}{{tenantUser.user.lastName}}{{/row.cell}}
+							{{#if editable}}
+							{{#row.cell class="text-right"}}
+								{{#liquid-if tenantUser.operationIsRunning}}
+									{{#paper-button onClick=null}}
+										{{paper-icon "rotate-left" reverseSpin=true}}
+									{{/paper-button}}
+								{{else}}
+									{{#paper-button iconButton=true title="Reset Password" onClick=(perform resetPassword tenantUser)}}
+										{{mdi-icon "lock-reset"}}
+									{{/paper-button}}
+									{{#paper-button iconButton=true title="Edit Account"}}
+										{{mdi-icon "account-edit"}}
+									{{/paper-button}}
+
+									{{#paper-button iconButton=true title="Clone Account"}}
+										{{mdi-icon "account-switch"}}
+									{{/paper-button}}
+
+									{{#paper-button iconButton=true title="De-authorize Account" onClick=(perform changeAccountStatus tenantUser "disabled")}}
+										{{mdi-icon "account-remove"}}
+									{{/paper-button}}
+								{{/liquid-if}}
+							{{/row.cell}}
+							{{/if}}
+						{{/body.row}}
+					{{/each}}
+				{{/table.body}}
+			{{/paper-data-table}}
+		{{/accItem.body}}
+	{{/accordion.item}}
+
+	{{#if (get (filter-by "accessStatus" "waiting" model) "length")}}
+	{{#accordion.item class="mt-2" value="2" title="Awaiting Authorization" as |accItem|}}
+		{{#accItem.title class="p-0"}}
+			<h5 class="mb-0">Awaiting Authorization</h5>
+		{{/accItem.title}}
+		{{#accItem.body class="p-0"}}
+			{{#paper-data-table sortProp="user.email" sortDir="asc" as |table|}}
+				{{#table.head as |head|}}
+					{{#head.column sortProp="user.email"}}Login{{/head.column}}
+					{{#head.column sortProp="user.firstName"}}First Name{{/head.column}}
+					{{#head.column sortProp="user.middleNames"}}Middle Name{{/head.column}}
+					{{#head.column sortProp="user.lastName"}}Last Name{{/head.column}}
+					{{#if editable}}
+						{{#head.column}}&nbsp;{{/head.column}}
+					{{/if}}
+				{{/table.head}}
+				{{#table.body as |body|}}
+					{{#each (sort-by table.sortDesc (filter-by "accessStatus" "waiting" model)) as |tenantUser|}}
+						{{#body.row as |row|}}
+							{{#row.cell}}{{tenantUser.user.email}}{{/row.cell}}
+							{{#row.cell}}{{tenantUser.user.firstName}}{{/row.cell}}
+							{{#row.cell}}{{tenantUser.user.middleNames}}{{/row.cell}}
+							{{#row.cell}}{{tenantUser.user.lastName}}{{/row.cell}}
+							{{#if editable}}
+							{{#row.cell class="text-right"}}
+								{{#liquid-if tenantUser.operationIsRunning}}
+									{{#paper-button onClick=null}}
+										{{paper-icon "rotate-left" reverseSpin=true}}
+									{{/paper-button}}
+								{{else}}
+									{{#paper-button iconButton=true title="Authorize Account" onClick=(perform changeAccountStatus tenantUser "authorized")}}
+										{{mdi-icon "account-check"}}
+									{{/paper-button}}
+
+									{{#paper-button iconButton=true title="De-authorize Account" onClick=(perform changeAccountStatus tenantUser "disabled")}}
+										{{mdi-icon "account-remove"}}
+									{{/paper-button}}
+								{{/liquid-if}}
+							{{/row.cell}}
+							{{/if}}
+						{{/body.row}}
+					{{/each}}
+				{{/table.body}}
+			{{/paper-data-table}}
+		{{/accItem.body}}
+	{{/accordion.item}}
+	{{/if}}
+
+	{{#if (get (filter-by "accessStatus" "disabled" model) "length")}}
+	{{#accordion.item class="mt-2" value="3" title="De-authorized Users" as |accItem|}}
+		{{#accItem.title class="p-0"}}
+			<h5 class="mb-0">De-authorized Users</h5>
+		{{/accItem.title}}
+		{{#accItem.body class="p-0"}}
+			{{#paper-data-table sortProp="user.email" sortDir="asc" as |table|}}
+				{{#table.head as |head|}}
+					{{#head.column sortProp="user.email"}}Login{{/head.column}}
+					{{#head.column sortProp="user.firstName"}}First Name{{/head.column}}
+					{{#head.column sortProp="user.middleNames"}}Middle Name{{/head.column}}
+					{{#head.column sortProp="user.lastName"}}Last Name{{/head.column}}
+					{{#if editable}}
+						{{#head.column}}&nbsp;{{/head.column}}
+					{{/if}}
+				{{/table.head}}
+				{{#table.body as |body|}}
+					{{#each (sort-by table.sortDesc (filter-by "accessStatus" "disabled" model)) as |tenantUser|}}
+						{{#body.row as |row|}}
+							{{#row.cell}}{{tenantUser.user.email}}{{/row.cell}}
+							{{#row.cell}}{{tenantUser.user.firstName}}{{/row.cell}}
+							{{#row.cell}}{{tenantUser.user.middleNames}}{{/row.cell}}
+							{{#row.cell}}{{tenantUser.user.lastName}}{{/row.cell}}
+							{{#if editable}}
+							{{#row.cell class="text-right"}}
+								{{#liquid-if tenantUser.operationIsRunning}}
+									{{#paper-button onClick=null}}
+										{{paper-icon "rotate-left" reverseSpin=true}}
+									{{/paper-button}}
+								{{else}}
+									{{#paper-button iconButton=true title="Re-authorize Account" onClick=(perform changeAccountStatus tenantUser "authorized")}}
+										{{mdi-icon "account-check"}}
+									{{/paper-button}}
+								{{/liquid-if}}
+							{{/row.cell}}
+							{{/if}}
+						{{/body.row}}
+					{{/each}}
+				{{/table.body}}
+			{{/paper-data-table}}
+		{{/accItem.body}}
+	{{/accordion.item}}
+	{{/if}}
+{{/bs-accordion}}
 {{/if}}
