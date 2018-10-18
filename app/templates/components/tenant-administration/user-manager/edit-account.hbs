@@ -1,0 +1,25 @@
+{{#paper-card class="flex m-0" as |card|}}
+	{{#card.content class="mt-4 pb-0"}}
+		<div class="layout-row layout-align-space-between layout-wrap">
+			<div class="layout-column layout-align-start-stretch flex-100 flex-gt-md-45">
+				<div id="profile-basic-information-image" class="flex" contenteditable=true />
+			</div>
+			<div class="layout-column layout-align-start-stretch flex-100 flex-gt-md-45 flex-gt-lg-50">
+				{{#paper-form class="w-100" onSubmit=(perform save) as |form|}}
+					<div class="layout-row">
+						{{form.input type="text" class="flex-100" label="Username / Login" value=state.model.email onChange=null disabled=true}}
+					</div>
+					<div class="layout-row">
+						{{form.input type="text" class="flex-100" label="First Name" value=state.model.firstName onChange=(action (mut state.model.firstName)) required=true}}
+					</div>
+					<div class="layout-row">
+						{{form.input type="text" class="flex-100" label="Middle Name(s)" value=state.model.middleNames onChange=(action (mut state.model.middleNames))}}
+					</div>
+					<div class="layout-row">
+						{{form.input type="text" class="flex-100" label="Last Name" value=state.model.lastName onChange=(action (mut state.model.lastName)) required=true}}
+					</div>
+				{{/paper-form}}
+			</div>
+		</div>
+	{{/card.content}}
+{{/paper-card}}

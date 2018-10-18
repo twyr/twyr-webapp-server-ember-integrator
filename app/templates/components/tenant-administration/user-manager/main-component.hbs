@@ -7,6 +7,7 @@
 		{{#accItem.body class="p-0"}}
 			{{#paper-data-table sortProp="user.email" sortDir="asc" as |table|}}
 				{{#table.head as |head|}}
+					{{#head.column}}&nbsp;{{/head.column}}
 					{{#head.column sortProp="user.email"}}Login{{/head.column}}
 					{{#head.column sortProp="user.firstName"}}First Name{{/head.column}}
 					{{#head.column sortProp="user.middleNames"}}Middle Name{{/head.column}}
@@ -18,6 +19,9 @@
 				{{#table.body as |body|}}
 					{{#each (sort-by table.sortDesc (filter-by "accessStatus" "authorized" model)) as |tenantUser|}}
 						{{#body.row as |row|}}
+							{{#row.cell class="text-center"}}
+								<img src="/tenant-administration/user-manager/get-image/{{tenantUser.id}}" style="max-width:4rem; max-height:2rem;">
+							{{/row.cell}}
 							{{#row.cell}}{{tenantUser.user.email}}{{/row.cell}}
 							{{#row.cell}}{{tenantUser.user.firstName}}{{/row.cell}}
 							{{#row.cell}}{{tenantUser.user.middleNames}}{{/row.cell}}
@@ -32,7 +36,7 @@
 									{{#paper-button iconButton=true title="Reset Password" onClick=(perform resetPassword tenantUser)}}
 										{{mdi-icon "lock-reset"}}
 									{{/paper-button}}
-									{{#paper-button iconButton=true title="Edit Account"}}
+									{{#paper-button iconButton=true title="Edit Account" onClick=(perform editAccount tenantUser)}}
 										{{mdi-icon "account-edit"}}
 									{{/paper-button}}
 
