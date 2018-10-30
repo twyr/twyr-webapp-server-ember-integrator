@@ -21,7 +21,7 @@ export default BaseRoute.extend({
 		}
 
 		const profileData =  this.get('store').peekRecord('profile/user', window.twyrUserId);
-		if(profileData) return profileData;
+		if(profileData) return profileData.reload();
 
 		return this.get('store').findRecord('profile/user', window.twyrUserId, {
 			'include': 'contacts'

@@ -1,5 +1,10 @@
 {{#if hasPermission}}
 	{{page-title "Feature Manager"}}
+	<div class="p-0 card-header" role="tab">
+		<button type="button" class="btn btn-link">
+			<h5 class="mb-0">Feature Manager</h5>
+		</button>
+	</div>
 	<div class="layout-row layout-align-start-stretch layout-wrap">
 		{{component "tenant-administration/feature-manager/tree-component" class="flex-100 flex-gt-sm-50 flex-gt-md-40 flex-gt-lg-30 layout-row layout-align-start-stretch" model=model controller-action=(action "controller-action")}}
 		{{component "tenant-administration/feature-manager/main-component" class="flex-100 flex-gt-sm-50 flex-gt-md-60 flex-gt-lg-70 layout-row layout-align-start-stretch" model=model breadcrumbStack=breadcrumbStack controller-action=(action "controller-action")}}
