@@ -20,7 +20,7 @@
 					{{#each (sort-by table.sortDesc (filter-by "accessStatus" "authorized" model)) as |tenantUser|}}
 						{{#body.row as |row|}}
 							{{#row.cell class="text-center"}}
-								<img src="/tenant-administration/user-manager/get-image/{{tenantUser.id}}" style="max-width:4rem; max-height:2rem;">
+								<img src="{{tenantUser.profileImgUrl}}" style="max-width:4rem; max-height:2rem;">
 							{{/row.cell}}
 							{{#row.cell}}{{tenantUser.user.email}}{{/row.cell}}
 							{{#row.cell}}{{tenantUser.user.firstName}}{{/row.cell}}

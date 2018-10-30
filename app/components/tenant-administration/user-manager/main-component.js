@@ -107,6 +107,7 @@ export default BaseComponent.extend({
 
 				'componentName': 'tenant-administration/user-manager/edit-account',
 				'componentState': {
+					'tenantUser': tenantUser,
 					'model': user
 				},
 

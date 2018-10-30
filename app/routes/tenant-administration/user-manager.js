@@ -22,7 +22,14 @@ export default BaseRoute.extend({
 		}
 
 		const tenantUserData =  this.get('store').peekAll('tenant-administration/user-manager/tenant-user');
-		if(tenantUserData.get('length')) return tenantUserData;
+		if(tenantUserData.get('length')) {
+			const thisTenantUser = tenantUserData.filterBy('user.id', window.twyrUserId).shift();
+			thisTenantUser.get('user').reload({
+				'include': 'contacts'
+			});
+
+			return tenantUserData;
+		}
 
 		return this.get('store').findAll('tenant-administration/user-manager/tenant-user', {
 			'include': 'tenant, user, user.contacts'
