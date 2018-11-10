@@ -1,4 +1,4 @@
-import BaseComponent from '../../framework/base-component';
+import BaseComponent from '../../../framework/base-component';
 import ExponentialBackoffPolicy from 'ember-concurrency-retryable/policies/exponential-backoff';
 
 import { observer } from '@ember/object';
@@ -12,38 +12,42 @@ const backoffPolicy = new ExponentialBackoffPolicy({
 });
 
 export default BaseComponent.extend({
-	classNames: ['flex-100', 'flex-gt-sm-50', 'flex-gt-md-40', 'flex-gt-lg-30'],
-	editable: false,
+	'editable': false,
 
 	init() {
 		this._super(...arguments);
-		this.set('permissions', ['tenant-administration-read']);
+		this.set('permissions', ['group-manager-read']);
 	},
 
 	onHasPermissionChange: observer('hasPermission', function() {
-		const updatePerm = this.get('currentUser').hasPermission('tenant-administration-update');
+		const updatePerm = this.get('currentUser').hasPermission('group-manager-update');
 		this.set('editable', updatePerm);
 	}),
 
-	save: task(function* () {
+	changeSelectedGroup(tenantGroup) {
+		this.invokeAction('controller-action', 'setSelectedGroup', tenantGroup);
+	},
+
+	'saveGroup': task(function* () {
 		yield this.get('model').save();
 	}).drop().evented().retryable(backoffPolicy),
 
-	saveSucceeded: on('save:succeeded', function() {
+	'saveGroupSucceeded': on('saveGroup:succeeded', function () {
 		this.get('notification').display({
 			'type': 'success',
-			'message': 'Tenant saved successfully'
+			'message': `Changes to ${this.get('model.displayName')} saved successfully`
 		});
 	}),
 
-	saveErrored: on('save:errored', function(taskInstance, err) {
+	'saveGroupErrored': on('saveGroup:errored', function (taskInstance, err) {
+		this.get('model').rollback();
 		this.get('notification').display({
 			'type': 'error',
 			'error': err
 		});
 	}),
 
-	cancel: task(function* () {
+	'cancelGroup': task(function* () {
 		yield this.get('model').rollback();
 	}).drop()
 });

@@ -101,6 +101,5 @@ export default BaseComponent.extend({
 
 		this.$('div#tenant-administration-feature-manager-tree-container').jstree('activate_node', this.get('model.id'), false, false);
 		this.$('div#tenant-administration-feature-manager-tree-container').jstree('open_node', this.get('model.id'));
-	}),
-
+	})
 });

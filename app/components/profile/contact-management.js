@@ -38,7 +38,8 @@ export default BaseComponent.extend({
 				'user': this.get('model')
 			});
 
-			yield this.get('model.contacts').pushObject(newContact);
+			const contacts = yield this.get('model.contacts');
+			contacts.pushObject(newContact);
 		}
 		catch(err) {
 			this.get('notification').display({
@@ -66,9 +67,10 @@ export default BaseComponent.extend({
 
 	deleteContact: task(function* (contact) {
 		if(contact.get('isNew')) {
-			yield this.get('model.contacts').removeObject(contact);
-			yield contact.destroyRecord();
+			const contacts = yield this.get('model.contacts');
+			contacts.removeObject(contact);
 
+			yield contact.destroyRecord();
 			return;
 		}
 
@@ -139,12 +141,14 @@ export default BaseComponent.extend({
 	// }).enqueue().retryable(backoffPolicy),
 
 	_confirmedDeleteContact: task(function* (contact) {
+		const contacts = yield this.get('model.contacts');
+
 		try {
 			const contactType = contact.get('type');
 			const contactValue = contact.get('contact');
 
 			yield contact.destroyRecord();
-			yield this.get('model.contacts').removeObject(contact);
+			contacts.removeObject(contact);
 
 			this.get('notification').display({
 				'type': 'success',
@@ -152,7 +156,7 @@ export default BaseComponent.extend({
 			});
 		}
 		catch(err) {
-			yield this.get('model.contacts').addObject(contact);
+			contacts.addObject(contact);
 			yield contact.rollback();
 
 			this.get('notification').display({

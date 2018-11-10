@@ -26,7 +26,7 @@ export default BaseModel.extend({
 			else
 				newSubDomain = value;
 
-			this.set('subDomain', newSubDomain.replace(`${window.location.protocol}//`, '').replace(env.twyr.domain, '').replace(`:${window.location.port}`, '').trim());
+			this.set(key, newSubDomain.replace(`${window.location.protocol}//`, '').replace(env.twyr.domain, '').replace(`:${window.location.port}`, '').trim()); // eslint-disable-line ember/no-side-effects
 			return newSubDomain;
 		}
 	})

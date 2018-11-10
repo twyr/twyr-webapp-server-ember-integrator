@@ -1,8 +1,8 @@
 import BaseComponent from '../../../framework/base-component';
 import ExponentialBackoffPolicy from 'ember-concurrency-retryable/policies/exponential-backoff';
 
-import { task } from 'ember-concurrency';
 import { observer } from '@ember/object';
+import { task } from 'ember-concurrency';
 
 const backoffPolicy = new ExponentialBackoffPolicy({
 	'multiplier': 1.5,

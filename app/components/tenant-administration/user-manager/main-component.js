@@ -184,7 +184,7 @@ export default BaseComponent.extend({
 		yield this.get('onChangeAccordionItem').perform(undefined);
 	}).enqueue().evented().retryable(backoffPolicy),
 
-	changeAccountStatusErrored: on('changeAccountStatus:erored', function(taskInstance, err) {
+	changeAccountStatusErrored: on('changeAccountStatus:errored', function(taskInstance, err) {
 		const tenantUser = taskInstance.args[0];
 
 		tenantUser.rollback();

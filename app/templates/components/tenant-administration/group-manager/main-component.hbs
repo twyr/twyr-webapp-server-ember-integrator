@@ -1,0 +1,55 @@
+{{#if hasPermission}}
+{{#paper-card class="m-0 flex" as |card|}}
+	{{#card.content class="p-0 layout-column layout-align-start-stretch"}}
+		{{#paper-subheader}}
+		<div class="layout-row layout-align-space-between-center" style="font-size:16px;">
+			<div class="flex layout-row layout-align-start-center">
+			{{#each breadcrumbStack as |parentCrumb idx|}}
+				{{#if idx}}&nbsp; &gt; &nbsp;{{/if}}
+				{{#if (eq idx (sub breadcrumbStack.length 1))}}
+					{{parentCrumb.displayName}}
+				{{else}}
+					<a href="#" {{action "controller-action" "changeSelectedGroup" parentCrumb}}>
+						{{parentCrumb.displayName}}
+					</a>
+				{{/if}}
+			{{/each}}
+			</div>
+			{{#if (and editable (await model.parent))}}
+			<div class="layout-row layout-align-end-center">
+				{{#paper-button primary=true raised=true onClick=(perform saveGroup) disabled=(or (not model.hasDirtyAttributes) saveGroup.isRunning cancelGroup.isRunning) bubbles=false}}
+					{{#liquid-if (or saveGroup.isRunning cancelGroup.isRunning)}}
+						{{paper-icon "rotate-left" reverseSpin=true}}
+					{{else}}
+						{{paper-icon "save"}} Save
+					{{/liquid-if}}
+				{{/paper-button}}
+				{{#paper-button warn=true raised=true onClick=(perform cancelGroup) disabled=(or (not model.hasDirtyAttributes) saveGroup.isRunning cancelGroup.isRunning) bubbles=false}}
+					{{#liquid-if (or saveGroup.isRunning cancelGroup.isRunning)}}
+						{{paper-icon "rotate-left" reverseSpin=true}}
+					{{else}}
+						{{paper-icon "cancel"}} Cancel
+					{{/liquid-if}}
+				{{/paper-button}}
+			</div>
+			{{/if}}
+		</div>
+		{{/paper-subheader}}
+		<div class="mx-3 pt-4 pb-2 layout-row layout-align-start-space-between">
+			{{paper-input type="text" class="flex" label="Name" value=model.displayName onChange=(action (mut model.displayName)) disabled=(not (and editable (await model.parent))) minLength="3"}}
+			{{#paper-switch value=model.defaultForNewUser onChange=(action (mut model.defaultForNewUser)) disabled=(not (and editable (await model.parent)))}}
+				{{#if model.defaultForNewUser}}
+					Default Group
+				{{else}}
+					Non-default Group
+				{{/if}}
+			{{/paper-switch}}
+		</div>
+
+		{{#paper-subheader}}Description{{/paper-subheader}}
+		<div class="mx-3 pt-2 pb-4 layout-row layout-align-start-center">
+			{{paper-input textarea=true block=true class="flex" value=model.description onChange=(action (mut model.description)) passThru=(hash rows=3 maxRows=3) disabled=(not (and editable (await model.parent)))}}
+		</div>
+	{{/card.content}}
+{{/paper-card}}
+{{/if}}

@@ -5,6 +5,8 @@
 			<h5 class="mb-0">Group Manager</h5>
 		</button>
 	</div>
-	{{!-- component "tenant-administration/group-manager/main-component" model=model controller-action=(action "controller-action") --}}
-	TODO Group Management...
+	<div class="layout-row layout-align-start-stretch layout-wrap">
+		{{component "tenant-administration/group-manager/tree-component" class="flex-100 flex-gt-sm-50 flex-gt-md-40 flex-gt-lg-30 layout-row layout-align-start-stretch" model=model controller-action=(action "controller-action")}}
+		{{component "tenant-administration/group-manager/main-component" class="flex-100 flex-gt-sm-50 flex-gt-md-60 flex-gt-lg-70 layout-row layout-align-start-stretch" model=model breadcrumbStack=breadcrumbStack controller-action=(action "controller-action")}}
+	</div>
 {{/if}}

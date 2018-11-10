@@ -5,6 +5,7 @@ import ResizeAware from 'ember-resize/mixins/resize-aware';
 import env from 'twyr-webapp-server/config/environment';
 
 import { observer } from '@ember/object';
+import { on } from '@ember/object/evented';
 import { task, timeout } from 'ember-concurrency';
 
 const backoffPolicy = new ExponentialBackoffPolicy({
@@ -176,34 +177,44 @@ export default BaseComponent.extend(ResizeAware, {
 	}).keepLatest(),
 
 	saveLocation: task(function* (tenantLocation) {
-		try {
-			if(tenantLocation.save) yield tenantLocation.save();
-			if(tenantLocation.content && tenantLocation.content.save) yield tenantLocation.content.save();
+		if(tenantLocation.save) yield tenantLocation.save();
+		if(tenantLocation.content && tenantLocation.content.save) yield tenantLocation.content.save();
+	}).drop().evented().retryable(backoffPolicy),
 
-			if(tenantLocation.reload) yield tenantLocation.reload();
-			if(tenantLocation.content && tenantLocation.content.reload) yield tenantLocation.content.reload();
-		}
-		catch(err) {
-			this.get('notification').display({
-				'type': 'error',
-				'error': err
-			});
-		}
-	}).drop().retryable(backoffPolicy),
+	saveLocationSucceeded: on('saveLocation:succeeded', function(taskInstance) {
+		const tenantLocation = taskInstance.args[0];
+		if(tenantLocation && tenantLocation.reload) tenantLocation.reload();
+		if(tenantLocation.content && tenantLocation.content.reload) tenantLocation.content.reload();
+	}),
+
+	saveLocationErrored: on('saveLocation:errored', function(taskInstance, err) {
+		const tenantLocation = taskInstance.args[0];
+		if(tenantLocation.rollback) tenantLocation.rollback();
+		if(tenantLocation.content && tenantLocation.content.rollback) tenantLocation.content.rollback();
+
+		this.get('notification').display({
+			'type': 'error',
+			'error': err
+		});
+	}),
 
 	removeLocation: task(function* (tenantLocation) {
-		try {
-			if(tenantLocation.destroyRecord) yield tenantLocation.destroyRecord();
-			if(tenantLocation.content && tenantLocation.content.destroyRecord) yield tenantLocation.content.destroyRecord();
-		}
-		catch(err) {
-			this.get('notification').display({
-				'type': 'error',
-				'error': err
-			});
-		}
-		finally {
-			this.set('model.location', null);
-		}
-	}).drop().retryable(backoffPolicy)
+		if(tenantLocation.destroyRecord) yield tenantLocation.destroyRecord();
+		if(tenantLocation.content && tenantLocation.content.destroyRecord) yield tenantLocation.content.destroyRecord();
+	}).drop().evented().retryable(backoffPolicy),
+
+	removeLocationSucceeded: on('removeLocation:succeeded', function() {
+		this.set('model.location', null);
+	}),
+
+	removeLocationErrored: on('removeLocation:errored', function(taskInstance, err) {
+		const tenantLocation = taskInstance.args[0];
+		if(tenantLocation.rollback) tenantLocation.rollback();
+		if(tenantLocation.content && tenantLocation.content.rollback) tenantLocation.content.rollback();
+
+		this.get('notification').display({
+			'type': 'error',
+			'error': err
+		});
+	})
 });
