@@ -2,14 +2,14 @@
 {{#paper-card class="m-0 flex" as |card|}}
 	{{#card.content class="p-0 layout-column layout-align-start-stretch"}}
 		{{#paper-subheader}}
-		<div class="layout-row layout-align-space-between-center" style="font-size:16px;">
-			<div class="flex layout-row layout-align-start-center">
+		<div class="layout-row layout-align-space-between-center" style="font-size:0.95rem;">
+			<div class="flex layout-row layout-align-start-center layout-wrap">
 			{{#each breadcrumbStack as |parentCrumb idx|}}
 				{{#if idx}}&nbsp; &gt; &nbsp;{{/if}}
 				{{#if (eq idx (sub breadcrumbStack.length 1))}}
-					{{parentCrumb.displayName}}
+					<span style="line-height:2rem;">{{parentCrumb.displayName}}</span>
 				{{else}}
-					<a href="#" {{action "controller-action" "changeSelectedFeature" parentCrumb}}>
+					<a href="#" style="line-height:2rem;" {{action "controller-action" "changeSelectedFeature" parentCrumb}}>
 						{{parentCrumb.displayName}}
 					</a>
 				{{/if}}

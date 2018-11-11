@@ -1,0 +1,38 @@
+{{#if hasPermission}}
+{{#paper-subheader}}Child Groups{{/paper-subheader}}
+{{#paper-data-table sortProp="displayName" sortDir="asc" as |table|}}
+	{{#table.head as |head|}}
+		{{#head.column sortProp="displayName"}}Name{{/head.column}}
+		{{#head.column}}Description{{/head.column}}
+		{{#head.column}}Default Y/N{{/head.column}}
+		{{#if editable}}
+			{{#head.column}}&nbsp;{{/head.column}}
+		{{/if}}
+	{{/table.head}}
+	{{#table.body as |body|}}
+		{{#each (sort-by table.sortDesc (await model.groups)) as |subGroup|}}
+			{{#body.row onClick=(action "controller-action" "changeSelectedGroup" subGroup) as |row|}}
+				{{#row.cell}}{{subGroup.displayName}}{{/row.cell}}
+				{{#row.cell}}{{subGroup.description}}{{/row.cell}}
+
+				{{#row.cell class="text-center"}}
+					{{paper-checkbox
+						class="flex m-0"
+						value=subGroup.defaultForNewUser
+						onChange=(perform changeDefaultForNewUser subGroup)
+						disabled=(or subGroup.defaultForNewUser (not (and editable (await subGroup.parent))))
+					}}
+				{{/row.cell}}
+
+				{{#if editable}}
+				{{#row.cell class="text-right"}}
+					{{#paper-button iconButton=true title="Delete sub-group" onClick=(perform deleteGroup subGroup)}}
+						{{paper-icon "delete"}}
+					{{/paper-button}}
+				{{/row.cell}}
+				{{/if}}
+			{{/body.row}}
+		{{/each}}
+	{{/table.body}}
+{{/paper-data-table}}
+{{/if}}

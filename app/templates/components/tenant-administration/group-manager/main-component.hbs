@@ -2,14 +2,14 @@
 {{#paper-card class="m-0 flex" as |card|}}
 	{{#card.content class="p-0 layout-column layout-align-start-stretch"}}
 		{{#paper-subheader}}
-		<div class="layout-row layout-align-space-between-center" style="font-size:16px;">
-			<div class="flex layout-row layout-align-start-center">
+		<div class="layout-row layout-align-space-between-center" style="font-size:0.95rem;">
+			<div class="flex layout-row layout-align-start-center layout-wrap">
 			{{#each breadcrumbStack as |parentCrumb idx|}}
 				{{#if idx}}&nbsp; &gt; &nbsp;{{/if}}
 				{{#if (eq idx (sub breadcrumbStack.length 1))}}
-					{{parentCrumb.displayName}}
+					<span style="line-height:2rem;">{{parentCrumb.displayName}}</span>
 				{{else}}
-					<a href="#" {{action "controller-action" "changeSelectedGroup" parentCrumb}}>
+					<a href="#" style="line-height:2rem;" {{action "controller-action" "changeSelectedGroup" parentCrumb}}>
 						{{parentCrumb.displayName}}
 					</a>
 				{{/if}}
@@ -17,39 +17,76 @@
 			</div>
 			{{#if (and editable (await model.parent))}}
 			<div class="layout-row layout-align-end-center">
-				{{#paper-button primary=true raised=true onClick=(perform saveGroup) disabled=(or (not model.hasDirtyAttributes) saveGroup.isRunning cancelGroup.isRunning) bubbles=false}}
-					{{#liquid-if (or saveGroup.isRunning cancelGroup.isRunning)}}
+				{{#liquid-if (or saveGroup.isRunning cancelGroup.isRunning deleteGroup.isRunning)}}
+					{{#paper-button disabled=true onClick=null}}
 						{{paper-icon "rotate-left" reverseSpin=true}}
-					{{else}}
+					{{/paper-button}}
+				{{else}}
+					{{#paper-button primary=true raised=true onClick=(perform saveGroup) disabled=(not model.hasDirtyAttributes) bubbles=false}}
 						{{paper-icon "save"}} Save
-					{{/liquid-if}}
-				{{/paper-button}}
-				{{#paper-button warn=true raised=true onClick=(perform cancelGroup) disabled=(or (not model.hasDirtyAttributes) saveGroup.isRunning cancelGroup.isRunning) bubbles=false}}
-					{{#liquid-if (or saveGroup.isRunning cancelGroup.isRunning)}}
-						{{paper-icon "rotate-left" reverseSpin=true}}
-					{{else}}
+					{{/paper-button}}
+
+					{{#paper-button accent=true raised=true onClick=(perform cancelGroup) disabled=(not model.hasDirtyAttributes) bubbles=false}}
 						{{paper-icon "cancel"}} Cancel
-					{{/liquid-if}}
-				{{/paper-button}}
+					{{/paper-button}}
+
+					{{#paper-button warn=true raised=true onClick=(perform deleteGroup) bubbles=false}}
+						{{paper-icon "delete"}} Delete
+					{{/paper-button}}
+				{{/liquid-if}}
 			</div>
 			{{/if}}
 		</div>
 		{{/paper-subheader}}
 		<div class="mx-3 pt-4 pb-2 layout-row layout-align-start-space-between">
-			{{paper-input type="text" class="flex" label="Name" value=model.displayName onChange=(action (mut model.displayName)) disabled=(not (and editable (await model.parent))) minLength="3"}}
-			{{#paper-switch value=model.defaultForNewUser onChange=(action (mut model.defaultForNewUser)) disabled=(not (and editable (await model.parent)))}}
-				{{#if model.defaultForNewUser}}
+			{{paper-input
+				type="text"
+				class="flex"
+				label="Name"
+				value=model.displayName
+				onChange=(action (mut model.displayName))
+				disabled=(not (and editable (await model.parent))) minLength="3"
+			}}
+
+			{{#paper-switch
+				value=model.defaultForNewUser
+				onChange=(action (mut model.defaultForNewUser))
+				disabled=(or model.defaultForNewUser (not (and editable (await model.parent))))
+			}}
+				{{#liquid-if model.defaultForNewUser}}
 					Default Group
 				{{else}}
 					Non-default Group
-				{{/if}}
+				{{/liquid-if}}
 			{{/paper-switch}}
 		</div>
 
 		{{#paper-subheader}}Description{{/paper-subheader}}
 		<div class="mx-3 pt-2 pb-4 layout-row layout-align-start-center">
-			{{paper-input textarea=true block=true class="flex" value=model.description onChange=(action (mut model.description)) passThru=(hash rows=3 maxRows=3) disabled=(not (and editable (await model.parent)))}}
+			{{paper-input
+				textarea=true
+				block=true
+				class="flex"
+				value=model.description
+				onChange=(action (mut model.description))
+				passThru=(hash rows=3 maxRows=3)
+				disabled=(not (and editable (await model.parent)))
+			}}
 		</div>
+
+		{{#bs-tab as |tab|}}
+			{{#tab.pane title="Sub-Groups"}}
+				{{component "tenant-administration/group-manager/sub-group-editor-component" model=model controller-action=(action "controller-action")}}
+			{{/tab.pane}}
+
+			{{#tab.pane title="Permissions"}}
+				<p>TODO: Group permission editor</p>
+			{{/tab.pane}}
+
+			{{#tab.pane title="Users"}}
+				<p>TODO: Group users editor</p>
+			{{/tab.pane}}
+		{{/bs-tab}}
 	{{/card.content}}
 {{/paper-card}}
 {{/if}}

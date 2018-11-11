@@ -97,5 +97,12 @@ export default BaseComponent.extend({
 	onSelectedGroupNameChanged: observer('model.displayName', function() {
 		const treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('model.id'));
 		this.$('div#tenant-administration-group-manager-tree-container').jstree('rename_node', treeNode, this.get('model.displayName'));
+	}),
+
+	onSelectedGroupDestroyed: observer('model.isDeleted', 'model.hasDirtyAttributes', function() {
+		if(!this.get('model.isDeleted')) return;
+
+		const treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('model.id'));
+		this.$('div#tenant-administration-group-manager-tree-container').jstree('delete_node', treeNode);
 	})
 });

@@ -20,8 +20,19 @@ export default BaseController.extend({
 		if(groupModel.get('id') === this.get('model.id'))
 			return;
 
-		this.set('model', groupModel);
-		this.get('setBreadcrumbHierarchy').perform();
+		groupModel.reload({
+			'include': 'parent, groups'
+		})
+		.then((reloadedModel) => {
+			this.set('model', reloadedModel);
+			this.get('setBreadcrumbHierarchy').perform();
+		})
+		.catch((err) => {
+			this.get('notification').display({
+				'type': 'error',
+				'error': err
+			});
+		});
 	},
 
 	'setBreadcrumbHierarchy': task(function* () {
