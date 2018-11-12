@@ -11,7 +11,7 @@
 	{{/table.head}}
 	{{#table.body as |body|}}
 		{{#each (sort-by table.sortDesc (await model.groups)) as |subGroup|}}
-			{{#body.row onClick=(action "controller-action" "changeSelectedGroup" subGroup) as |row|}}
+			{{#body.row onClick=(action "controller-action" "setSelectedGroup" subGroup) as |row|}}
 				{{#row.cell}}{{subGroup.displayName}}{{/row.cell}}
 				{{#row.cell}}{{subGroup.description}}{{/row.cell}}
 
@@ -26,9 +26,11 @@
 
 				{{#if editable}}
 				{{#row.cell class="text-right"}}
+					{{#unless subGroup.defaultForNewUser}}
 					{{#paper-button iconButton=true title="Delete sub-group" onClick=(perform deleteGroup subGroup)}}
 						{{paper-icon "delete"}}
 					{{/paper-button}}
+					{{/unless}}
 				{{/row.cell}}
 				{{/if}}
 			{{/body.row}}

@@ -17,7 +17,7 @@ export default BaseComponent.extend({
 	currentTenant: null,
 	allowedTenants: null,
 
-	display: computed('allowedTenants', 'hasPermission', function() {
+	'display': computed('allowedTenants', 'hasPermission', function() {
 		return {
 			'background-color': 'transparent',
 			'display': ((this.get('hasPermission') && this.get('allowedTenants') && (this.get('allowedTenants.length') > 1)) ? 'block' : 'none')
@@ -46,7 +46,7 @@ export default BaseComponent.extend({
 		this.$('span.md-select-icon').css('color', 'white');
 	},
 
-	onHasPermissionChange: observer('hasPermission', function() {
+	'onHasPermissionChange': observer('hasPermission', function() {
 		this.onAllowedTenantsUpdated();
 	}),
 
@@ -69,7 +69,7 @@ export default BaseComponent.extend({
 		this.set('allowedTenants', (userDetails['otherTenants'] || null));
 	},
 
-	onAllowedTenantsChange: observer('allowedTenants', function() {
+	'onAllowedTenantsChange': observer('allowedTenants', function() {
 		if(!this.get('allowedTenants')) {
 			this.set('currentTenant', null);
 			return;

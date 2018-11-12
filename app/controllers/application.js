@@ -52,7 +52,7 @@ export default BaseController.extend({
 		notification.display('Realtime Data Connectivity lost!');
 	},
 
-	displayModal: function(data) {
+	displayModal(data) {
 		if(this.get('showDialog')) {
 			this.get('notification').display({
 				'type': 'error',
@@ -98,7 +98,7 @@ export default BaseController.extend({
 		this.set('showDialog', true);
 	},
 
-	closeDialog: function(proceed) {
+	closeDialog(proceed) {
 		if(proceed && this.get('modalData.confirmButton.callback')) {
 			this.get('modalData.confirmButton.callback')();
 		}

@@ -10,7 +10,7 @@ export default BaseComponent.extend({
 		this.set('permissions', ['registered']);
 	},
 
-	doLogout: task(function* () {
+	'doLogout': task(function* () {
 		const notification = this.get('notification');
 
 		notification.display({

@@ -19,14 +19,10 @@ export default BaseComponent.extend({
 		this.set('permissions', ['group-manager-read']);
 	},
 
-	onHasPermissionChange: observer('hasPermission', function() {
+	'onHasPermissionChange': observer('hasPermission', function() {
 		const updatePerm = this.get('currentUser').hasPermission('group-manager-update');
 		this.set('editable', updatePerm);
 	}),
-
-	changeSelectedGroup(tenantGroup) {
-		this.invokeAction('controller-action', 'setSelectedGroup', tenantGroup);
-	},
 
 	'saveGroup': task(function* () {
 		const didDefaultForNewUserChange = this.get('model').didChange('defaultForNewUser');
@@ -121,6 +117,9 @@ export default BaseComponent.extend({
 
 	'_confirmedDeleteGroupErrored': on('_confirmedDeleteGroup:errored', function(taskInstance, err) {
 		this.get('model').rollback();
+		this.get('model').reload({
+			'include': 'parent, groups'
+		});
 
 		const parentGroup = this.get('model.parent');
 

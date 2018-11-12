@@ -18,16 +18,12 @@ export default BaseComponent.extend({
 		this.set('permissions', ['feature-manager-read']);
 	},
 
-	onHasPermissionChange: observer('hasPermission', function() {
+	'onHasPermissionChange': observer('hasPermission', function() {
 		const updatePerm = this.get('currentUser').hasPermission('feature-manager-update');
 		this.set('editable', updatePerm);
 	}),
 
-	changeSelectedFeature(feature) {
-		this.invokeAction('controller-action', 'setSelectedFeature', feature);
-	},
-
-	modifyTenantFeatureStatus: task(function* () {
+	'modifyTenantFeatureStatus': task(function* () {
 		if(!this.get('model'))
 			return;
 

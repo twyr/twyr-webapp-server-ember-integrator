@@ -30,7 +30,7 @@ export default Component.extend(ContextBoundTasksMixin, ContextBoundEventListene
 	},
 
 	// eslint-disable-next-line ember/no-on-calls-in-components
-	onPermissionChanges: on('init', observer('permissions', 'permissions.[]', 'permissions.@each', function() {
+	'onPermissionChanges': on('init', observer('permissions', 'permissions.[]', 'permissions.@each', function() {
 		this.updatePermissions();
 	})),
 

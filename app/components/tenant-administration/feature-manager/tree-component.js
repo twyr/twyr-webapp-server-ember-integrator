@@ -67,7 +67,7 @@ export default BaseComponent.extend({
 		this._super(...arguments);
 	},
 
-	onActivateNode: task(function* (treeNode) {
+	'onActivateNode': task(function* (treeNode) {
 		try {
 			let serverFeature = yield this.get('model');
 			if(serverFeature && (serverFeature.get('id') === treeNode.id))
@@ -92,7 +92,7 @@ export default BaseComponent.extend({
 		}
 	}).keepLatest(),
 
-	onSelectedFeatureChanged: observer('model', function() {
+	'onSelectedFeatureChanged': observer('model', function() {
 		if(!this.get('model'))
 			return;
 

@@ -54,7 +54,7 @@ export default BaseRoute.extend({
 		this.get('refreshTenantModel').perform();
 	},
 
-	refreshTenantModel: task(function* () {
+	'refreshTenantModel': task(function* () {
 		let tenantData =  this.get('store').peekRecord('tenant-administration/tenant', window.twyrTenantId);
 		if(!tenantData) {
 			tenantData = yield this.get('store').findRecord('tenant-administration/tenant', window.twyrTenantId, {

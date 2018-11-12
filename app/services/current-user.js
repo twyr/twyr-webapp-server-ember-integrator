@@ -5,11 +5,11 @@ import { inject } from '@ember/service';
 import { task } from 'ember-concurrency';
 
 export default Service.extend(Evented, {
-	ajax: inject('ajax'),
-	notification: inject('integrated-notification'),
-	userData: null,
+	'ajax': inject('ajax'),
+	'notification': inject('integrated-notification'),
+	'userData': null,
 
-	onInit: task(function* () {
+	'onInit': task(function* () {
 		const fetchUserData = this.get('fetchUserData');
 		yield fetchUserData.perform();
 
@@ -26,7 +26,7 @@ export default Service.extend(Evented, {
 		fetchUserData.perform();
 	},
 
-	fetchUserData: task(function* () {
+	'fetchUserData': task(function* () {
 		this.trigger('userDataUpdating');
 
 		try {

@@ -15,7 +15,7 @@ export default BaseComponent.extend({
 		this.set('permissions', ['registered']);
 	},
 
-	onDidInsertElement: task(function* () {
+	'onDidInsertElement': task(function* () {
 		try {
 			this.set('_profileImageElem', this.$('div#tenant-administration-user-manager-edit-account-image'));
 
@@ -61,7 +61,7 @@ export default BaseComponent.extend({
 		}
 	}).drop().on('didInsertElement'),
 
-	onWillDestroyElement: task(function* () {
+	'onWillDestroyElement': task(function* () {
 		document
 			.getElementById('tenant-administration-user-manager-edit-account-image')
 			.removeEventListener('drop', this._processDroppedImage.bind(this));
@@ -104,7 +104,7 @@ export default BaseComponent.extend({
 		}, 10000));
 	},
 
-	_uploadProfileImage: task(function* () {
+	'_uploadProfileImage': task(function* () {
 		try {
 			this.set('_enableCroppieUpdates', false);
 

@@ -17,7 +17,7 @@
 			</div>
 			{{#if (and editable (await model.parent))}}
 			<div class="layout-row layout-align-end-center">
-				{{#liquid-if (or saveGroup.isRunning cancelGroup.isRunning deleteGroup.isRunning)}}
+				{{#liquid-if (or saveGroup.isRunning cancelGroup.isRunning _confirmedDeleteGroup.isRunning)}}
 					{{#paper-button disabled=true onClick=null}}
 						{{paper-icon "rotate-left" reverseSpin=true}}
 					{{/paper-button}}

@@ -18,7 +18,7 @@ export default BaseComponent.extend({
 		this._super(...arguments);
 	},
 
-	onHasPermissionChange: observer('hasPermission', function() {
+	'onHasPermissionChange': observer('hasPermission', function() {
 		if(!this.get('hasPermission')) {
 			this.set('displayName', '');
 			this.set('displayImage', '');

@@ -19,7 +19,7 @@ export default BaseComponent.extend({
 		this.set('permissions', ['group-manager-read']);
 	},
 
-	onHasPermissionChange: observer('hasPermission', function() {
+	'onHasPermissionChange': observer('hasPermission', function() {
 		const updatePerm = this.get('currentUser').hasPermission('group-manager-update');
 		this.set('editable', updatePerm);
 	}),

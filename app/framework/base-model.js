@@ -8,21 +8,21 @@ import locale from 'ember-moment/computeds/locale';
 
 
 export default DS.Model.extend({
-	moment: inject('moment'),
+	'moment': inject('moment'),
 
-	createdAt: DS.attr('date', {
+	'createdAt': DS.attr('date', {
 		defaultValue() {
 			return new Date();
 		}
 	}),
 
-	updatedAt: DS.attr('date', {
+	'updatedAt': DS.attr('date', {
 		defaultValue() {
 			return new Date();
 		}
 	}),
 
-	formattedCreatedAt: format(
+	'formattedCreatedAt': format(
 		locale(
 			_moment('createdAt'),
 			'moment.locale'
@@ -30,7 +30,7 @@ export default DS.Model.extend({
 		'DD/MMM/YYYY hh:mm A'
 	),
 
-	formattedUpdatedAt: format(
+	'formattedUpdatedAt': format(
 		locale(
 			_moment('updatedAt'),
 			'moment.locale'

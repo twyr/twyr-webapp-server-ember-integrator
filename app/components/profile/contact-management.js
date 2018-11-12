@@ -18,7 +18,7 @@ export default BaseComponent.extend({
 		this.set('permissions', ['registered']);
 	},
 
-	onInit: task(function* () {
+	'onInit': task(function* () {
 		try {
 			const contactTypes = yield this.get('ajax').request('/masterdata/contactTypes', { 'method': 'GET' });
 			this.set('contactTypes', contactTypes);
@@ -31,7 +31,7 @@ export default BaseComponent.extend({
 		}
 	}).on('init').drop().retryable(backoffPolicy),
 
-	addContact: task(function* () {
+	'addContact': task(function* () {
 		try {
 			const store = this.get('store');
 			const newContact = store.createRecord('profile/user-contact', {
@@ -49,7 +49,7 @@ export default BaseComponent.extend({
 		}
 	}).drop(),
 
-	saveContact: task(function* (contact) {
+	'saveContact': task(function* (contact) {
 		try {
 			yield contact.save();
 			this.get('notification').display({
@@ -65,7 +65,7 @@ export default BaseComponent.extend({
 		}
 	}).enqueue().retryable(backoffPolicy),
 
-	deleteContact: task(function* (contact) {
+	'deleteContact': task(function* (contact) {
 		if(contact.get('isNew')) {
 			const contacts = yield this.get('model.contacts');
 			contacts.removeObject(contact);
@@ -140,7 +140,7 @@ export default BaseComponent.extend({
 	// 	yield this.invokeAction('controller-action', 'displayModal', modalData);
 	// }).enqueue().retryable(backoffPolicy),
 
-	_confirmedDeleteContact: task(function* (contact) {
+	'_confirmedDeleteContact': task(function* (contact) {
 		const contacts = yield this.get('model.contacts');
 
 		try {

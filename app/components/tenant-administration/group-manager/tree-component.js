@@ -58,7 +58,7 @@ export default BaseComponent.extend({
 		this._super(...arguments);
 	},
 
-	onActivateNode: task(function* (treeNode) {
+	'onActivateNode': task(function* (treeNode) {
 		try {
 			let tenantGroup = yield this.get('model');
 			if(tenantGroup && (tenantGroup.get('id') === treeNode.id))
@@ -83,7 +83,7 @@ export default BaseComponent.extend({
 		}
 	}).keepLatest(),
 
-	onSelectedGroupChanged: observer('model', function() {
+	'onSelectedGroupChanged': observer('model', function() {
 		if(!this.get('model'))
 			return;
 
@@ -94,15 +94,24 @@ export default BaseComponent.extend({
 		this.$('div#tenant-administration-group-manager-tree-container').jstree('open_node', this.get('model.id'));
 	}),
 
-	onSelectedGroupNameChanged: observer('model.displayName', function() {
+	'onSelectedGroupNameChanged': observer('model.displayName', function() {
 		const treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('model.id'));
 		this.$('div#tenant-administration-group-manager-tree-container').jstree('rename_node', treeNode, this.get('model.displayName'));
 	}),
 
-	onSelectedGroupDestroyed: observer('model.isDeleted', 'model.hasDirtyAttributes', function() {
-		if(!this.get('model.isDeleted')) return;
+	'onSelectedGroupDestroyed': observer('model.isDeleted', 'model.hasDirtyAttributes', function() {
+		if(this.get('model.isDeleted')) {
+			if(this.get('model.hasDirtyAttributes')) return;
 
-		const treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('model.id'));
-		this.$('div#tenant-administration-group-manager-tree-container').jstree('delete_node', treeNode);
+			const treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('model.id'));
+			this.$('div#tenant-administration-group-manager-tree-container').jstree('delete_node', treeNode);
+		}
+		else {
+			const treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('model.id'));
+			if(treeNode) return;
+
+			const parentNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('model.parent.id'));
+			this.$('div#tenant-administration-group-manager-tree-container').jstree('refresh_node', parentNode);
+		}
 	})
 });

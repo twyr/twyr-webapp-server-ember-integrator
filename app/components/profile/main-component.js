@@ -22,7 +22,7 @@ export default BaseComponent.extend({
 		this.set('permissions', ['registered']);
 	},
 
-	onDidInsertElement: task(function* () {
+	'onDidInsertElement': task(function* () {
 		try {
 			this.set('_profileImageElem', this.$('div#profile-basic-information-image'));
 
@@ -67,7 +67,7 @@ export default BaseComponent.extend({
 		}
 	}).drop().on('didInsertElement'),
 
-	onWillDestroyElement: task(function* () {
+	'onWillDestroyElement': task(function* () {
 		document
 			.getElementById('profile-basic-information-image')
 			.removeEventListener('drop', this._processDroppedImage.bind(this));
@@ -110,7 +110,7 @@ export default BaseComponent.extend({
 		}, 10000));
 	},
 
-	_uploadProfileImage: task(function* () {
+	'_uploadProfileImage': task(function* () {
 		try {
 			this.set('_enableCroppieUpdates', false);
 
@@ -150,7 +150,7 @@ export default BaseComponent.extend({
 		}
 	}).keepLatest().retryable(backoffPolicy),
 
-	save: task(function* () {
+	'save': task(function* () {
 		try {
 			yield this.get('model').save();
 			this.get('notification').display({
@@ -168,11 +168,11 @@ export default BaseComponent.extend({
 		}
 	}).drop().retryable(backoffPolicy),
 
-	cancel: task(function* () {
+	'cancel': task(function* () {
 		yield this.get('model').rollback();
 	}).drop(),
 
-	changePassword: task(function* () {
+	'changePassword': task(function* () {
 		try {
 			const changePasswordResult = yield this.get('ajax').post('/profile/changePassword', {
 				'dataType': 'json',
@@ -200,13 +200,13 @@ export default BaseComponent.extend({
 		}
 	}).drop().retryable(backoffPolicy),
 
-	cancelChangePassword: task(function* () {
+	'cancelChangePassword': task(function* () {
 		yield this.set('currentPassword', '');
 		this.set('newPassword1', '');
 		this.set('newPassword2', '');
 	}).drop(),
 
-	deleteAccount: task(function* () {
+	'deleteAccount': task(function* () {
 		yield this.invokeAction('controller-action', 'displayModal', {
 			'title': 'Delete Account',
 			'content': `<strong>${this.get('model.fullName')}</strong>, are you sure you want to delete your account?`,
@@ -233,14 +233,14 @@ export default BaseComponent.extend({
 		});
 	}).drop(),
 
-	onChangeAccordionItem: task(function* (newSelectedItem) {
+	'onChangeAccordionItem': task(function* (newSelectedItem) {
 		this.set('selectedAccordionItem', newSelectedItem);
 		yield timeout(10);
 
 		if(!newSelectedItem) this.set('selectedAccordionItem', '1');
 	}).keepLatest(),
 
-	_confirmedDeleteAccount: task(function* () {
+	'_confirmedDeleteAccount': task(function* () {
 		try {
 			yield this.get('model').destroyRecord();
 			this.get('notification').display({

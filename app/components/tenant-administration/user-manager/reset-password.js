@@ -7,7 +7,7 @@ export default BaseComponent.extend({
 		this.set('permissions', ['user-manager-update']);
 	},
 
-	onGeneratePasswordChange: observer('state.generateRandomPassword', function() {
+	'onGeneratePasswordChange': observer('state.generateRandomPassword', function() {
 		this.set('state.newPassword', '');
 	})
 });

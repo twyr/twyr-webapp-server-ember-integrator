@@ -57,7 +57,7 @@
 				{{#table.body as |body|}}
 					{{#each (sort-by table.sortDesc (await model.features)) as |feature|}}
 						{{#if (eq feature.type 'feature')}}
-							{{#body.row onClick=(action "controller-action" "changeSelectedFeature" feature) as |row|}}
+							{{#body.row onClick=(action "controller-action" "setSelectedFeature" feature) as |row|}}
 								{{#row.cell}}{{feature.displayName}}{{/row.cell}}
 								{{#row.cell}}{{feature.description}}{{/row.cell}}
 								{{#row.cell}}{{titleize feature.deploy}}{{/row.cell}}

@@ -28,7 +28,7 @@ export default Controller.extend(Evented, InvokeActionMixin, {
 		this._super(...arguments);
 	},
 
-	onPermissionChanges: on('init', observer('permissions', 'permissions.[]', 'permissions.@each', function() {
+	'onPermissionChanges': on('init', observer('permissions', 'permissions.[]', 'permissions.@each', function() {
 		this.updatePermissions();
 	})),
 

@@ -26,7 +26,7 @@ export default BaseComponent.extend(InvokeActionMixin, {
 		this._super(...arguments);
 	},
 
-	onWillInsertElement: task(function* () {
+	'onWillInsertElement': task(function* () {
 		const mergedMessages = Object.assign({}, this.get('_messages'), (this.get('messages') || {}));
 
 		this.set('themeInstance', Bootstrap4Theme.create({
@@ -55,7 +55,7 @@ export default BaseComponent.extend(InvokeActionMixin, {
 
 	}).drop().on('willInsertElement'),
 
-	onDidInsertElement: task(function* () {
+	'onDidInsertElement': task(function* () {
 		if(!this.get('createEnabled'))
 			return;
 
@@ -87,7 +87,7 @@ export default BaseComponent.extend(InvokeActionMixin, {
 		lastHeaderColumn.html(createButton);
 	}).drop().on('didInsertElement'),
 
-	onWillDestroyElement: task(function* () {
+	'onWillDestroyElement': task(function* () {
 		const createButton = window.$(this.$('table thead tr:first-child th:last-child button.md-button.md-primary')[0]);
 		createButton.off('click');
 	}).drop().on('willDestroyElement'),

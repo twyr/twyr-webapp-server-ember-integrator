@@ -45,7 +45,7 @@ export default BaseRoute.extend({
 		this.get('refreshProfileModel').perform();
 	},
 
-	refreshProfileModel: task(function* () {
+	'refreshProfileModel': task(function* () {
 		let profileData =  this.get('store').peekRecord('profile/user', window.twyrUserId);
 		if(!profileData) {
 			profileData = yield this.get('store').findRecord('profile/user', window.twyrUserId, {

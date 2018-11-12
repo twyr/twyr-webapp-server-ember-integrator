@@ -41,7 +41,7 @@ export default BaseRoute.extend({
 		this.get('refreshDashboardFeatures').perform();
 	},
 
-	refreshDashboardFeatures: task(function* () {
+	'refreshDashboardFeatures': task(function* () {
 		let featureData =  this.get('store').peekAll('dashboard/feature');
 		if(!featureData.get('length')) featureData = yield this.get('store').findAll('dashboard/feature');
 

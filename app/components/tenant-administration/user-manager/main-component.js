@@ -22,12 +22,12 @@ export default BaseComponent.extend({
 		this.set('permissions', ['user-manager-read']);
 	},
 
-	onHasPermissionChange: observer('hasPermission', function() {
+	'onHasPermissionChange': observer('hasPermission', function() {
 		const updatePerm = this.get('currentUser').hasPermission('user-manager-update');
 		this.set('editable', updatePerm);
 	}),
 
-	resetPassword: task(function* (tenantUser) {
+	'resetPassword': task(function* (tenantUser) {
 		try {
 			const self = this;
 			const user = yield tenantUser.get('user');
@@ -76,7 +76,7 @@ export default BaseComponent.extend({
 		}
 	}).drop(),
 
-	doResetPassword: task(function* (componentState) {
+	'doResetPassword': task(function* (componentState) {
 		try {
 			componentState.tenantUser.set('operationIsRunning', true);
 			yield this.get('ajax').post('/tenant-administration/user-manager/resetPassword', {
@@ -96,7 +96,7 @@ export default BaseComponent.extend({
 		}
 	}).enqueue().retryable(backoffPolicy),
 
-	editAccount: task(function* (tenantUser) {
+	'editAccount': task(function* (tenantUser) {
 		try {
 			const self = this;
 			const user = yield tenantUser.get('user');
@@ -146,11 +146,11 @@ export default BaseComponent.extend({
 		}
 	}).drop(),
 
-	doUpdateAccount: task(function* (user) {
+	'doUpdateAccount': task(function* (user) {
 		yield user.save();
 	}).enqueue().evented().retryable(backoffPolicy),
 
-	doUpdateAccountSucceeded: on('doUpdateAccount:succeeded', function(taskInstance) {
+	'doUpdateAccountSucceeded': on('doUpdateAccount:succeeded', function(taskInstance) {
 		const user = taskInstance.args[0];
 		const loggedInUser = this.get('currentUser').getUser();
 
@@ -160,7 +160,7 @@ export default BaseComponent.extend({
 		window.TwyrApp.trigger('userChanged');
 	}),
 
-	doUpdateAccountErrored: on('doUpdateAccount:errored', function(taskInstance, err) {
+	'doUpdateAccountErrored': on('doUpdateAccount:errored', function(taskInstance, err) {
 		const user = taskInstance.args[0];
 		user.rollback();
 
@@ -170,7 +170,7 @@ export default BaseComponent.extend({
 		});
 	}),
 
-	changeAccountStatus: task(function* (tenantUser, newStatus) {
+	'changeAccountStatus': task(function* (tenantUser, newStatus) {
 		const oldStatus = tenantUser.get('accessStatus');
 
 		tenantUser.set('operationIsRunning', true);
@@ -184,7 +184,7 @@ export default BaseComponent.extend({
 		yield this.get('onChangeAccordionItem').perform(undefined);
 	}).enqueue().evented().retryable(backoffPolicy),
 
-	changeAccountStatusErrored: on('changeAccountStatus:errored', function(taskInstance, err) {
+	'changeAccountStatusErrored': on('changeAccountStatus:errored', function(taskInstance, err) {
 		const tenantUser = taskInstance.args[0];
 
 		tenantUser.rollback();
@@ -196,7 +196,7 @@ export default BaseComponent.extend({
 		});
 	}),
 
-	onChangeAccordionItem: task(function* (newSelectedItem) {
+	'onChangeAccordionItem': task(function* (newSelectedItem) {
 		this.set('selectedAccordionItem', newSelectedItem);
 		yield timeout(10);
 

@@ -21,7 +21,7 @@ export default BaseComponent.extend({
 	lastName: '',
 	mobileNumber: '',
 
-	display: computed('hasPermission', function() {
+	'display': computed('hasPermission', function() {
 		return {
 			'display': (this.get('hasPermission') ? 'none' : 'block'),
 			'min-width': (this.get('hasPermission') ? '0rem' : '20rem')
@@ -33,7 +33,7 @@ export default BaseComponent.extend({
 		this.set('permissions', ['registered']);
 	},
 
-	doLogin: task(function* () {
+	'doLogin': task(function* () {
 		const notification = this.get('notification');
 
 		notification.display({
@@ -91,7 +91,7 @@ export default BaseComponent.extend({
 		}
 	}).drop(),
 
-	resetPassword: task(function* () {
+	'resetPassword': task(function* () {
 		const notification = this.get('notification');
 
 		notification.display({
@@ -121,7 +121,7 @@ export default BaseComponent.extend({
 		}
 	}).drop(),
 
-	registerAccount: task(function* () {
+	'registerAccount': task(function* () {
 		const notification = this.get('notification');
 
 		if(this.get('password') !== this.get('confirmPassword')) {

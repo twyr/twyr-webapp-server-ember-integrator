@@ -54,7 +54,7 @@ export default BaseRoute.extend({
 		this.get('refreshTenantUserModel').perform();
 	},
 
-	refreshTenantUserModel: task(function* () {
+	'refreshTenantUserModel': task(function* () {
 		let tenantUserData =  this.get('store').peekAll('tenant-administration/user-manager/tenant-user');
 		if(!tenantUserData.get('length')) {
 			tenantUserData = yield this.get('store').findAll('tenant-administration/user-manager/tenant-user', {
