@@ -1,5 +1,15 @@
 {{#if hasPermission}}
-{{#paper-subheader}}Child Groups{{/paper-subheader}}
+{{#paper-subheader}}
+	<div class="layout-row layout-align-space-between-center">
+		<span class="flex" style="font-size:0.95rem;">Child Groups</span>
+		{{#if editable}}
+		{{#paper-button primary=true raised=true onClick=(perform addGroup) bubbles=false}}
+			{{paper-icon "add"}} Add Sub-group
+		{{/paper-button}}
+		{{/if}}
+	</div>
+{{/paper-subheader}}
+
 {{#paper-data-table sortProp="displayName" sortDir="asc" as |table|}}
 	{{#table.head as |head|}}
 		{{#head.column sortProp="displayName"}}Name{{/head.column}}
@@ -10,30 +20,70 @@
 		{{/if}}
 	{{/table.head}}
 	{{#table.body as |body|}}
-		{{#each (sort-by table.sortDesc (await model.groups)) as |subGroup|}}
-			{{#body.row onClick=(action "controller-action" "setSelectedGroup" subGroup) as |row|}}
-				{{#row.cell}}{{subGroup.displayName}}{{/row.cell}}
-				{{#row.cell}}{{subGroup.description}}{{/row.cell}}
+		{{#each (sort-by table.sortDesc (await selectedGroup.groups)) as |subGroup|}}
+			{{#if subGroup.isNew}}
+				{{#body.row as |row|}}
+					{{#row.cell}}
+						{{paper-input
+							type="text"
+							class="mb-0"
+							value=subGroup.displayName
+							onChange=(action (mut subGroup.displayName))
+							minLength="3"
+						}}
+					{{/row.cell}}
 
-				{{#row.cell class="text-center"}}
-					{{paper-checkbox
-						class="flex m-0"
-						value=subGroup.defaultForNewUser
-						onChange=(perform changeDefaultForNewUser subGroup)
-						disabled=(or subGroup.defaultForNewUser (not (and editable (await subGroup.parent))))
-					}}
-				{{/row.cell}}
+					{{#row.cell}}
+						{{subGroup.description}}
+					{{/row.cell}}
 
-				{{#if editable}}
-				{{#row.cell class="text-right"}}
-					{{#unless subGroup.defaultForNewUser}}
-					{{#paper-button iconButton=true title="Delete sub-group" onClick=(perform deleteGroup subGroup)}}
-						{{paper-icon "delete"}}
-					{{/paper-button}}
-					{{/unless}}
-				{{/row.cell}}
-				{{/if}}
-			{{/body.row}}
+					{{#row.cell class="text-center"}}
+						&nbsp;
+					{{/row.cell}}
+
+					{{#if editable}}
+					{{#row.cell class="text-right"}}
+						{{#paper-button iconButton=true title="Save sub-group" onClick=(perform saveGroup subGroup) bubbles=false}}
+							{{paper-icon "save"}}
+						{{/paper-button}}
+
+						{{#paper-button iconButton=true title="Delete sub-group" onClick=(perform deleteGroup subGroup) bubbles=false}}
+							{{paper-icon "delete"}}
+						{{/paper-button}}
+					{{/row.cell}}
+					{{/if}}
+				{{/body.row}}
+			{{else}}
+				{{#body.row onClick=(action "controller-action" "setSelectedGroup" subGroup) as |row|}}
+					{{#row.cell}}
+						{{subGroup.displayName}}
+					{{/row.cell}}
+
+					{{#row.cell}}
+						{{subGroup.description}}
+					{{/row.cell}}
+
+					{{#row.cell class="text-center"}}
+						{{paper-checkbox
+							class="flex m-0"
+							value=subGroup.defaultForNewUser
+							onChange=(perform changeDefaultForNewUser subGroup)
+							disabled=(or subGroup.defaultForNewUser (not (and editable (await subGroup.parent))))
+							bubbles=false
+						}}
+					{{/row.cell}}
+
+					{{#if editable}}
+					{{#row.cell class="text-right"}}
+						{{#unless subGroup.defaultForNewUser}}
+							{{#paper-button iconButton=true title="Delete sub-group" onClick=(perform deleteGroup subGroup) bubbles=false}}
+								{{paper-icon "delete"}}
+							{{/paper-button}}
+						{{/unless}}
+					{{/row.cell}}
+					{{/if}}
+				{{/body.row}}
+			{{/if}}
 		{{/each}}
 	{{/table.body}}
 {{/paper-data-table}}

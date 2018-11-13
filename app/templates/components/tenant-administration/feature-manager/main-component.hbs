@@ -9,14 +9,14 @@
 				{{#if (eq idx (sub breadcrumbStack.length 1))}}
 					<span style="line-height:2rem;">{{parentCrumb.displayName}}</span>
 				{{else}}
-					<a href="#" style="line-height:2rem;" {{action "controller-action" "changeSelectedFeature" parentCrumb}}>
+					<a href="#" style="line-height:2rem;" {{action "controller-action" "setSelectedFeature" parentCrumb}}>
 						{{parentCrumb.displayName}}
 					</a>
 				{{/if}}
 			{{/each}}
 			</div>
-			{{#paper-switch class="m-0" value=(await model.isTenantSubscribed) onChange=(perform modifyTenantFeatureStatus) disabled=(not (and (await model.parent.isTenantSubscribed) (eq model.deploy 'custom')))}}
-				{{#if (await model.isTenantSubscribed)}}
+			{{#paper-switch class="m-0" value=(await selectedFeature.isTenantSubscribed) onChange=(perform modifyTenantFeatureStatus) disabled=(not (and (await selectedFeature.parent.isTenantSubscribed) (eq selectedFeature.deploy 'custom')))}}
+				{{#if (await selectedFeature.isTenantSubscribed)}}
 					Subscribed
 				{{else}}
 					Unsubscribed
@@ -25,9 +25,9 @@
 		</div>
 		{{/paper-subheader}}
 		<div class="mx-3 pt-2 pb-4 layout-row layout-align-start-center">
-			{{model.description}}
+			{{selectedFeature.description}}
 		</div>
-		{{#if (get (await model.permissions) 'length')}}
+		{{#if (get (await selectedFeature.permissions) 'length')}}
 			{{paper-divider class="mt-4"}}
 			{{#paper-subheader}}Permissions{{/paper-subheader}}
 			{{#paper-data-table sortProp="displayName" sortDir="asc" as |table|}}
@@ -36,7 +36,7 @@
 					{{#head.column}}Description{{/head.column}}
 				{{/table.head}}
 				{{#table.body as |body|}}
-					{{#each (sort-by table.sortDesc (await model.permissions)) as |permission|}}
+					{{#each (sort-by table.sortDesc (await selectedFeature.permissions)) as |permission|}}
 						{{#body.row as |row|}}
 							{{#row.cell}}{{permission.displayName}}{{/row.cell}}
 							{{#row.cell}}{{permission.description}}{{/row.cell}}
@@ -45,7 +45,7 @@
 				{{/table.body}}
 			{{/paper-data-table}}
 		{{/if}}
-		{{#if (get (await model.features) 'length')}}
+		{{#if (get (await selectedFeature.features) 'length')}}
 			{{paper-divider class="mt-4"}}
 			{{#paper-subheader}}Sub Features{{/paper-subheader}}
 			{{#paper-data-table sortProp="displayName" sortDir="asc" as |table|}}
@@ -55,7 +55,7 @@
 					{{#head.column}}Access Level{{/head.column}}
 				{{/table.head}}
 				{{#table.body as |body|}}
-					{{#each (sort-by table.sortDesc (await model.features)) as |feature|}}
+					{{#each (sort-by table.sortDesc (await selectedFeature.features)) as |feature|}}
 						{{#if (eq feature.type 'feature')}}
 							{{#body.row onClick=(action "controller-action" "setSelectedFeature" feature) as |row|}}
 								{{#row.cell}}{{feature.displayName}}{{/row.cell}}

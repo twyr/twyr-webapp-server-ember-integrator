@@ -24,20 +24,20 @@ export default BaseComponent.extend({
 	}),
 
 	'modifyTenantFeatureStatus': task(function* () {
-		if(!this.get('model'))
+		if(!this.get('selectedFeature'))
 			return;
 
-		const tenantFeatures = yield this.get('model.tenantFeatures');
+		const tenantFeatures = yield this.get('selectedFeature.tenantFeatures');
 		let tenantFeature = tenantFeatures.get('firstObject');
 
 		if(tenantFeature) {
 			try {
-				this.get('model.tenantFeatures').removeObject(tenantFeature);
+				this.get('selectedFeature.tenantFeatures').removeObject(tenantFeature);
 				yield tenantFeature.destroyRecord();
 			}
 			catch(err) {
 				tenantFeature.rollback();
-				this.get('model.tenantFeatures').addObject(tenantFeature);
+				this.get('selectedFeature.tenantFeatures').addObject(tenantFeature);
 
 				throw err;
 			}
@@ -46,15 +46,15 @@ export default BaseComponent.extend({
 			const tenant = this.get('store').peekRecord('tenant-administration/tenant', window.twyrTenantId);
 			tenantFeature = this.get('store').createRecord('tenant-administration/feature-manager/tenant-feature', {
 				'tenant': tenant,
-				'feature': this.get('model')
+				'feature': this.get('selectedFeature')
 			});
 
 			try {
-				this.get('model.tenantFeatures').addObject(tenantFeature);
+				this.get('selectedFeature.tenantFeatures').addObject(tenantFeature);
 				yield tenantFeature.save();
 			}
 			catch(err) {
-				this.get('model.tenantFeatures').removeObject(tenantFeature);
+				this.get('selectedFeature.tenantFeatures').removeObject(tenantFeature);
 				tenantFeature.deleteRecord();
 
 				throw err;

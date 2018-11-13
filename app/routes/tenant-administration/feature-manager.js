@@ -11,6 +11,19 @@ export default BaseRoute.extend({
 		this._super(...arguments);
 	},
 
+	model() {
+		if(!window.twyrTenantId) {
+			this.get('store').unloadAll('tenant-administration/feature-manager/tenant-feature');
+			this.get('store').unloadAll('server-administration/feature');
+			this.get('store').unloadAll('server-administration/feature-permission');
+
+			return;
+		}
+
+		const tenantModel = this.modelFor('tenant-administration');
+		return tenantModel;
+	},
+
 	onUserDataUpdated() {
 		if(!window.twyrTenantId) {
 			this.get('store').unloadAll('tenant-administration/feature-manager/tenant-feature');

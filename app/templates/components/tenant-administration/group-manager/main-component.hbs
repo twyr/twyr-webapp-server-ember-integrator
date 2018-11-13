@@ -9,30 +9,32 @@
 				{{#if (eq idx (sub breadcrumbStack.length 1))}}
 					<span style="line-height:2rem;">{{parentCrumb.displayName}}</span>
 				{{else}}
-					<a href="#" style="line-height:2rem;" {{action "controller-action" "changeSelectedGroup" parentCrumb}}>
+					<a href="#" style="line-height:2rem;" {{action "controller-action" "setSelectedGroup" parentCrumb}}>
 						{{parentCrumb.displayName}}
 					</a>
 				{{/if}}
 			{{/each}}
 			</div>
-			{{#if (and editable (await model.parent))}}
+			{{#if (and editable (await selectedGroup.parent))}}
 			<div class="layout-row layout-align-end-center">
 				{{#liquid-if (or saveGroup.isRunning cancelGroup.isRunning _confirmedDeleteGroup.isRunning)}}
 					{{#paper-button disabled=true onClick=null}}
 						{{paper-icon "rotate-left" reverseSpin=true}}
 					{{/paper-button}}
 				{{else}}
-					{{#paper-button primary=true raised=true onClick=(perform saveGroup) disabled=(not model.hasDirtyAttributes) bubbles=false}}
+					{{#paper-button primary=true raised=true onClick=(perform saveGroup) disabled=(not selectedGroup.hasDirtyAttributes) bubbles=false}}
 						{{paper-icon "save"}} Save
 					{{/paper-button}}
 
-					{{#paper-button accent=true raised=true onClick=(perform cancelGroup) disabled=(not model.hasDirtyAttributes) bubbles=false}}
+					{{#paper-button accent=true raised=true onClick=(perform cancelGroup) disabled=(not selectedGroup.hasDirtyAttributes) bubbles=false}}
 						{{paper-icon "cancel"}} Cancel
 					{{/paper-button}}
 
+					{{#unless selectedGroup.defaultForNewUser}}
 					{{#paper-button warn=true raised=true onClick=(perform deleteGroup) bubbles=false}}
 						{{paper-icon "delete"}} Delete
 					{{/paper-button}}
+					{{/unless}}
 				{{/liquid-if}}
 			</div>
 			{{/if}}
@@ -43,17 +45,17 @@
 				type="text"
 				class="flex"
 				label="Name"
-				value=model.displayName
-				onChange=(action (mut model.displayName))
-				disabled=(not (and editable (await model.parent))) minLength="3"
+				value=selectedGroup.displayName
+				onChange=(action (mut selectedGroup.displayName))
+				disabled=(not (and editable (await selectedGroup.parent))) minLength="3"
 			}}
 
 			{{#paper-switch
-				value=model.defaultForNewUser
-				onChange=(action (mut model.defaultForNewUser))
-				disabled=(or model.defaultForNewUser (not (and editable (await model.parent))))
+				value=selectedGroup.defaultForNewUser
+				onChange=(action (mut selectedGroup.defaultForNewUser))
+				disabled=(or selectedGroup.defaultForNewUser (not (and editable (await selectedGroup.parent))))
 			}}
-				{{#liquid-if model.defaultForNewUser}}
+				{{#liquid-if selectedGroup.defaultForNewUser}}
 					Default Group
 				{{else}}
 					Non-default Group
@@ -67,16 +69,16 @@
 				textarea=true
 				block=true
 				class="flex"
-				value=model.description
-				onChange=(action (mut model.description))
+				value=selectedGroup.description
+				onChange=(action (mut selectedGroup.description))
 				passThru=(hash rows=3 maxRows=3)
-				disabled=(not (and editable (await model.parent)))
+				disabled=(not (and editable (await selectedGroup.parent)))
 			}}
 		</div>
 
 		{{#bs-tab as |tab|}}
 			{{#tab.pane title="Sub-Groups"}}
-				{{component "tenant-administration/group-manager/sub-group-editor-component" model=model controller-action=(action "controller-action")}}
+				{{component "tenant-administration/group-manager/sub-group-editor-component" model=model selectedGroup=selectedGroup controller-action=(action "controller-action")}}
 			{{/tab.pane}}
 
 			{{#tab.pane title="Permissions"}}

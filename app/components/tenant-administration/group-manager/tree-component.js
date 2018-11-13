@@ -60,7 +60,7 @@ export default BaseComponent.extend({
 
 	'onActivateNode': task(function* (treeNode) {
 		try {
-			let tenantGroup = yield this.get('model');
+			let tenantGroup = yield this.get('selectedGroup');
 			if(tenantGroup && (tenantGroup.get('id') === treeNode.id))
 				return;
 
@@ -68,7 +68,7 @@ export default BaseComponent.extend({
 			tenantGroup = store.peekRecord('tenant-administration/group-manager/tenant-group', treeNode.id);
 			if(!tenantGroup) {
 				tenantGroup = yield store.findRecord('tenant-administration/group-manager/tenant-group', treeNode.id, {
-					'include': 'parent, groups'
+					'include': 'tenant, parent, groups'
 				});
 			}
 
@@ -83,35 +83,84 @@ export default BaseComponent.extend({
 		}
 	}).keepLatest(),
 
-	'onSelectedGroupChanged': observer('model', function() {
-		if(!this.get('model'))
+	'onSelectedGroupChanged': observer('selectedGroup', function() {
+		if(!this.get('selectedGroup'))
 			return;
 
-		if(this.$('div#tenant-administration-group-manager-tree-container').jstree('get_selected')[0] === this.get('model.id'))
+		if(this.$('div#tenant-administration-group-manager-tree-container').jstree('get_selected')[0] === this.get('selectedGroup.id'))
 			return;
 
-		this.$('div#tenant-administration-group-manager-tree-container').jstree('activate_node', this.get('model.id'), false, false);
-		this.$('div#tenant-administration-group-manager-tree-container').jstree('open_node', this.get('model.id'));
+		const treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('selectedGroup.id'));
+		if(treeNode) {
+			this.$('div#tenant-administration-group-manager-tree-container').jstree('activate_node', this.get('selectedGroup.id'), false, false);
+			this.$('div#tenant-administration-group-manager-tree-container').jstree('open_node', this.get('selectedGroup.id'));
+
+			return;
+		}
+
+		const parentNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('selectedGroup.parent.id'));
+		this.$('div#tenant-administration-group-manager-tree-container').one('refresh_node.jstree', () => {
+			this.$('div#tenant-administration-group-manager-tree-container').jstree('activate_node', this.get('selectedGroup.id'), false, false);
+			this.$('div#tenant-administration-group-manager-tree-container').jstree('open_node', this.get('selectedGroup.id'));
+		});
+
+		this.$('div#tenant-administration-group-manager-tree-container').jstree('refresh_node', parentNode);
 	}),
 
-	'onSelectedGroupNameChanged': observer('model.displayName', function() {
-		const treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('model.id'));
-		this.$('div#tenant-administration-group-manager-tree-container').jstree('rename_node', treeNode, this.get('model.displayName'));
+	'onSelectedGroupNameChanged': observer('selectedGroup.displayName', function() {
+		const treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('selectedGroup.id'));
+		this.$('div#tenant-administration-group-manager-tree-container').jstree('rename_node', treeNode, this.get('selectedGroup.displayName'));
 	}),
 
-	'onSelectedGroupDestroyed': observer('model.isDeleted', 'model.hasDirtyAttributes', function() {
-		if(this.get('model.isDeleted')) {
-			if(this.get('model.hasDirtyAttributes')) return;
+	'onSelectedGroupDestroyed': observer('selectedGroup.isDeleted', 'selectedGroup.hasDirtyAttributes', function() {
+		if(this.get('selectedGroup.isDeleted')) {
+			if(this.get('selectedGroup.hasDirtyAttributes')) return;
 
-			const treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('model.id'));
+			const treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('selectedGroup.id'));
 			this.$('div#tenant-administration-group-manager-tree-container').jstree('delete_node', treeNode);
 		}
 		else {
-			const treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('model.id'));
+			const treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('selectedGroup.id'));
 			if(treeNode) return;
 
-			const parentNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('model.parent.id'));
+			const parentNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('selectedGroup.parent.id'));
 			this.$('div#tenant-administration-group-manager-tree-container').jstree('refresh_node', parentNode);
 		}
-	})
+	}),
+
+	'onTenantGroupNameChanged': observer('model.groups.@each.displayName', function() {
+		this.get('_updateChildGroupText').perform();
+	}),
+
+	'_updateChildGroupText': task(function* () {
+		const tenantGroups = yield this.get('model.groups');
+		tenantGroups.forEach((subGroup) => {
+			const treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', subGroup.get('id'));
+			if(!treeNode) return;
+
+			this.$('div#tenant-administration-group-manager-tree-container').jstree('rename_node', treeNode, subGroup.get('displayName'));
+		});
+	}).enqueue(),
+
+	'onTenantGroupsChanged': observer('model.groups.@each.isNew', 'model.groups.@each.isDeleted', function() {
+		this.get('_updateGroupTree').perform();
+	}),
+
+	'_updateGroupTree': task(function* () {
+		const tenantGroups = yield this.get('model.groups');
+		tenantGroups.forEach((subGroup) => {
+			let treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', subGroup.get('id'));
+
+			if(subGroup.get('isNew') && !treeNode) {
+				treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('create_node', subGroup.get('parent.id'), {
+					'id': subGroup.get('id'),
+					'text': subGroup.get('displayName')
+				});
+			}
+
+			if(subGroup.get('isDeleted') && treeNode) {
+				this.$('div#tenant-administration-group-manager-tree-container').jstree('delete_node', subGroup.get('id'));
+			}
+		});
+	}).enqueue()
 });

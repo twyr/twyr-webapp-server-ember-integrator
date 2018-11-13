@@ -2,13 +2,14 @@ import BaseModel from '../../../framework/base-model';
 import DS from 'ember-data';
 
 import { computed } from '@ember/object';
+import { observer } from '@ember/object';
 import { task } from 'ember-concurrency';
 
 export default BaseModel.extend({
 	'name': DS.attr('string'),
 	'displayName': DS.attr('string'),
 	'description': DS.attr('string'),
-	'defaultForNewUser': DS.attr('boolean'),
+	'defaultForNewUser': DS.attr('boolean', { 'defaultValue': false }),
 
 	'tenant': DS.belongsTo('tenant-administration/tenant', {
 		'async': true,
@@ -39,5 +40,9 @@ export default BaseModel.extend({
 		if(!parentGroupPath) return this.get('displayName');
 
 		return `${parentGroupPath} > ${this.get('displayName')}`;
-	}).keepLatest()
+	}).keepLatest(),
+
+	'onDisplayNameChanged': observer('displayName', function() {
+		this.set('name', this.get('displayName').dasherize());
+	})
 });

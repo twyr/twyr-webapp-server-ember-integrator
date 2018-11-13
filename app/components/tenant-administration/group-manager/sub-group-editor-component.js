@@ -27,7 +27,6 @@ export default BaseComponent.extend({
 	'changeDefaultForNewUser': task(function* (subGroup) {
 		const loadedGroups = this.get('store').peekAll('tenant-administration/group-manager/tenant-group');
 		let oldDefaultGroup = null;
-
 		loadedGroups.forEach((tenantGroup) => {
 			if(tenantGroup.get('id') === subGroup.get('id'))
 				return;
@@ -35,8 +34,7 @@ export default BaseComponent.extend({
 			if(!tenantGroup.get('defaultForNewUser'))
 				return;
 
-			tenantGroup.set('defaultForNewUser', false);
-			oldDefaultGroup = tenantGroup;
+				oldDefaultGroup = tenantGroup;
 		});
 
 		subGroup.set('defaultForNewUser', true);
@@ -44,7 +42,7 @@ export default BaseComponent.extend({
 
 		if(oldDefaultGroup)
 		yield oldDefaultGroup.reload({
-			'include': 'parent, groups'
+			'include': 'tenant, parent, groups'
 		});
 	}).keepLatest().evented().retryable(backoffPolicy),
 
@@ -57,6 +55,120 @@ export default BaseComponent.extend({
 
 	'changeDefaultForNewUserErrored': on('changeDefaultForNewUser:errored', function (taskInstance, err) {
 		taskInstance.args[0].rollback();
+		taskInstance.args[0].reload({
+			'include': 'tenant, parent, groups'
+		});
+
+		this.get('notification').display({
+			'type': 'error',
+			'error': err
+		});
+	}),
+
+	'addGroup': task(function* () {
+		const newGroup = this.get('store').createRecord('tenant-administration/group-manager/tenant-group', {
+			'tenant': this.get('model'),
+			'parent': this.get('selectedGroup')
+		});
+
+		const displayName = `New Group ${window.moment().valueOf()}`;
+		newGroup.set('displayName', displayName);
+
+		const siblingGroups = yield this.get('selectedGroup.groups');
+		siblingGroups.addObject(newGroup);
+
+		const tenantGroups = yield this.get('model.groups');
+		tenantGroups.addObject(newGroup);
+	}).drop(),
+
+	'saveGroup': task(function* (subGroup) {
+		yield subGroup.save();
+	}).drop().evented().retryable(backoffPolicy),
+
+	'saveGroupSucceeded': on('saveGroup:succeeded', function (taskInstance) {
+		this.get('notification').display({
+			'type': 'success',
+			'message': `Changes to ${taskInstance.args[0].get('displayName')} saved successfully`
+		});
+	}),
+
+	'saveGroupErrored': on('saveGroup:errored', function (taskInstance, err) {
+		const subGroup = taskInstance.args[0];
+		subGroup.rollback();
+
+		if(!subGroup.get('isNew'))
+		subGroup.reload({
+			'include': 'tenant, parent, groups'
+		});
+
+		this.get('notification').display({
+			'type': 'error',
+			'error': err
+		});
+	}),
+
+	'deleteGroup': task(function* (subGroup) {
+		const modalData = {
+			'title': 'Delete Group',
+			'content': `Are you sure you want to delete the <strong>${subGroup.get('displayName')}</strong> group?`,
+
+			'confirmButton': {
+				'text': 'Delete',
+				'icon': 'delete',
+
+				'warn': true,
+				'raised': true,
+
+				'callback': () => {
+					this.get('_confirmedDeleteGroup').perform(subGroup);
+				}
+			},
+
+			'cancelButton': {
+				'text': 'Cancel',
+				'icon': 'close',
+
+				'primary': true,
+				'raised': true
+			}
+		};
+
+		yield this.invokeAction('controller-action', 'displayModal', modalData);
+	}).drop(),
+
+	'_confirmedDeleteGroup': task(function* (subGroup) {
+		const parentGroup = yield subGroup.get('parent');
+
+		const groupSiblings = yield parentGroup.get('groups');
+		groupSiblings.removeObject(subGroup);
+
+		const tenantGroups = yield this.get('model.groups');
+		tenantGroups.removeObject(subGroup);
+
+		if(subGroup.get('isNew'))
+			subGroup.deleteRecord();
+		else
+			yield subGroup.destroyRecord();
+	}).drop().evented().retryable(backoffPolicy),
+
+	'_confirmedDeleteGroupSucceeded': on('_confirmedDeleteGroup:succeeded', function(taskInstance) {
+		this.get('notification').display({
+			'type': 'success',
+			'message': `${taskInstance.args[0].get('displayName')} deleted successfully`
+		});
+	}),
+
+	'_confirmedDeleteGroupErrored': on('_confirmedDeleteGroup:errored', function(taskInstance, err) {
+		const subGroup = taskInstance.args[0];
+		subGroup.rollback();
+		subGroup.reload({
+			'include': 'tenant, parent, groups'
+		});
+
+		const parentGroup = subGroup.get('parent');
+		const groupSiblings = parentGroup.get('groups');
+		groupSiblings.addObject(subGroup);
+
 		this.get('notification').display({
 			'type': 'error',
 			'error': err

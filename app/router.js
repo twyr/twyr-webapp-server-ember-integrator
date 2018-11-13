@@ -12,6 +12,8 @@ Router.map(function() {
   this.route('dashboard');
   this.route('tenant-administration', function() {
     this.route('feature-manager');
+    this.route('group-manager');
+    this.route('user-manager');
   });
 });
 

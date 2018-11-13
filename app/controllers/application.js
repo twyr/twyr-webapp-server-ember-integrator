@@ -4,17 +4,17 @@ import env from 'twyr-webapp-server/config/environment';
 import { inject } from '@ember/service';
 
 export default BaseController.extend({
-	notification: inject('integrated-notification'),
-	realtimeData: inject('realtime-data'),
+	'notification': inject('integrated-notification'),
+	'realtimeData': inject('realtime-data'),
 
-	modalData: null,
-	showDialog: false,
+	'modalData': null,
+	'showDialog': false,
 
-	mainTitle: '',
-	displayCurrentYear: false,
+	'mainTitle': '',
+	'displayCurrentYear': false,
 
-	startYear: env.twyr.startYear,
-	currentYear: env.twyr.startYear,
+	'startYear': env.twyr.startYear,
+	'currentYear': env.twyr.startYear,
 
 	init() {
 		this._super(...arguments);

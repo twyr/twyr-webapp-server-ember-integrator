@@ -3,6 +3,7 @@ import { task } from 'ember-concurrency';
 
 export default BaseController.extend({
 	'breadcrumbStack': null,
+	'selectedGroup': null,
 
 	init() {
 		this._super(...arguments);
@@ -11,20 +12,23 @@ export default BaseController.extend({
 
 	setSelectedGroup(groupModel) {
 		if(!groupModel) {
-			this.set('model', null);
+			this.set('selectedGroup', null);
 			this.set('breadcrumbStack', null);
 
 			return;
 		}
 
-		if(groupModel.get('id') === this.get('model.id'))
+		if(groupModel.get('id') === this.get('selectedGroup.id'))
 			return;
 
+		// this.set('selectedGroup', groupModel);
+		// this.get('setBreadcrumbHierarchy').perform();
+
 		groupModel.reload({
-			'include': 'parent, groups'
+			'include': 'tenant, parent, groups'
 		})
 		.then((reloadedModel) => {
-			this.set('model', reloadedModel);
+			this.set('selectedGroup', reloadedModel);
 			this.get('setBreadcrumbHierarchy').perform();
 		})
 		.catch((err) => {
@@ -36,7 +40,7 @@ export default BaseController.extend({
 	},
 
 	'setBreadcrumbHierarchy': task(function* () {
-		let currentGroup = this.get('model');
+		let currentGroup = this.get('selectedGroup');
 		const breadcrumbHierarchy = [];
 
 		while(currentGroup) {

@@ -2,6 +2,7 @@ import BaseController from '../../framework/base-controller';
 
 export default BaseController.extend({
 	'breadcrumbStack': null,
+	'selectedFeature': null,
 
 	init() {
 		this._super(...arguments);
@@ -10,7 +11,7 @@ export default BaseController.extend({
 
 	setSelectedFeature(featureModel) {
 		if(!featureModel) {
-			this.set('model', null);
+			this.set('selectedFeature', null);
 			this.set('breadcrumbStack', null);
 
 			return;
@@ -18,7 +19,7 @@ export default BaseController.extend({
 
 		featureModel.reload()
 		.then((reloadedModel) => {
-			this.set('model', reloadedModel);
+			this.set('selectedFeature', reloadedModel);
 
 			let currentFeature = reloadedModel;
 			const breadcrumbHierarchy = [];

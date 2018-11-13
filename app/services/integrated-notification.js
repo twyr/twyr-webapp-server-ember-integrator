@@ -59,6 +59,7 @@ export default Service.extend({
 			return;
 		}
 
+		if(window.developmentMode) console.error(data.error);
 		if(typeof data.error === 'string') {
 			toast.error(data.error.replace(/\\n/g, '\n').split('\n').splice(0, 2).join('\n'), 'Error', options);
 			return;
