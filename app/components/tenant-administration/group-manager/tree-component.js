@@ -147,7 +147,7 @@ export default BaseComponent.extend({
 	}),
 
 	'_updateGroupTree': task(function* () {
-		const tenantGroups = yield this.get('model.groups');
+		const tenantGroups = yield this.get('selectedGroup.groups');
 		tenantGroups.forEach((subGroup) => {
 			let treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', subGroup.get('id'));
 
@@ -157,10 +157,17 @@ export default BaseComponent.extend({
 					'text': subGroup.get('displayName')
 				});
 			}
-
-			if(subGroup.get('isDeleted') && treeNode) {
-				this.$('div#tenant-administration-group-manager-tree-container').jstree('delete_node', subGroup.get('id'));
-			}
 		});
+
+		const selectedTreeNodeId = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_selected')[0];
+		const selectedTreeNodeChildren = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_children_dom', selectedTreeNodeId);
+
+		for(let idx = 0; idx < selectedTreeNodeChildren.length; idx++) {
+			const tenantGroup = this.get('store').peekRecord('tenant-administration/group-manager/tenant-group', window.$(selectedTreeNodeChildren[idx]).attr('id'));
+			if(tenantGroup && !tenantGroup.get('isDeleted'))
+				continue;
+
+			this.$('div#tenant-administration-group-manager-tree-container').jstree('delete_node', window.$(selectedTreeNodeChildren[idx]).attr('id'));
+		}
 	}).enqueue()
 });
