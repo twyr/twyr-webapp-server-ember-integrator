@@ -1,7 +1,7 @@
 {{#if hasPermission}}
 {{#paper-subheader}}
 	<div class="layout-row layout-align-space-between-center">
-		<span class="flex" style="font-size:0.95rem;">Child Groups</span>
+		<span class="flex" style="font-size:1.25rem;">Child Groups</span>
 		{{#if editable}}
 		{{#paper-button primary=true raised=true onClick=(perform addGroup) bubbles=false}}
 			{{paper-icon "add"}} Add Sub-group
@@ -34,7 +34,13 @@
 					{{/row.cell}}
 
 					{{#row.cell}}
-						{{subGroup.description}}
+						{{paper-input
+							type="text"
+							class="mb-0"
+							value=subGroup.description
+							onChange=(action (mut subGroup.description))
+							minLength="3"
+						}}
 					{{/row.cell}}
 
 					{{#row.cell class="text-center"}}

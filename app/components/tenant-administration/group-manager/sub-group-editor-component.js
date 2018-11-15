@@ -73,6 +73,7 @@ export default BaseComponent.extend({
 
 		const displayName = `New Group ${window.moment().valueOf()}`;
 		newGroup.set('displayName', displayName);
+		newGroup.set('description', displayName);
 
 		const siblingGroups = yield this.get('selectedGroup.groups');
 		siblingGroups.addObject(newGroup);

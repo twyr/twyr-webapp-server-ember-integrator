@@ -1,6 +1,7 @@
 import BaseComponent from '../../../framework/base-component';
 
 import { observer } from '@ember/object';
+import { once } from '@ember/runloop';
 import { task } from 'ember-concurrency';
 
 export default BaseComponent.extend({
@@ -113,6 +114,10 @@ export default BaseComponent.extend({
 	}),
 
 	'onSelectedGroupDestroyed': observer('selectedGroup.isDeleted', 'selectedGroup.hasDirtyAttributes', function() {
+		once(this, 'processGroupDeletion');
+	}),
+
+	'processGroupDeletion': function() {
 		if(this.get('selectedGroup.isDeleted')) {
 			if(this.get('selectedGroup.hasDirtyAttributes')) return;
 
@@ -126,14 +131,16 @@ export default BaseComponent.extend({
 			const parentNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', this.get('selectedGroup.parent.id'));
 			this.$('div#tenant-administration-group-manager-tree-container').jstree('refresh_node', parentNode);
 		}
-	}),
+	},
 
 	'onTenantGroupNameChanged': observer('model.groups.@each.displayName', function() {
 		this.get('_updateChildGroupText').perform();
 	}),
 
 	'_updateChildGroupText': task(function* () {
-		const tenantGroups = yield this.get('model.groups');
+		const tenantGroups = yield this.get('selectedGroup.groups');
+		if(!tenantGroups) return;
+
 		tenantGroups.forEach((subGroup) => {
 			const treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', subGroup.get('id'));
 			if(!treeNode) return;
@@ -143,11 +150,16 @@ export default BaseComponent.extend({
 	}).enqueue(),
 
 	'onTenantGroupsChanged': observer('model.groups.@each.isNew', 'model.groups.@each.isDeleted', function() {
-		this.get('_updateGroupTree').perform();
+		once(this, () => {
+			// console.log(`Firing observer for 'model.groups.@each.isNew' OR 'model.groups.@each.isDeleted'`);
+			this.get('_updateGroupTree').perform();
+		});
 	}),
 
 	'_updateGroupTree': task(function* () {
 		const tenantGroups = yield this.get('selectedGroup.groups');
+
+		if(tenantGroups)
 		tenantGroups.forEach((subGroup) => {
 			let treeNode = this.$('div#tenant-administration-group-manager-tree-container').jstree('get_node', subGroup.get('id'));
 

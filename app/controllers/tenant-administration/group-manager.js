@@ -21,9 +21,6 @@ export default BaseController.extend({
 		if(groupModel.get('id') === this.get('selectedGroup.id'))
 			return;
 
-		// this.set('selectedGroup', groupModel);
-		// this.get('setBreadcrumbHierarchy').perform();
-
 		groupModel.reload({
 			'include': 'tenant, parent, groups'
 		})

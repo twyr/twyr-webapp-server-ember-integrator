@@ -20,8 +20,9 @@ export default BaseRoute.extend({
 		}
 
 		const tenantModel = this.modelFor('tenant-administration');
-		console.log(`Tenant Model (Route): `, tenantModel);
-		return tenantModel;
+		return tenantModel || this.get('store').findRecord('tenant-administration/tenant', window.twyrTenantId, {
+			'include': 'location'
+		});
 	},
 
 	onUserDataUpdated() {
@@ -48,7 +49,6 @@ export default BaseRoute.extend({
 			});
 		}
 
-		console.log(`Tenant Model (Controller): `, tenantModel);
 		this.get('controller').set('model', tenantModel);
 	}).keepLatest()
 });
