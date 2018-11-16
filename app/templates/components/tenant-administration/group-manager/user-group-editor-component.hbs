@@ -1,0 +1,49 @@
+{{#if hasPermission}}
+{{#paper-subheader}}
+	<div class="layout-row layout-align-space-between-center">
+		<span class="flex" style="font-size:1.25rem;">Users</span>
+		{{#if editable}}
+		{{#paper-button primary=true raised=true onClick=(perform addUser) bubbles=false}}
+			{{paper-icon "add"}} Add User
+		{{/paper-button}}
+		{{/if}}
+	</div>
+{{/paper-subheader}}
+
+{{#paper-data-table sortProp="groupUser.tenantUser.user.email" sortDir="asc" as |table|}}
+	{{#table.head as |head|}}
+		{{#head.column sortProp="groupUser.tenantUser.user.email"}}Login{{/head.column}}
+		{{#head.column sortProp="groupUser.tenantUser.user.firstName"}}First Name{{/head.column}}
+		{{#head.column sortProp="groupUser.tenantUser.user.lastName"}}Last Name{{/head.column}}
+		{{#if editable}}
+			{{#head.column}}&nbsp;{{/head.column}}
+		{{/if}}
+	{{/table.head}}
+	{{#table.body as |body|}}
+		{{#each (sort-by table.sortDesc (await selectedGroup.tenantUserGroups)) as |groupUser|}}
+			{{log 'Group User' (await groupUser.tenantUser.user)}}
+			{{#body.row as |row|}}
+				{{#row.cell}}
+					{{await groupUser.tenantUser.user.email}}
+				{{/row.cell}}
+
+				{{#row.cell}}
+					{{await groupUser.tenantUser.user.firstName}}
+				{{/row.cell}}
+
+				{{#row.cell}}
+					{{await groupUser.tenantUser.user.lastName}}
+				{{/row.cell}}
+
+				{{#if editable}}
+				{{#row.cell class="text-right"}}
+					{{#paper-button iconButton=true title="Remove User" onClick=(perform removeUser groupUser) bubbles=false}}
+						{{paper-icon "delete"}}
+					{{/paper-button}}
+				{{/row.cell}}
+				{{/if}}
+			{{/body.row}}
+		{{/each}}
+	{{/table.body}}
+{{/paper-data-table}}
+{{/if}}

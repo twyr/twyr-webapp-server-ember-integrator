@@ -13,6 +13,7 @@ const backoffPolicy = new ExponentialBackoffPolicy({
 
 export default BaseComponent.extend({
 	'editable': false,
+	'observerInitialized': false,
 
 	init() {
 		this._super(...arguments);
@@ -23,6 +24,28 @@ export default BaseComponent.extend({
 		const updatePerm = this.get('currentUser').hasPermission('group-manager-update');
 		this.set('editable', updatePerm);
 	}),
+
+	'_initializeObservers': task(function* () {
+		const newGroup = this.get('store').createRecord('tenant-administration/group-manager/tenant-group', {
+			'tenant': this.get('model'),
+			'parent': this.get('selectedGroup')
+		});
+
+		const displayName = `New Group ${window.moment().valueOf()}`;
+		newGroup.set('displayName', displayName);
+		newGroup.set('description', displayName);
+
+		const siblingGroups = yield this.get('selectedGroup.groups');
+		const tenantGroups = yield this.get('model.groups');
+
+		siblingGroups.addObject(newGroup);
+		tenantGroups.addObject(newGroup);
+
+		siblingGroups.removeObject(newGroup);
+		tenantGroups.removeObject(newGroup);
+
+		newGroup.deleteRecord();
+	}).drop(),
 
 	'changeDefaultForNewUser': task(function* (subGroup) {
 		const loadedGroups = this.get('store').peekAll('tenant-administration/group-manager/tenant-group');
@@ -42,7 +65,7 @@ export default BaseComponent.extend({
 
 		if(oldDefaultGroup)
 		yield oldDefaultGroup.reload({
-			'include': 'tenant, parent, groups'
+			'include': 'tenant, parent, groups, tenantUserGroups'
 		});
 	}).keepLatest().evented().retryable(backoffPolicy),
 
@@ -56,7 +79,7 @@ export default BaseComponent.extend({
 	'changeDefaultForNewUserErrored': on('changeDefaultForNewUser:errored', function (taskInstance, err) {
 		taskInstance.args[0].rollback();
 		taskInstance.args[0].reload({
-			'include': 'tenant, parent, groups'
+			'include': 'tenant, parent, groups, tenantUserGroups'
 		});
 
 		this.get('notification').display({
@@ -66,6 +89,11 @@ export default BaseComponent.extend({
 	}),
 
 	'addGroup': task(function* () {
+		if(!this.get('observerInitialized')) {
+			yield this.get('_initializeObservers').perform();
+			this.set('observerInitialized', true);
+		}
+
 		const newGroup = this.get('store').createRecord('tenant-administration/group-manager/tenant-group', {
 			'tenant': this.get('model'),
 			'parent': this.get('selectedGroup')
@@ -99,7 +127,7 @@ export default BaseComponent.extend({
 
 		if(!subGroup.get('isNew'))
 		subGroup.reload({
-			'include': 'tenant, parent, groups'
+			'include': 'tenant, parent, groups, tenantUserGroups'
 		});
 
 		this.get('notification').display({
@@ -109,6 +137,11 @@ export default BaseComponent.extend({
 	}),
 
 	'deleteGroup': task(function* (subGroup) {
+		if(!this.get('observerInitialized')) {
+			yield this.get('_initializeObservers').perform();
+			this.set('observerInitialized', true);
+		}
+
 		const modalData = {
 			'title': 'Delete Group',
 			'content': `Are you sure you want to delete the <strong>${subGroup.get('displayName')}</strong> group?`,
@@ -163,7 +196,7 @@ export default BaseComponent.extend({
 		const subGroup = taskInstance.args[0];
 		subGroup.rollback();
 		subGroup.reload({
-			'include': 'tenant, parent, groups'
+			'include': 'tenant, parent, groups, tenantUserGroups'
 		});
 
 		const parentGroup = subGroup.get('parent');

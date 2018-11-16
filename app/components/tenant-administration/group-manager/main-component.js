@@ -45,7 +45,7 @@ export default BaseComponent.extend({
 
 		if(oldDefaultGroup)
 		yield oldDefaultGroup.reload({
-			'include': 'tenant, parent, groups'
+			'include': 'tenant, parent, groups, tenantUserGroups'
 		});
 	}).drop().evented().retryable(backoffPolicy),
 
@@ -59,7 +59,7 @@ export default BaseComponent.extend({
 	'saveGroupErrored': on('saveGroup:errored', function (taskInstance, err) {
 		this.get('selectedGroup').rollback();
 		this.get('selectedGroup').reload({
-			'include': 'tenant, parent, groups'
+			'include': 'tenant, parent, groups, tenantUserGroups'
 		});
 
 		this.get('notification').display({
@@ -124,7 +124,7 @@ export default BaseComponent.extend({
 	'_confirmedDeleteGroupErrored': on('_confirmedDeleteGroup:errored', function(taskInstance, err) {
 		this.get('selectedGroup').rollback();
 		this.get('selectedGroup').reload({
-			'include': 'tenant, parent, groups'
+			'include': 'tenant, parent, groups, tenantUserGroups'
 		});
 
 		const parentGroup = this.get('selectedGroup.parent');

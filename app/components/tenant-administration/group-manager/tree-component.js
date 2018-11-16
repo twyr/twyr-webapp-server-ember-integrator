@@ -69,7 +69,7 @@ export default BaseComponent.extend({
 			tenantGroup = store.peekRecord('tenant-administration/group-manager/tenant-group', treeNode.id);
 			if(!tenantGroup) {
 				tenantGroup = yield store.findRecord('tenant-administration/group-manager/tenant-group', treeNode.id, {
-					'include': 'tenant, parent, groups'
+					'include': 'tenant, parent, groups, tenantUserGroups'
 				});
 			}
 

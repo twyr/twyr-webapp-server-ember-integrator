@@ -26,6 +26,11 @@ export default BaseModel.extend({
 		'inverse': 'parent'
 	}),
 
+	'tenantUserGroups': DS.hasMany('tenant-administration/group-manager/tenant-user-group', {
+		'async': true,
+		'inverse': 'tenantGroup'
+	}),
+
 	'path': computed('parent', 'parent.path', {
 		get() {
 			return this.get('computePath').perform();
