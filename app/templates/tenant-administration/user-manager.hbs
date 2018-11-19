@@ -1,4 +1,20 @@
 {{#if hasPermission}}
-	{{page-title "User Manager"}}
-	{{component "tenant-administration/user-manager/main-component" model=model controller-action=(action "controller-action")}}
+{{page-title "User Manager"}}
+<div class="p-0 card-header layout-row layout-align-space-between-center" style="background-color:#fcf8e3;" role="tab">
+	<button type="button" class="btn btn-link">
+		<h5 class="mb-0">User Manager</h5>
+	</button>
+	{{#if editable}}
+	<div class="ml-auto text-right">
+		{{#paper-button primary=true raised=true onClick=(perform createUser) bubbles=false}}
+			{{paper-icon "add"}} Create New User
+		{{/paper-button}}
+
+		{{#paper-button accent=true raised=true onClick=(perform addUser) bubbles=false}}
+			{{paper-icon "add"}} Add Existing User
+		{{/paper-button}}
+	</div>
+	{{/if}}
+</div>
+{{component "tenant-administration/user-manager/main-component" model=model controller-action=(action "controller-action")}}
 {{/if}}

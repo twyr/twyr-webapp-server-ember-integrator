@@ -184,6 +184,11 @@ export default BaseComponent.extend({
 		yield this.get('onChangeAccordionItem').perform(undefined);
 	}).enqueue().evented().retryable(backoffPolicy),
 
+	'changeAccountStatusSucceeded': on('changeAccountStatus:succeeded', function(taskInstance) {
+		const tenantUser = taskInstance.args[0];
+		tenantUser.set('operationIsRunning', false);
+	}),
+
 	'changeAccountStatusErrored': on('changeAccountStatus:errored', function(taskInstance, err) {
 		const tenantUser = taskInstance.args[0];
 

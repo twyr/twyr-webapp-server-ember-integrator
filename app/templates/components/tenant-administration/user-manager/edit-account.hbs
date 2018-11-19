@@ -5,7 +5,7 @@
 				<div id="tenant-administration-user-manager-edit-account-image" class="flex" contenteditable=true />
 			</div>
 			<div class="layout-column layout-align-start-stretch flex-100 flex-gt-md-45 flex-gt-lg-50">
-				{{#paper-form class="w-100" onSubmit=(perform save) as |form|}}
+				{{#paper-form class="w-100" as |form|}}
 					<div class="layout-row">
 						{{form.input type="text" class="flex-100" label="Username / Login" value=state.model.email onChange=null disabled=true}}
 					</div>

@@ -82,7 +82,7 @@
 			{{/tab.pane}}
 
 			{{#tab.pane title="Permissions"}}
-				<p>TODO: Group permission editor</p>
+				{{component "tenant-administration/group-manager/permission-group-editor-component" model=model selectedGroup=selectedGroup controller-action=(action "controller-action")}}
 			{{/tab.pane}}
 
 			{{#tab.pane title="Users"}}

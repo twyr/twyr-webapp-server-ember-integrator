@@ -2,7 +2,7 @@
 {{#bs-accordion class="w-100" selected=selectedAccordionItem onChange=(perform onChangeAccordionItem) as |accordion|}}
 	{{#accordion.item value="1" title="Current Users" as |accItem|}}
 		{{#accItem.title class="p-0"}}
-			<h5 class="mb-0">Current Users</h5>
+			Current Users
 		{{/accItem.title}}
 		{{#accItem.body class="p-0"}}
 			{{#paper-data-table sortProp="user.email" sortDir="asc" as |table|}}
@@ -59,9 +59,7 @@
 
 	{{#if (get (filter-by "accessStatus" "waiting" model) "length")}}
 	{{#accordion.item class="mt-2" value="2" title="Awaiting Authorization" as |accItem|}}
-		{{#accItem.title class="p-0"}}
-			<h5 class="mb-0">Awaiting Authorization</h5>
-		{{/accItem.title}}
+		{{#accItem.title class="p-0"}}Awaiting Authorization{{/accItem.title}}
 		{{#accItem.body class="p-0"}}
 			{{#paper-data-table sortProp="user.email" sortDir="asc" as |table|}}
 				{{#table.head as |head|}}
@@ -107,9 +105,7 @@
 
 	{{#if (get (filter-by "accessStatus" "disabled" model) "length")}}
 	{{#accordion.item class="mt-2" value="3" title="De-authorized Users" as |accItem|}}
-		{{#accItem.title class="p-0"}}
-			<h5 class="mb-0">De-authorized Users</h5>
-		{{/accItem.title}}
+		{{#accItem.title class="p-0"}}De-authorized Users{{/accItem.title}}
 		{{#accItem.body class="p-0"}}
 			{{#paper-data-table sortProp="user.email" sortDir="asc" as |table|}}
 				{{#table.head as |head|}}

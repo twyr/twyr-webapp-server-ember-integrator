@@ -10,6 +10,7 @@ export default BaseModel.extend({
 	'nickname': DS.attr('string'),
 
 	'email': DS.attr('string'),
+	'password': DS.attr('string'),
 
 	'profileImage': DS.attr('string'),
 	'profileImageMetadata': DS.attr(),
