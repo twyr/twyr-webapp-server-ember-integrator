@@ -1,4 +1,7 @@
 import BaseController from '../../framework/base-controller';
+
+import { A } from '@ember/array';
+import ArrayProxy from '@ember/array/proxy';
 import ExponentialBackoffPolicy from 'ember-concurrency-retryable/policies/exponential-backoff';
 
 import { observer } from '@ember/object';
@@ -113,12 +116,93 @@ export default BaseController.extend({
 		const user = taskInstance.args[0];
 		const tenantUser = taskInstance.args[1];
 
-		tenantUser.deleteRecord();
-		user.deleteRecord();
+		tenantUser.destroyRecord();
+		user.destroyRecord();
 
 		this.get('notification').display({
 			'type': 'error',
 			'error': err
 		});
-	})
+	}),
+
+	'addUser': task(function* () {
+		try {
+			const self = this;
+			const usersToBeAdded = ArrayProxy.create({
+				'content': A([])
+			});
+
+			const modalData = {
+				'title': 'Add Users',
+
+				'componentName': 'tenant-administration/user-manager/add-existing-accounts',
+				'componentState': {
+					'model': usersToBeAdded
+				},
+
+				'confirmButton': {
+					'text': 'Add Users',
+					'icon': 'check',
+
+					'primary': true,
+					'raised': true,
+
+					'callback': () => {
+						self.get('doAddAccounts').perform(usersToBeAdded);
+					}
+				},
+
+				'cancelButton': {
+					'text': 'Cancel',
+					'icon': 'cancel',
+
+					'warn': true,
+					'raised': true,
+					'callback': null
+				}
+			};
+
+			yield this.send('controller-action', 'displayModal', modalData);
+		}
+		catch(err) {
+			this.get('notification').display({
+				'type': 'error',
+				'error': err
+			});
+		}
+	}).drop(),
+
+	'doAddAccounts': task(function* (userList) {
+		const tenant = this.get('store').peekRecord('tenant-administration/tenant', window.twyrTenantId);
+
+		for(let idx = 0; idx < userList.get('length'); idx++) {
+			const user = userList.objectAt(idx);
+			const isAlreadyAdded = this.get('store').peekAll('tenant-administration/user-manager/tenant-user').filterBy('user.id', user.get('id'));
+			if(isAlreadyAdded.get('length'))
+				continue;
+
+			const tenantUser = this.get('store').createRecord('tenant-administration/user-manager/tenant-user', {
+				'tenant': tenant,
+				'user': user
+			});
+
+			yield tenantUser.save();
+		}
+	}).drop().evented().retryable(backoffPolicy),
+
+	'doAddAccountsSucceeded': on('doAddAccounts:succeeded', function(taskInstance) {
+		const userList = taskInstance.args[0];
+
+		this.get('notification').display({
+			'type': 'success',
+			'message': `${userList.get('length')} Users succesfully added`
+		});
+	}),
+
+	'doAddAccountsErrored': on('doAddAccounts:errored', function(taskInstance, err) {
+		this.get('notification').display({
+			'type': 'error',
+			'error': err
+		});
+	}),
 });
