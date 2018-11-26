@@ -1,2 +1,44 @@
 {{#paper-card class="flex m-0" as |card|}}
+	{{#card.content}}
+		{{#power-select
+			search=(perform searchUserByEmail)
+			selected=selectedUser
+			onchange=(action (mut selectedUser))
+			as |user|
+		}}
+			{{user.first_name}} {{user.last_name}} &lt;{{user.email}}&gt;
+		{{/power-select}}
+	{{/card.content}}
+	{{#card.content class="mt-2 p-0"}}
+		{{#paper-data-table sortProp="state.model.email" sortDir="asc" as |table|}}
+			{{#table.head as |head|}}
+				{{#head.column}}&nbsp;{{/head.column}}
+				{{#head.column sortProp="state.model.email"}}Login{{/head.column}}
+				{{#head.column sortProp="state.model.firstName"}}First Name{{/head.column}}
+				{{#head.column sortProp="state.model.middleNames"}}Middle Name{{/head.column}}
+				{{#head.column sortProp="state.model.lastName"}}Last Name{{/head.column}}
+				{{#head.column}}&nbsp;{{/head.column}}
+			{{/table.head}}
+			{{#table.body as |body|}}
+				{{#each (sort-by table.sortDesc state.model) as |user|}}
+					{{#body.row as |row|}}
+						{{#row.cell class="text-center"}}
+							<img src="{{user.profileImage}}" style="max-width:4rem; max-height:2rem;">
+						{{/row.cell}}
+						{{#row.cell}}{{user.email}}{{/row.cell}}
+						{{#row.cell}}{{user.firstName}}{{/row.cell}}
+						{{#row.cell}}{{user.middleNames}}{{/row.cell}}
+						{{#row.cell}}{{user.lastName}}{{/row.cell}}
+						{{#if editable}}
+						{{#row.cell class="text-right"}}
+							{{#paper-button iconButton=true title="Delete sub-group" onClick=null bubbles=false}}
+								{{paper-icon "delete"}}
+							{{/paper-button}}
+						{{/row.cell}}
+						{{/if}}
+					{{/body.row}}
+				{{/each}}
+			{{/table.body}}
+		{{/paper-data-table}}
+	{{/card.content}}
 {{/paper-card}}

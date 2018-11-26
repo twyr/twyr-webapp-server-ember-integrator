@@ -9,13 +9,13 @@ import { observer } from '@ember/object';
 import { on } from '@ember/object/evented';
 
 export default Component.extend(ContextBoundTasksMixin, ContextBoundEventListenersMixin, DisposableMixin, Evented, InvokeActionMixin, {
-	ajax: inject('ajax'),
-	store: inject('store'),
-	currentUser: inject('current-user'),
-	notification: inject('integrated-notification'),
+	'ajax': inject('ajax'),
+	'store': inject('store'),
+	'currentUser': inject('current-user'),
+	'notification': inject('integrated-notification'),
 
-	permissions: null,
-	hasPermission: false,
+	'permissions': null,
+	'hasPermission': false,
 
 	init() {
 		this._super(...arguments);
