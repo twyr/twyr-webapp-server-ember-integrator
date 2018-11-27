@@ -29,5 +29,11 @@ export default BaseComponent.extend({
 		if(!userModel) userModel = yield this.get('store').findRecord('tenant-administration/user-manager/user', this.get('selectedUser.id'));
 
 		this.get('state.model').addObject(userModel);
+		this.set('selectedUser', null);
+	}).enqueue(),
+
+	'deleteUser': task(function* (user) {
+		const model = yield this.get('state.model');
+		model.removeObject(user);
 	}).enqueue()
 });

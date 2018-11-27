@@ -153,7 +153,7 @@ export default BaseComponent.extend(ResizeAware, {
 	}).drop(),
 
 	displayPrimaryLocation: task(function* () {
-		yield timeout(500);
+		yield timeout(1500);
 
 		const staticLocationdisplayDiv = document.getElementById('tenant-administrator-main-component-static-location-display');
 		if(!staticLocationdisplayDiv) return;

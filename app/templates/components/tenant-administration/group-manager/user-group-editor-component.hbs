@@ -21,7 +21,6 @@
 	{{/table.head}}
 	{{#table.body as |body|}}
 		{{#each (sort-by table.sortDesc (await selectedGroup.tenantUserGroups)) as |groupUser|}}
-			{{log 'Group User' (await groupUser.tenantUser.user)}}
 			{{#body.row as |row|}}
 				{{#row.cell}}
 					{{await groupUser.tenantUser.user.email}}

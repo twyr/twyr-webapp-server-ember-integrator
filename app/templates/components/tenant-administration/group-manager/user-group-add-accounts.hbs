@@ -1,0 +1,28 @@
+{{#paper-card class="flex m-0" as |card|}}
+	{{#card.content class="p-0"}}
+		{{#paper-data-table sortProp="email" sortDir="asc" selectable=true as |table|}}
+			{{#table.head as |head|}}
+				{{#head.column checkbox=true}}
+					{{#paper-checkbox disabled=true onChange=null}}{{/paper-checkbox}}
+				{{/head.column}}
+				{{#head.column sortProp="email"}}Login{{/head.column}}
+				{{#head.column sortProp="firstName"}}First Name{{/head.column}}
+				{{#head.column sortProp="middleNames"}}Middle Names{{/head.column}}
+				{{#head.column sortProp="lastName"}}Last Name{{/head.column}}
+			{{/table.head}}
+			{{#table.body as |body|}}
+				{{#each (sort-by table.sortDesc possibleTenantUsers) as |tenantUser|}}
+					{{#body.row as |row|}}
+						{{#row.cell checkbox=true}}
+							{{#paper-checkbox value=(get (filter-by "id" tenantUser.id state.model) 'length') onChange=(perform toggleTenantUser tenantUser)}}{{/paper-checkbox}}
+						{{/row.cell}}
+						{{#row.cell}}{{tenantUser.email}}{{/row.cell}}
+						{{#row.cell}}{{tenantUser.firstName}}{{/row.cell}}
+						{{#row.cell}}{{tenantUser.middleNames}}{{/row.cell}}
+						{{#row.cell}}{{tenantUser.lastName}}{{/row.cell}}
+					{{/body.row}}
+				{{/each}}
+			{{/table.body}}
+		{{/paper-data-table}}
+	{{/card.content}}
+{{/paper-card}}

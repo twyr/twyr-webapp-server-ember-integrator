@@ -102,6 +102,9 @@ export default BaseController.extend({
 	'doCreateAccount': task(function* (user, tenantUser) {
 		yield user.save();
 		yield tenantUser.save();
+
+		const defaultGroup = this.get('store').peekAll('tenant-administration/group-manager/tenant-group').filterBy('defaultForNewUser', true).objectAt(0);
+		if(defaultGroup) this.get('store').unloadRecord(defaultGroup);
 	}).drop().evented().retryable(backoffPolicy),
 
 	'doCreateAccountSucceeded': on('doCreateAccount:succeeded', function(taskInstance) {
@@ -177,17 +180,22 @@ export default BaseController.extend({
 
 		for(let idx = 0; idx < userList.get('length'); idx++) {
 			const user = userList.objectAt(idx);
-			const isAlreadyAdded = this.get('store').peekAll('tenant-administration/user-manager/tenant-user').filterBy('user.id', user.get('id'));
-			if(isAlreadyAdded.get('length'))
+			let tenantUser = this.get('store').peekAll('tenant-administration/user-manager/tenant-user').filterBy('user.id', user.get('id')).objectAt(0);
+
+			if(tenantUser && !tenantUser.get('isNew'))
 				continue;
 
-			const tenantUser = this.get('store').createRecord('tenant-administration/user-manager/tenant-user', {
-				'tenant': tenant,
-				'user': user
-			});
+			if(!tenantUser)
+				tenantUser = this.get('store').createRecord('tenant-administration/user-manager/tenant-user', {
+					'tenant': tenant,
+					'user': user
+				});
 
 			yield tenantUser.save();
 		}
+
+		const defaultGroup = this.get('store').peekAll('tenant-administration/group-manager/tenant-group').filterBy('defaultForNewUser', true).objectAt(0);
+		if(defaultGroup) this.get('store').unloadRecord(defaultGroup);
 	}).drop().evented().retryable(backoffPolicy),
 
 	'doAddAccountsSucceeded': on('doAddAccounts:succeeded', function(taskInstance) {
@@ -204,5 +212,5 @@ export default BaseController.extend({
 			'type': 'error',
 			'error': err
 		});
-	}),
+	})
 });
