@@ -101,7 +101,7 @@
     "node-sass": "^4.10.0",
     "notifyjs": "^3.0.0",
     "paper-data-table": "git+https://github.com/ibarrick/paper-data-table.git",
-    "qunit-dom": "^0.8.1",
+    "qunit-dom": "^0.8.2",
     "toastr": "^2.1.4"
   },
   "engines": {
