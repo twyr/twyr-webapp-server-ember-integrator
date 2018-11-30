@@ -4,4 +4,25 @@
 		<span class="flex" style="font-size:1.25rem;">Group Permissions</span>
 	</div>
 {{/paper-subheader}}
+
+{{#paper-data-table sortProp="email" sortDir="asc" selectable=true as |table|}}
+	{{#table.head as |head|}}
+		{{#head.column checkbox=true}}
+			{{#paper-checkbox disabled=true onChange=null}}{{/paper-checkbox}}
+		{{/head.column}}
+		{{#head.column sortProp="displayName"}}Name{{/head.column}}
+		{{#head.column sortProp="description"}}Description{{/head.column}}
+	{{/table.head}}
+	{{#table.body as |body|}}
+		{{#each (sort-by table.sortDesc (await selectedGroup.parent.featurePermissions)) as |featurePermission|}}
+			{{#body.row as |row|}}
+				{{#row.cell checkbox=true}}
+					{{#paper-checkbox value=(get (filter-by "id" featurePermission.id selectedGroup.featurePermissions) 'length') onChange=(perform toggleFeaturePermission featurePermission)}}{{/paper-checkbox}}
+				{{/row.cell}}
+				{{#row.cell}}{{featurePermission.displayName}}{{/row.cell}}
+				{{#row.cell}}{{featurePermission.description}}{{/row.cell}}
+			{{/body.row}}
+		{{/each}}
+	{{/table.body}}
+{{/paper-data-table}}
 {{/if}}

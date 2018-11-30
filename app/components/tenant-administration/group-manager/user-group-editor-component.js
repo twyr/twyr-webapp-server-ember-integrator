@@ -78,10 +78,10 @@ export default BaseComponent.extend({
 	'_doAddAccounts': task(function* (tenantUserList) {
 		for(let idx = 0; idx < tenantUserList.get('length'); idx++) {
 			const tenantUser = tenantUserList.objectAt(idx);
-			let groupUser = this.get('store').peekAll('tenant-administration/group-manager/tenant-user-group').filterBy('tenantUser.id', tenantUser.get('id')).objectAt(0);
 
-			if(groupUser && (groupUser.get('tenantGroup.id') === this.get('selectedGroup.id')) && !groupUser.get('isNew'))
-				continue;
+			let groupUser = this.get('store').peekAll('tenant-administration/group-manager/tenant-user-group').filterBy('tenantUser.id', tenantUser.get('id'));
+			groupUser = groupUser.filterBy('tenantGroup.id', this.get('selectedGroup.id')).objectAt(0);
+			if(groupUser && !groupUser.get('isNew')) continue;
 
 			let storedTenantUser = this.get('store').peekRecord('tenant-administration/user-manager/tenant-user', tenantUser.get('id'));
 			if(!storedTenantUser) storedTenantUser = yield this.get('store').findRecord('tenant-administration/user-manager/tenant-user', tenantUser.get('id'));
@@ -106,6 +106,17 @@ export default BaseComponent.extend({
 	}),
 
 	'_doAddAccountsErrored': on('_doAddAccounts:errored', function(taskInstance, err) {
+		const tenantUserList = taskInstance.args[0];
+		for(let idx = 0; idx < tenantUserList.get('length'); idx++) {
+			const tenantUser = tenantUserList.objectAt(idx);
+
+			let groupUser = this.get('store').peekAll('tenant-administration/group-manager/tenant-user-group').filterBy('tenantUser.id', tenantUser.get('id'));
+			groupUser = groupUser.filterBy('tenantGroup.id', this.get('selectedGroup.id')).objectAt(0);
+
+			if(groupUser && !groupUser.get('isNew')) continue;
+			groupUser.deleteRecord();
+		}
+
 		this.get('notification').display({
 			'type': 'error',
 			'error': err
