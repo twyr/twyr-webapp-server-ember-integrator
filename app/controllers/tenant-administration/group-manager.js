@@ -22,7 +22,7 @@ export default BaseController.extend({
 			return;
 
 		groupModel.reload({
-			'include': 'tenant, parent, groups, tenantUserGroups, featurePermissions'
+			'include': 'tenant, parent, groups, tenantUserGroups, permissions, permissions.tenant, permissions.group, permissions.featurePermission'
 		})
 		.then((reloadedModel) => {
 			this.set('selectedGroup', reloadedModel);

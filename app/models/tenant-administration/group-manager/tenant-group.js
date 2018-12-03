@@ -31,9 +31,9 @@ export default BaseModel.extend({
 		'inverse': 'tenantGroup'
 	}),
 
-	'featurePermissions': DS.hasMany('server-administration/feature-permission', {
+	'permissions': DS.hasMany('tenant-administration/group-manager/tenant-group-permission', {
 		'async': true,
-		'inverse': 'tenantGroups'
+		'inverse': 'group'
 	}),
 
 	'path': computed('parent', 'parent.path', {

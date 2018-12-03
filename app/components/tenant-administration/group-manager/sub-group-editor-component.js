@@ -65,7 +65,7 @@ export default BaseComponent.extend({
 
 		if(oldDefaultGroup)
 		yield oldDefaultGroup.reload({
-			'include': 'tenant, parent, groups, tenantUserGroups, featurePermissions'
+			'include': 'tenant, parent, groups, tenantUserGroups, permissions, permissions.tenant, permissions.group, permissions.featurePermission'
 		});
 	}).keepLatest().evented().retryable(backoffPolicy),
 
@@ -79,7 +79,7 @@ export default BaseComponent.extend({
 	'changeDefaultForNewUserErrored': on('changeDefaultForNewUser:errored', function (taskInstance, err) {
 		taskInstance.args[0].rollback();
 		taskInstance.args[0].reload({
-			'include': 'tenant, parent, groups, tenantUserGroups, featurePermissions'
+			'include': 'tenant, parent, groups, tenantUserGroups, permissions, permissions.tenant, permissions.group, permissions.featurePermission'
 		});
 
 		this.get('notification').display({
@@ -127,7 +127,7 @@ export default BaseComponent.extend({
 
 		if(!subGroup.get('isNew'))
 		subGroup.reload({
-			'include': 'tenant, parent, groups, tenantUserGroups, featurePermissions'
+			'include': 'tenant, parent, groups, tenantUserGroups, permissions, permissions.tenant, permissions.group, permissions.featurePermission'
 		});
 
 		this.get('notification').display({
@@ -196,7 +196,7 @@ export default BaseComponent.extend({
 		const subGroup = taskInstance.args[0];
 		subGroup.rollback();
 		subGroup.reload({
-			'include': 'tenant, parent, groups, tenantUserGroups, featurePermissions'
+			'include': 'tenant, parent, groups, tenantUserGroups, permissions, permissions.tenant, permissions.group, permissions.featurePermission'
 		});
 
 		const parentGroup = subGroup.get('parent');

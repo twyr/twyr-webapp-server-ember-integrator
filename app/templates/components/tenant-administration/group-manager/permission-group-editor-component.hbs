@@ -5,24 +5,36 @@
 	</div>
 {{/paper-subheader}}
 
-{{#paper-data-table sortProp="email" sortDir="asc" selectable=true as |table|}}
+{{#paper-data-table sortProp="featurePermission.displayName" sortDir="asc" selectable=true as |table|}}
 	{{#table.head as |head|}}
 		{{#head.column checkbox=true}}
 			{{#paper-checkbox disabled=true onChange=null}}{{/paper-checkbox}}
 		{{/head.column}}
-		{{#head.column sortProp="displayName"}}Name{{/head.column}}
-		{{#head.column sortProp="description"}}Description{{/head.column}}
+		{{#head.column sortProp="featurePermission.displayName"}}Name{{/head.column}}
+		{{#head.column sortProp="featurePermission.description"}}Description{{/head.column}}
 	{{/table.head}}
 	{{#table.body as |body|}}
-		{{#each (sort-by table.sortDesc (await selectedGroup.parent.featurePermissions)) as |featurePermission|}}
-			{{#body.row as |row|}}
-				{{#row.cell checkbox=true}}
-					{{#paper-checkbox value=(get (filter-by "id" featurePermission.id selectedGroup.featurePermissions) 'length') onChange=(perform toggleFeaturePermission featurePermission)}}{{/paper-checkbox}}
-				{{/row.cell}}
-				{{#row.cell}}{{featurePermission.displayName}}{{/row.cell}}
-				{{#row.cell}}{{featurePermission.description}}{{/row.cell}}
-			{{/body.row}}
-		{{/each}}
+		{{#if (await selectedGroup.parent)}}
+			{{#each (sort-by table.sortDesc (await selectedGroup.parent.permissions)) as |groupPermission|}}
+				{{#body.row as |row|}}
+					{{#row.cell checkbox=true}}
+						{{#paper-checkbox disabled=(not editable) value=(get (intersect (await groupPermissionIdList) (array (await groupPermission.featurePermission.id))) 'length') onChange=(perform toggleGroupPermission groupPermission)}}{{/paper-checkbox}}
+					{{/row.cell}}
+					{{#row.cell}}{{await groupPermission.featurePermission.displayName}}{{/row.cell}}
+					{{#row.cell}}{{await groupPermission.featurePermission.description}}{{/row.cell}}
+				{{/body.row}}
+			{{/each}}
+		{{else}}
+			{{#each (sort-by table.sortDesc (await selectedGroup.permissions)) as |groupPermission|}}
+				{{#body.row as |row|}}
+					{{#row.cell checkbox=true}}
+						{{#paper-checkbox disabled=true value=true onChange=null}}{{/paper-checkbox}}
+					{{/row.cell}}
+					{{#row.cell}}{{await groupPermission.featurePermission.displayName}}{{/row.cell}}
+					{{#row.cell}}{{await groupPermission.featurePermission.description}}{{/row.cell}}
+				{{/body.row}}
+			{{/each}}
+		{{/if}}
 	{{/table.body}}
 {{/paper-data-table}}
 {{/if}}

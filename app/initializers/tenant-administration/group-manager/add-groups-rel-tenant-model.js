@@ -21,9 +21,9 @@ export function initialize( /* application */ ) {
 	});
 
 	FeaturePermissionModel.reopen({
-		'tenantGroups': DS.hasMany('tenant-administration/group-manager/tenant-group', {
+		'tenantGroupPermissions': DS.hasMany('tenant-administration/group-manager/tenant-group-permission', {
 			'async': true,
-			'inverse': 'featurePermissions'
+			'inverse': 'featurePermission'
 		})
 	});
 }

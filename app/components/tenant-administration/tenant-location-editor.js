@@ -118,7 +118,7 @@ export default BaseComponent.extend({
 			return;
 
 		if(!this.get('approxLocation') || (this.get('approxLocation').trim() === ''))
-			this.set('approxLocation', 'Nagpur, India');
+			this.set('approxLocation', 'Charminar, Hyderabad, India');
 
 		const addressData = yield this.get('ajax').request(`https://maps.googleapis.com/maps/api/geocode/json?address=${this.get('approxLocation').replace(/ /g, '+')}&key=${env['ember-google-maps']['key']}`, {
 			'method': 'GET',

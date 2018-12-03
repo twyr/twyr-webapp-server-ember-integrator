@@ -20,12 +20,12 @@
 				{{/if}}
 			</div>
 			<div class="flex-100 flex-gt-md-30 pl-4" style="font-style:italic;">
-				{{model.location.line1}}<br />
-				{{#if (not-eq model.location.line2 '')}}{{model.location.line2}}<br />{{/if}}
-				{{#if (not-eq model.location.line3 '')}}{{model.location.line3}}<br />{{/if}}
-				{{#if (not-eq model.location.area '')}}{{model.location.area}}<br />{{/if}}
-				{{model.location.city}}<br />
-				{{model.location.state}}<br />
+				{{model.location.line1}},<br />
+				{{#if (not-eq model.location.line2 '')}}{{model.location.line2}},<br />{{/if}}
+				{{#if (not-eq model.location.line3 '')}}{{model.location.line3}},<br />{{/if}}
+				{{#if (not-eq model.location.area '')}}{{model.location.area}},<br />{{/if}}
+				{{model.location.city}},<br />
+				{{model.location.state}},<br />
 				{{model.location.country}}&nbsp;{{model.location.postalCode}}
 			</div>
 		{{else}}
