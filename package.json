@@ -17,7 +17,7 @@
     "test": "ember test"
   },
   "devDependencies": {
-    "@fortawesome/ember-fontawesome": "^0.1.8",
+    "@fortawesome/ember-fontawesome": "^0.1.9",
     "@fortawesome/free-solid-svg-icons": "^5.5.0",
     "@mdi/svg": "^2.8.94",
     "bootstrap": "^4.1.3",
