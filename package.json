@@ -25,7 +25,7 @@
     "corber-ember-livereload": "0.0.1",
     "ember-addons-inspector": "^1.1.0",
     "ember-ag-grid": "^0.4.1",
-    "ember-ajax": "^4.0.1",
+    "ember-ajax": "^4.0.2",
     "ember-assign-helper": "^0.2.0",
     "ember-auto-import": "^1.2.19",
     "ember-awesome-macros": "^3.1.0",
@@ -35,7 +35,7 @@
     "ember-changeset": "^1.6.0",
     "ember-changeset-conditional-validations": "^0.5.0",
     "ember-changeset-validations": "^1.3.3",
-    "ember-cli": "^3.6.0",
+    "ember-cli": "^3.6.1",
     "ember-cli-app-version": "^3.0.0",
     "ember-cli-babel": "^7.2.0",
     "ember-cli-dependency-checker": "^2.0.0",
@@ -54,7 +54,7 @@
     "ember-cli-sri": "^2.1.0",
     "ember-cli-string-helpers": "^1.10.0",
     "ember-cli-uglify": "^2.0.0",
-    "ember-cli-update": "^0.27.3",
+    "ember-cli-update": "^0.27.18",
     "ember-cli-uuid": "^0.7.1",
     "ember-composable-helpers": "^2.1.0",
     "ember-computed-style": "^0.3.0",
@@ -68,15 +68,15 @@
     "ember-google-maps": "^2.1.0",
     "ember-gridstack": "^1.3.0",
     "ember-invoke-action": "^1.5.1",
-    "ember-lifeline": "^3.1.0",
+    "ember-lifeline": "^3.1.1",
     "ember-load-initializers": "^1.1.0",
-    "ember-math-helpers": "^2.8.1",
+    "ember-math-helpers": "^2.9.0",
     "ember-maybe-import-regenerator": "^0.1.6",
     "ember-mdi": "^0.4.8",
     "ember-models-table": "^2.8.0",
     "ember-moment": "^7.8.0",
     "ember-page-title": "^4.0.5",
-    "ember-paper": "^1.0.0-beta.20",
+    "ember-paper": "^1.0.0-beta.21",
     "ember-paper-dual-slider": "^0.2.1",
     "ember-paper-expansion-panel": "0.0.4",
     "ember-paper-link": "0.0.5",
@@ -91,7 +91,7 @@
     "ember-promise-helpers": "^1.0.6",
     "ember-resize": "0.2.4",
     "ember-resolver": "^4.0.0",
-    "ember-source": "3.5.1",
+    "ember-source": "^3.7.0",
     "ember-summernote-lite": "*",
     "ember-toastr": "^1.7.2",
     "ember-truth-helpers": "^2.1.0",
@@ -101,13 +101,13 @@
     "node-sass": "^4.11.0",
     "notifyjs": "^3.0.0",
     "paper-data-table": "git+https://github.com/ibarrick/paper-data-table.git",
-    "qunit-dom": "^0.8.3",
+    "qunit-dom": "^0.8.4",
     "toastr": "^2.1.4"
   },
   "engines": {
     "node": ">= 10.*"
   },
   "dependencies": {
-    "corber": "^1.3.3"
+    "corber": "^1.3.5"
   }
 }
