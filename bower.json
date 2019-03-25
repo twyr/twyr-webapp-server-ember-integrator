@@ -21,12 +21,12 @@
     "bower_components"
   ],
   "dependencies": {
-    "ag-grid": "^9.0.0",
-    "ag-grid-enterprise": "^9.0.1",
+    "ag-grid": "^20.2.0",
+    "ag-grid-enterprise": "^20.2.0",
     "jstree": "*",
     "jquery-ui": "~1.12.1",
-    "lodash": "^4.13.1",
-    "gridstack": "~0.2.6",
+    "lodash": "^4.17.11",
+    "gridstack": "~0.4.0",
     "jquery.ui.touch-punch": "^0.3.0",
     "summernote": "0.8.3"
   }
